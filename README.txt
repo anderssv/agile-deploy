@@ -14,9 +14,12 @@ my JavaZone 2009 talk on Agile Deployment.
 * Installing the application by
 ** Downloading ZIP from Maven Repository
 ** Unpacking
-** Installing settings
+** Installing configuration
 ** Replacing Symlinks
 * Upgrading the database
+* Run with daemon? JSW might have licence issues
+* Start/stop scripts
+* Recommended practices
 
 Some of these parts should probably be in something
 like Scala or JRuby, but I'll have to take the time
