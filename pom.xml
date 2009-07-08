@@ -8,5 +8,6 @@
 	<name>agile-deploy</name>
 	<modules>
 		<module>application-template</module>
+		<module>deployer</module>
 	</modules>
 </project>
