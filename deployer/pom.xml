@@ -17,43 +17,34 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
-					<descriptor>assembly.xml</descriptor>
+					<archive>
+						<manifest>
+							<mainClass>no.f12.agiledeploy.Deployer</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>assembly</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>appassembler-maven-plugin</artifactId>
-				<configuration>
-					<programs>
-						<program>
-							<mainClass>org.mygroup.myapp.StartServer</mainClass>
-							<name>myapp</name>
-						</program>
-					</programs>
-				</configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
 				<executions>
 					<execution>
 						<phase>package</phase>
 						<goals>
-							<!-- This must be added or else the assembler plugin won't include the war -->
-							<goal>create-repository</goal>
-							<goal>assemble</goal>
+							<goal>shade</goal>
 						</goals>
+						<configuration>
+							<!-- put your configurations here -->
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<artifactId>junit</artifactId>
@@ -61,6 +52,16 @@
 			<version>4.6</version>
 			<scope>test</scope>
 		</dependency>
-		
+		<dependency>
+			<artifactId>mockito-all</artifactId>
+			<groupId>org.mockito</groupId>
+			<version>1.7</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<artifactId>spring-core</artifactId>
+			<groupId>org.springframework</groupId>
+			<version>2.5.6</version>
+		</dependency>
 	</dependencies>
 </project>
