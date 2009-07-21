@@ -36,7 +36,7 @@ public class PackageSpecificationTest {
 		assertEquals("group/g/artifact/version/maven-metadata.xml", spec.getMetadataFilename());
 	}
 	
-	private PackageSpecification createDefaultSpect(boolean snapshot) {
+	public static PackageSpecification createDefaultSpect(boolean snapshot) {
 		PackageSpecification spec = new PackageSpecification("group.g", "artifact", "version", snapshot);
 		return spec;
 	}

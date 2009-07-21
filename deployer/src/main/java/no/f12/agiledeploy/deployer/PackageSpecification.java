@@ -39,4 +39,8 @@ public class PackageSpecification {
 		return getArtifactPath() + "/maven-metadata.xml";
 	}
 
+	public String getFullFilename() {
+		return this.getArtifactPath() + "/" + this.getArtifactFileName();
+	}
+
 }
