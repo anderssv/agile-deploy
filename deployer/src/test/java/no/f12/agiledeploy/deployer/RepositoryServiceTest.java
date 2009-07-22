@@ -14,7 +14,7 @@ public class RepositoryServiceTest {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		repoService.fetchPackage(spec);
 
-		verify(repo).fetchFile("group/g/artifact/version/artifact-version.zip");
+		verify(repo).fetchFile("group/g/artifact/version", "artifact-version.zip");
 	}
 
 	private String createDefaultMetadataXML() {

@@ -7,7 +7,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 	private RepositoryRepo repositoryRepo;
 
 	public File fetchPackage(PackageSpecification spec) {
-		repositoryRepo.fetchFile(spec.getFullFilename() + ".zip");
+		repositoryRepo.fetchFile(spec.getArtifactPath(), spec.getArtifactFileName() + ".zip");
 		return null;
 	}
 

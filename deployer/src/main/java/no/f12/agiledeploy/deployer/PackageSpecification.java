@@ -14,6 +14,10 @@ public class PackageSpecification {
 		this.snapshot = snapshot;
 	}
 
+	public PackageSpecification(String groupId, String artifactId, String version) {
+		this(groupId, artifactId, version, false);
+	}
+
 	public String getArtifactPath() {
 		String result = this.groupId.replaceAll("\\.", "/") + "/" + this.artifactId + "/" + version;
 		return suffixIfSnapshot(result);
