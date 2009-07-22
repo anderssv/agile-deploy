@@ -3,7 +3,7 @@ package no.f12.agiledeploy.deployer;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
-public class RepositoryTest {
+public class RepositoryServiceTest {
 
 	@Test
 	public void shouldFetchFileGivenCorrectSpec() {
