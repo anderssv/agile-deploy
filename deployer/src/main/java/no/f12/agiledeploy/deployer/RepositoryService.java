@@ -1,7 +1,9 @@
 package no.f12.agiledeploy.deployer;
 
+import java.io.File;
+
 public interface RepositoryService {
 
-	public void fetchPackage(PackageSpecification spec);
+	public File fetchPackage(PackageSpecification spec);
 
 }
