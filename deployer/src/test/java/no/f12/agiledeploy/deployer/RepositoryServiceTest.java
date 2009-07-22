@@ -14,7 +14,7 @@ public class RepositoryServiceTest {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		repoService.fetchPackage(spec);
 
-		verify(repo).fetchFile("group/g/artifact/version", "artifact-version.zip");
+		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.zip");
 	}
 
 	private String createDefaultMetadataXML() {

@@ -9,31 +9,31 @@ public class PackageSpecificationTest {
 	@Test
 	public void shouldResloveCorrectPathForArtifact() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
-		assertEquals("group/g/artifact/version", spec.getArtifactPath());
+		assertEquals("org/springframework/spring-core/2.5.6", spec.getArtifactPath());
 	}
 
 	@Test
 	public void shouldResloveCorrectPathForArtifactIfSnapshot() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
-		assertEquals("group/g/artifact/version-SNAPSHOT", spec.getArtifactPath());
+		assertEquals("org/springframework/spring-core/2.5.6-SNAPSHOT", spec.getArtifactPath());
 	}
 
 	@Test
 	public void shouldResolveCorrectNameForFile() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
-		assertEquals("artifact-version", spec.getArtifactFileName());
+		assertEquals("spring-core-2.5.6", spec.getArtifactFileName());
 	}
 	
 	@Test
 	public void shouldResloveCorrectNameForFileWithSnapshot() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
-		assertEquals("artifact-version-SNAPSHOT", spec.getArtifactFileName());
+		assertEquals("spring-core-2.5.6-SNAPSHOT", spec.getArtifactFileName());
 	}
 	
 	@Test
 	public void shouldResolveCorrectMetaDataFile() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
-		assertEquals("group/g/artifact/version/maven-metadata.xml", spec.getMetadataFilename());
+		assertEquals("org/springframework/spring-core/2.5.6/maven-metadata.xml", spec.getMetadataFilename());
 	}
 	
 }

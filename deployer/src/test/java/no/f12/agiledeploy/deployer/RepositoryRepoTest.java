@@ -22,7 +22,7 @@ public class RepositoryRepoTest {
 		RepositoryRepoImpl repo = new RepositoryRepoImpl();
 		repo.setRepositoryURL(new URL("http://repo1.maven.org/maven2/"));
 
-		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", "2.5.6");
+		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		String fileName = spec.getArtifactFileName() + ".jar";
 
 		File downloadedFile = repo.fetchFile(spec.getArtifactPath(), fileName);

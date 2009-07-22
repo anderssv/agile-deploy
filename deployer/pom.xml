@@ -44,7 +44,6 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<!-- put your configurations here -->
 						</configuration>
 					</execution>
 				</executions>
