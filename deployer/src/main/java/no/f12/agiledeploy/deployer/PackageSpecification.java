@@ -47,4 +47,8 @@ public class PackageSpecification {
 		return this.getArtifactPath() + "/" + this.getArtifactFileName();
 	}
 
+	public String getArtifactId() {
+		return this.artifactId;
+	}
+
 }

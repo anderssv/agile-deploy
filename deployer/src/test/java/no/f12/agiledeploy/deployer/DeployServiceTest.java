@@ -1,11 +1,13 @@
 package no.f12.agiledeploy.deployer;
 
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -15,17 +17,21 @@ public class DeployServiceTest {
 	private UnpackerService unpackServ;
 	private DeployServiceImpl dServ;
 	private File downloadedFile;
+	private File tempDir = TestDataProvider.getDefaultTempDir();
 
-	public void createMocks() {
+	public void createMocks(File downloaded) {
+		downloadedFile = downloaded;
 		repoServ = mock(RepositoryService.class);
 		unpackServ = mock(UnpackerService.class);
 
-		downloadedFile = new File(".");
-		when(repoServ.fetchPackage((PackageSpecification) anyObject())).thenReturn(downloadedFile);
+		when(repoServ.fetchPackage((PackageSpecification) anyObject())).thenReturn(downloaded);
+	}
+
+	public void createMocks() {
+		createMocks(new File("."));
 	}
 
 	public void createService() {
-		createMocks();
 		dServ = new DeployServiceImpl();
 		dServ.setRepositoryService(repoServ);
 		dServ.setUnpackerService(unpackServ);
@@ -33,13 +39,27 @@ public class DeployServiceTest {
 
 	@Test
 	public void shouldDownloadAndThenUnpack() {
+		createMocks();
 		createService();
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 
-		dServ.deploy(spec);
+		dServ.deploy(spec, "test", tempDir);
 
 		verify(repoServ).fetchPackage(spec);
 		verify(unpackServ).unpack(downloadedFile);
+	}
+
+	@Test
+	public void shouldCreateCorrectDirectoryForUnpack() throws IOException {
+		File zipFile = TestDataProvider.getZipFile();
+		createMocks(zipFile);
+		createService();
+
+		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
+		dServ.deploy(spec, "test", tempDir);
+
+		File expectedDir = new File(tempDir, "spring-core/test");
+		assertTrue(expectedDir.exists());
 	}
 
 }

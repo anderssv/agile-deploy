@@ -15,8 +15,13 @@ public class DeployServiceImpl implements DeployService {
 		this.unpackerService = unpackServ;
 	}
 
-	public void deploy(PackageSpecification spec) {
+	public void deploy(PackageSpecification spec, String environment, File baseDirectory) {
 		File downloadedFile = repositoryService.fetchPackage(spec);
+
+		File deployDirectory = new File(baseDirectory, spec.getArtifactId() + "/" + environment);
+		if (!deployDirectory.exists() && !deployDirectory.mkdirs()) {
+			throw new IllegalStateException("Could not create directory to deploy to: " + deployDirectory);
+		}
 		unpackerService.unpack(downloadedFile);
 	}
 
