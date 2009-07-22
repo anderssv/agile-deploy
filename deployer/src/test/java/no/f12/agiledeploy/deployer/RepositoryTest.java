@@ -11,7 +11,7 @@ public class RepositoryTest {
 		RepositoryRepo repo = mock(RepositoryRepo.class);
 		repoService.setRepositoryRepo(repo);
 
-		PackageSpecification spec = PackageSpecificationTest.createDefaultSpect(false);
+		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		repoService.fetchPackage(spec);
 
 		verify(repo).fetchFile("group/g/artifact/version/artifact-version.zip");
@@ -21,7 +21,7 @@ public class RepositoryTest {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<metadata xsi:schemaLocation=\"http://maven.apache.org/METADATA/1.0.0 http://maven.apache.org/xsd/metadata-1.0.0.xsd\" xmlns=\"http://maven.apache.org/METADATA/1.0.0\"\n"
 				+ "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" + "<groupId>no.f12</groupId>\n"
-				+ "<artifactId>bikestatus-web</artifactId>\n" + "<version>0.1-SNAPSHOT</version>\n" + "<versioning>\n"
+				+ "<artifactId>artifact</artifactId>\n" + "<version>0.1-SNAPSHOT</version>\n" + "<versioning>\n"
 				+ "  <snapshot>\n" + "    <timestamp>20090720.085251</timestamp>\n"
 				+ "    <buildNumber>1</buildNumber>\n" + "  </snapshot>\n"
 				+ "  <lastUpdated>20090720085428</lastUpdated>\n" + "</versioning>\n" + "</metadata>\n";

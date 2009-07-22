@@ -34,7 +34,7 @@ public class DeployServiceTest {
 	@Test
 	public void shouldDownloadAndThenUnpack() {
 		createService();
-		PackageSpecification spec = PackageSpecificationTest.createDefaultSpect(false);
+		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 
 		dServ.deploy(spec);
 
