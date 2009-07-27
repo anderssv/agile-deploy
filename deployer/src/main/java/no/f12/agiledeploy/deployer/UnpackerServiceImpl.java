@@ -10,7 +10,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class UnpackerServiceImpl implements UnpackerService {
+
+	private static final Log LOG = LogFactory.getLog(UnpackerServiceImpl.class);
 
 	@Override
 	public void unpack(File downloadedFile) {
@@ -31,6 +36,7 @@ public class UnpackerServiceImpl implements UnpackerService {
 				if (entry.isDirectory()) {
 					File destination = new File(workingDirectory, entry.getName());
 					destination.mkdirs();
+					LOG.debug(destination);
 				} else {
 					String currentEntry = entry.getName();
 
@@ -40,6 +46,7 @@ public class UnpackerServiceImpl implements UnpackerService {
 					// create the parent directory structure if needed
 					destinationParent.mkdirs();
 					writeFile(entry, zip, destFile);
+					LOG.debug(destFile);
 				}
 			}
 		} catch (ZipException e) {

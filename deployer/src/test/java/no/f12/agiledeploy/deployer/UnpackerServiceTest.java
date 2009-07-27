@@ -24,6 +24,7 @@ public class UnpackerServiceTest {
 		unpacker.unpack(zipFile, tempDir);
 
 		assertTrue(new File(tempDir, "bin").exists());
+		assertTrue(new File(tempDir, "repo").exists());
 		assertTrue(new File(tempDir, "bin/myapp").exists());
 		assertTrue(new File(tempDir, "bin/myapp.bat").exists());
 	}
