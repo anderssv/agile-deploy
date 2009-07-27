@@ -1,5 +1,7 @@
 package no.f12.agiledeploy.deployer;
 
+import java.io.File;
+
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
@@ -12,9 +14,9 @@ public class RepositoryServiceTest {
 		repoService.setRepositoryRepo(repo);
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
-		repoService.fetchPackage(spec);
+		repoService.fetchPackage(spec, new File("."));
 
-		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.zip");
+		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.zip", new File("."));
 	}
 
 	@Test
@@ -24,9 +26,9 @@ public class RepositoryServiceTest {
 		repoService.setRepositoryRepo(repo);
 
 		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", "2.5.6", "jar");
-		repoService.fetchPackage(spec);
+		repoService.fetchPackage(spec, new File("."));
 
-		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.jar");
+		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.jar", new File("."));
 	}
 
 	private String createDefaultMetadataXML() {

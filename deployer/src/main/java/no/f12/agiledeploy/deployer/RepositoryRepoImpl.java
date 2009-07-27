@@ -19,7 +19,7 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 	private URL repositoryURL;
 
 	@Override
-	public File fetchFile(String filePath, String fileName) {
+	public File fetchFile(String filePath, String fileName, File workingDirectory) {
 		String fullFilePath = filePath + "/" + fileName;
 		File resultingFile = null;
 
@@ -41,7 +41,7 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 				byte[] data = new byte[contentLength];
 				fileInputstream = readBytes(connection, contentLength, data);
 
-				resultingFile = new File(fileName);
+				resultingFile = new File(workingDirectory, fileName);
 				out = new FileOutputStream(resultingFile);
 				out.write(data);
 			} finally {

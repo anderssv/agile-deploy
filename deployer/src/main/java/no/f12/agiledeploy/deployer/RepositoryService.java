@@ -4,6 +4,6 @@ import java.io.File;
 
 public interface RepositoryService {
 
-	public File fetchPackage(PackageSpecification spec);
+	public File fetchPackage(PackageSpecification spec, File workingDirectory);
 
 }

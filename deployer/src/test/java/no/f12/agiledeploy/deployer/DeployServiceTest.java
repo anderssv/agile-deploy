@@ -25,7 +25,7 @@ public class DeployServiceTest {
 		repoServ = mock(RepositoryService.class);
 		unpackServ = mock(UnpackerService.class);
 
-		when(repoServ.fetchPackage((PackageSpecification) anyObject())).thenReturn(downloaded);
+		when(repoServ.fetchPackage((PackageSpecification) anyObject(), (File) anyObject())).thenReturn(downloaded);
 	}
 
 	public void createMocks() {
@@ -46,7 +46,7 @@ public class DeployServiceTest {
 
 		dServ.deploy(spec, "test", tempDir);
 
-		verify(repoServ).fetchPackage(spec);
+		verify(repoServ).fetchPackage(spec, tempDir);
 		verify(unpackServ).unpack(downloadedFile, new File("./temp/spring-core/test"));
 	}
 
