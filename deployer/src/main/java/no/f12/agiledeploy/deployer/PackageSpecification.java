@@ -5,38 +5,29 @@ public class PackageSpecification {
 	private String groupId;
 	private String artifactId;
 	private String version;
-	private boolean snapshot;
+	private String packageType;
 
-	public PackageSpecification(String groupId, String artifactId, String version, boolean snapshot) {
+	public PackageSpecification(String groupId, String artifactId, String version) {
+		this(groupId, artifactId, version, "zip");
+	}
+
+	public PackageSpecification(String groupId, String artifactId, String version, String packageType) {
 		this.groupId = groupId;
 		this.artifactId = artifactId;
 		this.version = version;
-		this.snapshot = snapshot;
-	}
-
-	public PackageSpecification(String groupId, String artifactId, String version) {
-		this(groupId, artifactId, version, false);
+		this.packageType = packageType;
 	}
 
 	public String getArtifactPath() {
-		String result = this.groupId.replaceAll("\\.", "/") + "/" + this.artifactId + "/" + version;
-		return suffixIfSnapshot(result);
+		return this.groupId.replaceAll("\\.", "/") + "/" + this.artifactId + "/" + version;
 	}
 
 	public Object getArtifactFileName() {
-		String fileName = artifactId + "-" + version;
-		return suffixIfSnapshot(fileName);
+		return artifactId + "-" + version;
 	}
 
-	private String suffixIfSnapshot(String fileName) {
-		if (isSnapshot()) {
-			fileName += "-SNAPSHOT";
-		}
-		return fileName;
-	}
-
-	private boolean isSnapshot() {
-		return this.snapshot;
+	public boolean isSnapshot() {
+		return this.version.endsWith("-SNAPSHOT");
 	}
 
 	public String getMetadataFilename() {
@@ -49,6 +40,10 @@ public class PackageSpecification {
 
 	public String getArtifactId() {
 		return this.artifactId;
+	}
+
+	public String getPackageType() {
+		return this.packageType;
 	}
 
 }

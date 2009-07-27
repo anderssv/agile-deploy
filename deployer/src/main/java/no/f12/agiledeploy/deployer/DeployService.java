@@ -6,4 +6,6 @@ public interface DeployService {
 
 	public void deploy(PackageSpecification spec, String environment, File basePath);
 
+	public void deploy(PackageSpecification ps, String environment);
+
 }

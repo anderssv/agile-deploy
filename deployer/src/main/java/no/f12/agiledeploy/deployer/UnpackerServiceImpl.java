@@ -12,11 +12,13 @@ import java.util.zip.ZipFile;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UnpackerServiceImpl implements UnpackerService {
 
 	private static final Log LOG = LogFactory.getLog(UnpackerServiceImpl.class);
-
+	
 	@Override
 	public void unpack(File downloadedFile) {
 		unpack(downloadedFile, new File("."));

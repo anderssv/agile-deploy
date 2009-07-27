@@ -17,6 +17,18 @@ public class RepositoryServiceTest {
 		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.zip");
 	}
 
+	@Test
+	public void shouldFetchFileGivenArtifactType() {
+		RepositoryServiceImpl repoService = new RepositoryServiceImpl();
+		RepositoryRepo repo = mock(RepositoryRepo.class);
+		repoService.setRepositoryRepo(repo);
+
+		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", "2.5.6", "jar");
+		repoService.fetchPackage(spec);
+
+		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.jar");
+	}
+
 	private String createDefaultMetadataXML() {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 				+ "<metadata xsi:schemaLocation=\"http://maven.apache.org/METADATA/1.0.0 http://maven.apache.org/xsd/metadata-1.0.0.xsd\" xmlns=\"http://maven.apache.org/METADATA/1.0.0\"\n"

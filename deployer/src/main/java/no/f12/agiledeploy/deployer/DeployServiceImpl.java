@@ -2,9 +2,15 @@ package no.f12.agiledeploy.deployer;
 
 import java.io.File;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class DeployServiceImpl implements DeployService {
 
+	@Autowired
 	private RepositoryService repositoryService;
+	@Autowired
 	private UnpackerService unpackerService;
 
 	public void setRepositoryService(RepositoryService repoServ) {
@@ -22,7 +28,12 @@ public class DeployServiceImpl implements DeployService {
 		if (!deployDirectory.exists() && !deployDirectory.mkdirs()) {
 			throw new IllegalStateException("Could not create directory to deploy to: " + deployDirectory);
 		}
-		unpackerService.unpack(downloadedFile);
+		unpackerService.unpack(downloadedFile, deployDirectory);
+	}
+
+	@Override
+	public void deploy(PackageSpecification ps, String environment) {
+		deploy(ps, environment, new File("."));
 	}
 
 }

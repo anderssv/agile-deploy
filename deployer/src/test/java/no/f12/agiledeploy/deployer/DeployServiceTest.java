@@ -1,6 +1,6 @@
 package no.f12.agiledeploy.deployer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.After;
 import org.junit.Test;
 
 public class DeployServiceTest {
@@ -46,7 +47,7 @@ public class DeployServiceTest {
 		dServ.deploy(spec, "test", tempDir);
 
 		verify(repoServ).fetchPackage(spec);
-		verify(unpackServ).unpack(downloadedFile);
+		verify(unpackServ).unpack(downloadedFile, new File("./temp/spring-core/test"));
 	}
 
 	@Test
@@ -60,6 +61,11 @@ public class DeployServiceTest {
 
 		File expectedDir = new File(tempDir, "spring-core/test");
 		assertTrue(expectedDir.exists());
+	}
+	
+	@After
+	public void removeTempDir() {
+		TestDataProvider.deleteDir(tempDir);
 	}
 
 }

@@ -10,7 +10,11 @@ import org.springframework.core.io.Resource;
 public class TestDataProvider {
 
 	public static PackageSpecification createDefaultSpec(boolean snapshot) {
-		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", "2.5.6", snapshot);
+		String version = "2.5.6";
+		if (snapshot) {
+			version += "-SNAPSHOT";
+		}
+		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", version);
 		return spec;
 	}
 

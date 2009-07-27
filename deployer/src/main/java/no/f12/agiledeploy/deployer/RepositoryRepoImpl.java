@@ -9,16 +9,28 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class RepositoryRepoImpl implements RepositoryRepo {
 
+	@Autowired
 	private URL repositoryURL;
 
 	@Override
 	public File fetchFile(String filePath, String fileName) {
 		String fullFilePath = filePath + "/" + fileName;
 		File resultingFile = null;
+
+		URL fileUrl;
 		try {
-			URL fileUrl = new URL(repositoryURL, fullFilePath);
+			fileUrl = new URL(repositoryURL, fullFilePath);
+		} catch (MalformedURLException e) {
+			throw new IllegalArgumentException("Malformed URL: " + fullFilePath, e);
+		}
+		
+		try {
 			FileOutputStream out = null;
 			InputStream fileInputstream = null;
 			try {
@@ -40,10 +52,8 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 					out.close();
 				}
 			}
-		} catch (MalformedURLException e) {
-			throw new IllegalArgumentException("Malformed URL: " + fullFilePath, e);
 		} catch (IOException e) {
-			throw new IllegalStateException("Could not retrieve file: " + fullFilePath, e);
+			throw new IllegalStateException("Could not retrieve file: " + fileUrl, e);
 		}
 		return resultingFile;
 	}
@@ -70,7 +80,7 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 	private void checkContentType(URLConnection connection, int contentLength) throws IOException {
 		String contentType = connection.getContentType();
 		if (contentType.startsWith("text/") || contentLength == -1) {
-			throw new IOException("This is not a binary file.");
+			throw new IOException("This is not a binary file: " + contentType);
 		}
 	}
 
