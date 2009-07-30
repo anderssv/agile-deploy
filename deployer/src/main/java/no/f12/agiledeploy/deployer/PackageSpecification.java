@@ -22,7 +22,7 @@ public class PackageSpecification {
 		return this.groupId.replaceAll("\\.", "/") + "/" + this.artifactId + "/" + version;
 	}
 
-	public Object getArtifactFileName() {
+	public String getArtifactFileName() {
 		return artifactId + "-" + version;
 	}
 
@@ -31,7 +31,7 @@ public class PackageSpecification {
 	}
 
 	public String getMetadataFilename() {
-		return getArtifactPath() + "/maven-metadata.xml";
+		return "maven-metadata.xml";
 	}
 
 	public String getFullFilename() {
@@ -44,6 +44,10 @@ public class PackageSpecification {
 
 	public String getPackageType() {
 		return this.packageType;
+	}
+
+	public String getArtifactFilename(String snapshotReplacement) {
+		return this.getArtifactFileName().replaceAll("-SNAPSHOT", "-" + snapshotReplacement);
 	}
 
 }

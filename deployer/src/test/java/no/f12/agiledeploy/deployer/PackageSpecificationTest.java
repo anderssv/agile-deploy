@@ -31,12 +31,6 @@ public class PackageSpecificationTest {
 	}
 
 	@Test
-	public void shouldResolveCorrectMetaDataFile() {
-		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
-		assertEquals("org/springframework/spring-core/2.5.6/maven-metadata.xml", spec.getMetadataFilename());
-	}
-
-	@Test
 	public void shouldDetectSnapshot() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		assertTrue(spec.isSnapshot());
