@@ -10,12 +10,10 @@ import org.junit.Test;
 
 public class UnpackerServiceTest {
 
-	File tmpDir = TestDataProvider.getDefaultTempDir();
+	File tempDir = TestDataProvider.getDefaultTempDir();
 
 	@Test
 	public void shouldUnpackCorrectly() throws IOException {
-
-		File tempDir = tmpDir;
 		tempDir.mkdir();
 
 		File zipFile = TestDataProvider.getZipFile();
@@ -31,7 +29,7 @@ public class UnpackerServiceTest {
 
 	@After
 	public void cleanupFiles() {
-		TestDataProvider.deleteDir(tmpDir);
+		TestDataProvider.deleteDir(tempDir);
 	}
 
 }

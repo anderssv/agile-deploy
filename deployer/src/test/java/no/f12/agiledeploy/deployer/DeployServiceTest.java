@@ -47,7 +47,7 @@ public class DeployServiceTest {
 		dServ.deploy(spec, "test", tempDir);
 
 		verify(repoServ).fetchPackage(spec, tempDir);
-		verify(unpackServ).unpack(downloadedFile, new File("./temp/spring-core/test"));
+		verify(unpackServ).unpack(downloadedFile, new File(tempDir, "spring-core/test"));
 	}
 
 	@Test
@@ -55,8 +55,8 @@ public class DeployServiceTest {
 		File zipFile = TestDataProvider.getZipFile();
 		createMocks(zipFile);
 		createService();
-
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
+		
 		dServ.deploy(spec, "test", tempDir);
 
 		File expectedDir = new File(tempDir, "spring-core/test");

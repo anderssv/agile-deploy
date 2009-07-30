@@ -9,11 +9,13 @@ my JavaZone 2009 talk on Agile Deployment.
 * Packaging the application with all dependencies into
 ** A war
 ** A zip with all required JARs and WARs
+* Installing
+** Download release
+** Unpacking
 
 = TODO =
 * Installing the application by
-** Downloading ZIP from Maven Repository
-** Unpacking
+** Download snapshot
 ** Installing configuration
 ** Replacing Symlinks
 * Upgrading the database

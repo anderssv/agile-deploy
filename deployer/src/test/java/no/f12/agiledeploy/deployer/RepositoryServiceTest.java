@@ -7,11 +7,11 @@ import static org.mockito.Mockito.*;
 
 public class RepositoryServiceTest {
 
+	RepositoryServiceImpl repoService;
+
 	@Test
 	public void shouldFetchFileGivenCorrectSpec() {
-		RepositoryServiceImpl repoService = new RepositoryServiceImpl();
-		RepositoryRepo repo = mock(RepositoryRepo.class);
-		repoService.setRepositoryRepo(repo);
+		RepositoryRepo repo = createRepoServiceAndMockRepo();
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		repoService.fetchPackage(spec, new File("."));
@@ -19,11 +19,16 @@ public class RepositoryServiceTest {
 		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.zip", new File("."));
 	}
 
-	@Test
-	public void shouldFetchFileGivenArtifactType() {
-		RepositoryServiceImpl repoService = new RepositoryServiceImpl();
+	private RepositoryRepo createRepoServiceAndMockRepo() {
+		repoService = new RepositoryServiceImpl();
 		RepositoryRepo repo = mock(RepositoryRepo.class);
 		repoService.setRepositoryRepo(repo);
+		return repo;
+	}
+
+	@Test
+	public void shouldFetchFileGivenArtifactType() {
+		RepositoryRepo repo = createRepoServiceAndMockRepo();
 
 		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", "2.5.6", "jar");
 		repoService.fetchPackage(spec, new File("."));
