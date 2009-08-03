@@ -11,8 +11,8 @@ public class CommandLineDeployerTest {
 
 	String environment = "test";
 
-	File workingDirectory = new File("temp");
-	File unpackDir = new File(workingDirectory, "spring-core/" + environment);
+	File workingDirectory = TestDataProvider.getDefaultTempDir();
+	File unpackDir = new File(workingDirectory, "spring-core/" + environment + "/current");
 	File downloadedFile = new File(workingDirectory, "spring-core-2.5.6.jar");
 
 	@Test(expected = IllegalArgumentException.class)
@@ -46,7 +46,7 @@ public class CommandLineDeployerTest {
 
 	@After
 	public void cleanupDir() {
-		FileUtil.deleteDir(new File("temp"));
+		FileUtil.deleteWithLogging(workingDirectory);
 	}
 
 }

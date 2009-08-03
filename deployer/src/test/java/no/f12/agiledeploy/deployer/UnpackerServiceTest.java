@@ -29,7 +29,7 @@ public class UnpackerServiceTest {
 
 	@After
 	public void cleanupFiles() {
-		FileUtil.deleteDir(tempDir);
+		FileUtil.deleteWithLogging(tempDir);
 	}
 
 }

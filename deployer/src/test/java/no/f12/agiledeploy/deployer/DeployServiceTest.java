@@ -18,7 +18,9 @@ public class DeployServiceTest {
 	private UnpackerService unpackServ;
 	private DeployServiceImpl dServ;
 	private File downloadedFile;
+	
 	private File tempDir = TestDataProvider.getDefaultTempDir();
+	private File unpackDir = new File(tempDir, "spring-core/test/current");
 
 	public void createMocks(File downloaded) {
 		downloadedFile = downloaded;
@@ -47,7 +49,7 @@ public class DeployServiceTest {
 		dServ.deploy(spec, "test", tempDir);
 
 		verify(repoServ).fetchPackage(spec, tempDir);
-		verify(unpackServ).unpack(downloadedFile, new File(tempDir, "spring-core/test"));
+		verify(unpackServ).unpack(downloadedFile, unpackDir);
 	}
 
 	@Test
@@ -59,13 +61,12 @@ public class DeployServiceTest {
 		
 		dServ.deploy(spec, "test", tempDir);
 
-		File expectedDir = new File(tempDir, "spring-core/test");
-		assertTrue(expectedDir.exists());
+		assertTrue(unpackDir.exists());
 	}
 	
 	@After
 	public void removeTempDir() {
-		FileUtil.deleteDir(tempDir);
+		FileUtil.deleteWithLogging(tempDir);
 	}
 
 }
