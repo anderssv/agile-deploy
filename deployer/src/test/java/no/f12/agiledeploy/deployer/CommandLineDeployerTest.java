@@ -9,8 +9,11 @@ import org.junit.Test;
 
 public class CommandLineDeployerTest {
 
-	File unpackDir = new File("temp/spring-core");
-	File downloadedFile = new File("spring-core-2.5.6.jar");
+	String environment = "test";
+
+	File workingDirectory = new File("temp");
+	File unpackDir = new File(workingDirectory, "spring-core/" + environment);
+	File downloadedFile = new File(workingDirectory, "spring-core-2.5.6.jar");
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldGiveErrorIfNotEnoughParameters() {
@@ -20,15 +23,30 @@ public class CommandLineDeployerTest {
 
 	@Test
 	public void shouldStartUpGivenCorrectParameters() {
-		CommandLineDeployer deployer = new CommandLineDeployer("classpath:spring/deployer-test-applicationContext.xml");
-		String[] args = new String[] { "test", "org.springframework", "spring-core", "2.5.6", "jar" };
-		deployer.execute(args);
+		executeWithSpringStandard();
 		assertTrue(unpackDir.exists());
+	}
+
+	@Test
+	public void shouldCleanOutOldStuffFromDirectoryBeforeDeploy() {
+		File extraDir = new File(unpackDir, "extra");
+		extraDir.mkdirs();
+		assertTrue(extraDir.exists());
+
+		executeWithSpringStandard();
+
+		assertTrue(!extraDir.exists());
+	}
+
+	private void executeWithSpringStandard() {
+		CommandLineDeployer deployer = new CommandLineDeployer("classpath:spring/deployer-test-applicationContext.xml");
+		String[] args = new String[] { environment, "org.springframework", "spring-core", "2.5.6", "jar" };
+		deployer.execute(args);
 	}
 
 	@After
 	public void cleanupDir() {
-		TestDataProvider.deleteDir(new File("temp"));
+		FileUtil.deleteDir(new File("temp"));
 	}
 
 }

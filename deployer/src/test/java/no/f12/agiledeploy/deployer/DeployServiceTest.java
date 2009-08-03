@@ -65,7 +65,7 @@ public class DeployServiceTest {
 	
 	@After
 	public void removeTempDir() {
-		TestDataProvider.deleteDir(tempDir);
+		FileUtil.deleteDir(tempDir);
 	}
 
 }

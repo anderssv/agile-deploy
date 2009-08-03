@@ -67,7 +67,7 @@ public class RepositoryServiceTest {
 	
 	@After
 	public void cleanupTemp() {
-		TestDataProvider.deleteDir(tempDir);
+		FileUtil.deleteDir(tempDir);
 	}
 
 	/**

@@ -28,10 +28,13 @@ public class DeployServiceImpl implements DeployService {
 		File downloadedFile = repositoryService.fetchPackage(spec, workingDirectory);
 
 		File deployDirectory = new File(workingDirectory, spec.getArtifactId() + "/" + environment);
-		if (!deployDirectory.exists() && !deployDirectory.mkdirs()) {
+		FileUtil.deleteDir(deployDirectory);
+		if (!deployDirectory.mkdirs()) {
 			throw new IllegalStateException("Could not create directory to deploy to: " + deployDirectory);
 		}
 		unpackerService.unpack(downloadedFile, deployDirectory);
+		
+		downloadedFile.deleteOnExit();
 	}
 
 	@Override
