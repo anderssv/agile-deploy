@@ -14,7 +14,7 @@
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="locations">
 			<list>
-				<value>classpath:deploy.properties</value>
+				<value>classpath:deploy-default.properties</value>
 				<value>file:deploy.properties</value>
 			</list>
 		</property>
