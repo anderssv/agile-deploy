@@ -47,4 +47,8 @@ public class CommandLineDeployer {
 			return new PackageSpecification(args[1], args[2], args[3], args[4]);
 		}
 	}
+
+	public File getWorkingDirectory() {
+		return this.workingDirectory;
+	}
 }

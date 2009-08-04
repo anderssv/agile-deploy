@@ -16,9 +16,11 @@ public class DeployServiceTest {
 
 	private RepositoryService repoServ;
 	private UnpackerService unpackServ;
+	private ConfigurationService configServ;
+
 	private DeployServiceImpl dServ;
-	private File downloadedFile;
 	
+	private File downloadedFile;
 	private File tempDir = TestDataProvider.getDefaultTempDir();
 	private File unpackDir = new File(tempDir, "spring-core/test/current");
 
@@ -26,6 +28,7 @@ public class DeployServiceTest {
 		downloadedFile = downloaded;
 		repoServ = mock(RepositoryService.class);
 		unpackServ = mock(UnpackerService.class);
+		configServ = mock(ConfigurationService.class);
 
 		when(repoServ.fetchPackage((PackageSpecification) anyObject(), (File) anyObject())).thenReturn(downloaded);
 	}
@@ -38,10 +41,11 @@ public class DeployServiceTest {
 		dServ = new DeployServiceImpl();
 		dServ.setRepositoryService(repoServ);
 		dServ.setUnpackerService(unpackServ);
+		dServ.setConfigurationService(configServ);
 	}
 
 	@Test
-	public void shouldDownloadAndThenUnpack() {
+	public void shouldDownloadAndThenUnpackAndConfigure() {
 		createMocks();
 		createService();
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
@@ -50,6 +54,7 @@ public class DeployServiceTest {
 
 		verify(repoServ).fetchPackage(spec, tempDir);
 		verify(unpackServ).unpack(downloadedFile, unpackDir);
+		verify(configServ).configure(unpackDir);
 	}
 
 	@Test

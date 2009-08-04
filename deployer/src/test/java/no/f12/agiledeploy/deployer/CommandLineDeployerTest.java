@@ -11,24 +11,37 @@ public class CommandLineDeployerTest {
 
 	String environment = "test";
 
-	File workingDirectory = TestDataProvider.getDefaultTempDir();
-	File unpackDir = new File(workingDirectory, "spring-core/" + environment + "/current");
-	File downloadedFile = new File(workingDirectory, "spring-core-2.5.6.jar");
+	CommandLineDeployer deployer;
+
+	File workingDirectory;
+	File unpackDir;
+	File downloadedFile;
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldGiveErrorIfNotEnoughParameters() {
-		CommandLineDeployer deployer = new CommandLineDeployer("classpath:spring/deployer-test-applicationContext.xml");
+		createDeployerAndSetupDir();
 		deployer.execute(null);
+	}
+
+	private void createDeployerAndSetupDir() {
+		deployer = new CommandLineDeployer("classpath:spring/deployer-test-applicationContext.xml");
+		
+		workingDirectory = deployer.getWorkingDirectory();
+		unpackDir = new File(workingDirectory, "spring-core/" + environment + "/current");
+		downloadedFile = new File(workingDirectory, "spring-core-2.5.6.jar");
 	}
 
 	@Test
 	public void shouldStartUpGivenCorrectParameters() {
+		createDeployerAndSetupDir();
 		executeWithSpringStandard();
 		assertTrue(unpackDir.exists());
 	}
 
 	@Test
 	public void shouldCleanOutOldStuffFromDirectoryBeforeDeploy() {
+		createDeployerAndSetupDir();
+
 		File extraDir = new File(unpackDir, "extra");
 		extraDir.mkdirs();
 		assertTrue(extraDir.exists());
@@ -39,7 +52,6 @@ public class CommandLineDeployerTest {
 	}
 
 	private void executeWithSpringStandard() {
-		CommandLineDeployer deployer = new CommandLineDeployer("classpath:spring/deployer-test-applicationContext.xml");
 		String[] args = new String[] { environment, "org.springframework", "spring-core", "2.5.6", "jar" };
 		deployer.execute(args);
 	}
