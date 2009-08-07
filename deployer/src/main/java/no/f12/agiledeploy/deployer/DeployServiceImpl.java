@@ -33,9 +33,14 @@ public class DeployServiceImpl implements DeployService {
 
 		File deployDirectory = createUnpackDirectory(spec, environment, workingDirectory);
 		unpackerService.unpack(downloadedFile, deployDirectory);
-		configurationService.configure(deployDirectory);
+		removeArtifactAndVersion(deployDirectory, spec);
+		configurationService.configure(deployDirectory, environment);
 
 		downloadedFile.deleteOnExit();
+	}
+
+	public static void removeArtifactAndVersion(File deployDirectory, PackageSpecification spec) {
+		FileUtil.moveOneUp(deployDirectory, spec.getArtifactFileName());
 	}
 
 	private File createUnpackDirectory(PackageSpecification spec, String environment, File workingDirectory) {

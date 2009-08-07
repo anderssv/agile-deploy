@@ -28,7 +28,7 @@ It is loosely based around the following articles:
 * Run with daemon? JSW might have licence issues
 * Start/stop scripts
 * Recommended practices
-* Issues with clean up after run, some directories can not be deleted
+* Issues with clean up after run of deployer, some directories can not be deleted
 
 Some of these parts should probably be in something
 like Scala or JRuby, but I'll have to take the time

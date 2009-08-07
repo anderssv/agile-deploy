@@ -40,13 +40,13 @@ public class UnpackerServiceImpl implements UnpackerService {
 					destination.mkdirs();
 					LOG.debug(destination);
 				} else {
-					String currentEntry = entry.getName();
+					String currentFilename = entry.getName();
 
-					File destFile = new File(workingDirectory, currentEntry);
+					File destFile = new File(workingDirectory, currentFilename);
+					
 					File destinationParent = destFile.getParentFile();
-
-					// create the parent directory structure if needed
 					destinationParent.mkdirs();
+
 					writeFile(entry, zip, destFile);
 					LOG.debug(destFile);
 				}

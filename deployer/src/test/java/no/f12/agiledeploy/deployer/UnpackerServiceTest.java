@@ -20,6 +20,7 @@ public class UnpackerServiceTest {
 
 		UnpackerService unpacker = new UnpackerServiceImpl();
 		unpacker.unpack(zipFile, tempDir);
+		FileUtil.moveOneUp(tempDir, "myapp-server-0.1-SNAPSHOT");
 
 		assertTrue(new File(tempDir, "bin").exists());
 		assertTrue(new File(tempDir, "repo").exists());
