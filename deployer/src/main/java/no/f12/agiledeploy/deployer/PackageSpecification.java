@@ -50,4 +50,8 @@ public class PackageSpecification {
 		return this.getArtifactFileName().replaceAll("-SNAPSHOT", "-" + snapshotReplacement);
 	}
 
+	public String getInstallationPath(String environment) {
+		return this.artifactId + "/" + environment + "/current";
+	}
+
 }

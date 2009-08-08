@@ -31,25 +31,28 @@ public class DeployServiceImpl implements DeployService {
 
 		File downloadedFile = repositoryService.fetchPackage(spec, workingDirectory);
 
-		File deployDirectory = createUnpackDirectory(spec, environment, workingDirectory);
+		File deployDirectory = prepareDeployDirectory(workingDirectory, spec, environment);
+
 		unpackerService.unpack(downloadedFile, deployDirectory);
-		removeArtifactAndVersion(deployDirectory, spec);
+		removeArtifactAndVersionFromPath(deployDirectory, spec);
+
 		configurationService.configure(deployDirectory, environment);
 
 		downloadedFile.deleteOnExit();
 	}
 
-	public static void removeArtifactAndVersion(File deployDirectory, PackageSpecification spec) {
-		FileUtil.moveOneUp(deployDirectory, spec.getArtifactFileName());
-	}
-
-	private File createUnpackDirectory(PackageSpecification spec, String environment, File workingDirectory) {
-		File deployDirectory = new File(workingDirectory, spec.getArtifactId() + "/" + environment + "/current");
-		FileUtil.deleteWithLogging(deployDirectory);
-		if (!deployDirectory.mkdirs()) {
+	private File prepareDeployDirectory(File workingPath, PackageSpecification spec, String environment) {
+		File deployDirectory = new File(workingPath, spec.getInstallationPath(environment));
+		if (deployDirectory.exists()) {
+			FileUtil.deleteWithLogging(deployDirectory);
+		} else if (!deployDirectory.mkdirs()) {
 			throw new IllegalStateException("Could not create directory to deploy to: " + deployDirectory);
 		}
 		return deployDirectory;
+	}
+
+	public static void removeArtifactAndVersionFromPath(File deployDirectory, PackageSpecification spec) {
+		FileUtil.moveOneUp(deployDirectory, spec.getArtifactFileName());
 	}
 
 	@Override

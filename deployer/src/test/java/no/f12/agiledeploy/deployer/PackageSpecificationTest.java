@@ -35,5 +35,11 @@ public class PackageSpecificationTest {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		assertTrue(spec.isSnapshot());
 	}
+	
+	@Test
+	public void shouldGiveCorrectCurrentPathForInstallation() {
+		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
+		assertEquals("spring-core/test/current", spec.getInstallationPath("test"));
+	}
 
 }

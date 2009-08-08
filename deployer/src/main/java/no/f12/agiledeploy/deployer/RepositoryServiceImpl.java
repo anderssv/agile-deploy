@@ -26,6 +26,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 			File metadataFile = repositoryRepo.fetchFile(spec.getArtifactPath(), spec.getMetadataFilename(),
 					workingDirectory);
 			Document parsedDoc = parseXmlFile(metadataFile);
+			metadataFile.delete();
 
 			String timestamp = extractElementValue(parsedDoc, "timestamp");
 			String buildNumber = extractElementValue(parsedDoc, "buildNumber");

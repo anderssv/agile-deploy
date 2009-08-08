@@ -26,7 +26,7 @@ public class TestDataProvider {
 	}
 
 	public static File getDefaultTempDir() {
-		return new File("./temp");
+		return new File("./target/temp");
 	}
 
 	@Test
