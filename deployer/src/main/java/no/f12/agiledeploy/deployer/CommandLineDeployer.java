@@ -10,7 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class CommandLineDeployer {
 
 	private static final Logger LOG = Logger.getLogger(CommandLineDeployer.class);
-	
+
 	private DeployService deployService;
 	private File workingDirectory;
 
@@ -28,9 +28,16 @@ public class CommandLineDeployer {
 	}
 
 	public void execute(String[] args) {
-		checkCommandLine(args);
-		PackageSpecification ps = parsePackageSpecification(args);
-		String environment = parseEnvironment(args);
+		PackageSpecification ps = null;
+		String environment = null;
+		try {
+			checkCommandLine(args);
+			ps = parsePackageSpecification(args);
+			environment = parseEnvironment(args);
+		} catch (IllegalArgumentException e) {
+			LOG.error(e.getMessage());
+			System.exit(1);
+		}
 
 		LOG.info("Starting deploy: " + ps);
 		deployService.deploy(ps, environment, workingDirectory);
@@ -40,7 +47,7 @@ public class CommandLineDeployer {
 		return args[0];
 	}
 
-	private static void checkCommandLine(String[] args) {
+	public static void checkCommandLine(String[] args) {
 		if (args == null || args.length < 4) {
 			throw new IllegalArgumentException(
 					"Not enough parameters. Usage: CommandLineDeployer environment groupId artifactId version");

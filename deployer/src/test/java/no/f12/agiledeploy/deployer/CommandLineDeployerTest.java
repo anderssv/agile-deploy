@@ -19,13 +19,12 @@ public class CommandLineDeployerTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldGiveErrorIfNotEnoughParameters() {
-		createDeployerAndSetupDir();
-		deployer.execute(null);
+		CommandLineDeployer.checkCommandLine(new String[] {});
 	}
 
 	private void createDeployerAndSetupDir() {
 		deployer = new CommandLineDeployer("classpath:spring/deployer-test-applicationContext.xml");
-		
+
 		workingDirectory = deployer.getWorkingDirectory();
 		unpackDir = new File(workingDirectory, "spring-core/" + environment + "/current");
 		downloadedFile = new File(workingDirectory, "spring-core-2.5.6.jar");

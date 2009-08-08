@@ -29,7 +29,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>no.f12.agiledeploy.Deployer</mainClass>
+							<mainClass>no.f12.agiledeploy.deployer.CommandLineDeployer</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

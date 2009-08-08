@@ -19,7 +19,7 @@ public class FileUtil {
 
 	private static boolean deleteRecursive(File file) {
 		boolean success = false;
-		if (file.exists()) {
+		if (file != null && file.exists()) {
 			if (file.isDirectory()) {
 				File[] children = file.listFiles();
 				for (File child : children) {
