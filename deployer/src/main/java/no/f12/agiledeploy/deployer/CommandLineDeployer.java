@@ -1,12 +1,16 @@
 package no.f12.agiledeploy.deployer;
 
 import java.io.File;
+import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class CommandLineDeployer {
 
+	private static final Logger LOG = Logger.getLogger(CommandLineDeployer.class);
+	
 	private DeployService deployService;
 	private File workingDirectory;
 
@@ -17,8 +21,10 @@ public class CommandLineDeployer {
 	}
 
 	public static void main(String[] args) {
+		LOG.info("Launched deploy at " + new Date());
 		CommandLineDeployer deployer = new CommandLineDeployer("classpath:spring/deployer-applicationContext.xml");
 		deployer.execute(args);
+		LOG.info("Deploy ended at " + new Date());
 	}
 
 	public void execute(String[] args) {
@@ -26,6 +32,7 @@ public class CommandLineDeployer {
 		PackageSpecification ps = parsePackageSpecification(args);
 		String environment = parseEnvironment(args);
 
+		LOG.info("Starting deploy: " + ps);
 		deployService.deploy(ps, environment, workingDirectory);
 	}
 

@@ -30,7 +30,7 @@ public class UnpackerServiceTest {
 
 	@After
 	public void cleanupFiles() {
-		FileUtil.deleteWithLogging(tempDir);
+		FileUtil.deleteDir(tempDir);
 	}
 
 }

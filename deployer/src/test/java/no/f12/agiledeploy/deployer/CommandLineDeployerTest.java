@@ -58,7 +58,7 @@ public class CommandLineDeployerTest {
 
 	@After
 	public void cleanupDir() {
-		FileUtil.deleteWithLogging(workingDirectory);
+		FileUtil.deleteDir(workingDirectory);
 	}
 
 }

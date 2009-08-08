@@ -53,5 +53,10 @@ public class PackageSpecification {
 	public String getInstallationPath(String environment) {
 		return this.artifactId + "/" + environment + "/current";
 	}
+	
+	@Override
+	public String toString() {
+		return this.groupId + ":" + this.artifactId + ":" + this.version;
+	}
 
 }

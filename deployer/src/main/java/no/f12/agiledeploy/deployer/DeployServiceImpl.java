@@ -44,7 +44,7 @@ public class DeployServiceImpl implements DeployService {
 	private File prepareDeployDirectory(File workingPath, PackageSpecification spec, String environment) {
 		File deployDirectory = new File(workingPath, spec.getInstallationPath(environment));
 		if (deployDirectory.exists()) {
-			FileUtil.deleteWithLogging(deployDirectory);
+			FileUtil.deleteDir(deployDirectory);
 		} else if (!deployDirectory.mkdirs()) {
 			throw new IllegalStateException("Could not create directory to deploy to: " + deployDirectory);
 		}

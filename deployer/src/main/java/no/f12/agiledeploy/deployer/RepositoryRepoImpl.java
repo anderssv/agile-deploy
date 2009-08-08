@@ -9,11 +9,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RepositoryRepoImpl implements RepositoryRepo {
+
+	private static final Logger LOG = Logger.getLogger(RepositoryRepoImpl.class);
 
 	@Autowired
 	private URL repositoryURL;
@@ -30,6 +33,7 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 			throw new IllegalArgumentException("Malformed URL: " + fullFilePath, e);
 		}
 		
+		LOG.info("Downloading package from " + fileUrl);
 		try {
 			FileOutputStream out = null;
 			InputStream fileInputstream = null;
@@ -59,9 +63,9 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 	}
 
 	private InputStream readBytes(URLConnection connection, int contentLength, byte[] data) throws IOException {
-		InputStream fileInputstream;
 		InputStream raw = connection.getInputStream();
-		fileInputstream = new BufferedInputStream(raw);
+		InputStream fileInputstream = new BufferedInputStream(raw);
+
 		int bytesRead = 0;
 		int offset = 0;
 		while (offset < contentLength) {

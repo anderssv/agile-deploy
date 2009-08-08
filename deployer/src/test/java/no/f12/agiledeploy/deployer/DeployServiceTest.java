@@ -71,7 +71,7 @@ public class DeployServiceTest {
 	
 	@After
 	public void removeTempDir() {
-		FileUtil.deleteWithLogging(tempDir);
+		FileUtil.deleteDir(tempDir);
 	}
 
 }

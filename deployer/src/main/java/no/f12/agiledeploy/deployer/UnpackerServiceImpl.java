@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class UnpackerServiceImpl implements UnpackerService {
 
 	private static final Log LOG = LogFactory.getLog(UnpackerServiceImpl.class);
-	
+
 	@Override
 	public void unpack(File downloadedFile) {
 		unpack(downloadedFile, new File("."));
@@ -26,6 +27,7 @@ public class UnpackerServiceImpl implements UnpackerService {
 
 	@Override
 	public void unpack(File zipFile, File workingDirectory) {
+		LOG.info("Unpacking " + zipFile + " into " + workingDirectory);
 		try {
 			workingDirectory.mkdir();
 
@@ -43,7 +45,7 @@ public class UnpackerServiceImpl implements UnpackerService {
 					String currentFilename = entry.getName();
 
 					File destFile = new File(workingDirectory, currentFilename);
-					
+
 					File destinationParent = destFile.getParentFile();
 					destinationParent.mkdirs();
 
@@ -59,7 +61,8 @@ public class UnpackerServiceImpl implements UnpackerService {
 	}
 
 	private void writeFile(ZipEntry entry, ZipFile zip, File destination) throws IOException {
-		BufferedInputStream is = new BufferedInputStream(zip.getInputStream(entry));
+		InputStream zipStream = zip.getInputStream(entry);
+		BufferedInputStream is = new BufferedInputStream(zipStream);
 
 		// establish buffer for writing file
 		int BUFFER = 2048;
@@ -76,6 +79,7 @@ public class UnpackerServiceImpl implements UnpackerService {
 		}
 		dest.flush();
 		dest.close();
+		zipStream.close();
 		is.close();
 	}
 

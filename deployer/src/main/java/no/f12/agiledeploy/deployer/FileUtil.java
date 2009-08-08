@@ -13,32 +13,28 @@ public class FileUtil {
 
 	private static final Logger LOG = Logger.getLogger(FileUtil.class);
 
-	// Deletes all files and subdirectories under dir.
-	// Returns true if all deletions were successful.
-	// If a deletion fails, the method stops attempting to delete and returns
-	// false.
-	public static boolean deleteDir(File dir) {
-		if (dir.exists()) {
-			if (dir.isDirectory()) {
-				String[] children = dir.list();
-				for (int i = 0; i < children.length; i++) {
-					boolean success = deleteDir(new File(dir, children[i]));
-					if (!success) {
-						return false;
-					}
-				}
-			}
-
-			// This is a file, or directory is empty
-			return dir.delete();
-		}
-		return true;
+	public static boolean deleteDir(File file) {
+		return deleteRecursive(file);
 	}
 
-	public static void deleteWithLogging(File dir) {
-		if (!deleteDir(dir)) {
-			LOG.warn("Could not delete: " + dir);
+	private static boolean deleteRecursive(File file) {
+		boolean success = false;
+		if (file.exists()) {
+			if (file.isDirectory()) {
+				File[] children = file.listFiles();
+				for (File child : children) {
+					deleteRecursive(child);
+				}
+				success = file.delete();
+			} else {
+				success = file.delete();
+			}
+			if (!success) {
+				LOG.warn("Could not delete " + file);
+			}
+			return success;
 		}
+		return true;
 	}
 
 	public static void copyFile(File source, File target) {
