@@ -27,7 +27,7 @@ public class ConfigurationServiceTest {
 	private File createFiles() throws IOException {
 		UnpackerService unpacker = new UnpackerServiceImpl();
 		File workingDirectory = TestDataProvider.getDefaultTempDir();
-		unpacker.unpack(TestDataProvider.getZipFile(), workingDirectory);
+		unpacker.unpack(TestDataProvider.getZipFile(workingDirectory), workingDirectory);
 		FileUtil.moveOneUp(workingDirectory, "myapp-server-0.1-SNAPSHOT");
 		return workingDirectory;
 	}

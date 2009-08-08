@@ -59,7 +59,7 @@ public class DeployServiceTest {
 
 	@Test
 	public void shouldCreateCorrectDirectoryForUnpack() throws IOException {
-		File zipFile = TestDataProvider.getZipFile();
+		File zipFile = TestDataProvider.getZipFile(tempDir);
 		createMocks(zipFile);
 		createService();
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);

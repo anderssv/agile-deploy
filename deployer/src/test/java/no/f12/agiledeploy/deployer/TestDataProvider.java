@@ -18,11 +18,16 @@ public class TestDataProvider {
 		return spec;
 	}
 
-	public static File getZipFile() throws IOException {
+	public static File getZipFile(File workingdirectory) throws IOException {
 		DefaultResourceLoader loader = new DefaultResourceLoader();
 		Resource resource = loader.getResource("classpath:application.zip");
 		File zipFile = resource.getFile();
-		return zipFile;
+
+		workingdirectory.mkdirs();
+		File result = new File(workingdirectory, zipFile.getName());
+		FileUtil.copyFile(zipFile, result);
+		
+		return result;
 	}
 
 	public static File getDefaultTempDir() {

@@ -16,7 +16,7 @@ public class UnpackerServiceTest {
 	public void shouldUnpackCorrectly() throws IOException {
 		tempDir.mkdir();
 
-		File zipFile = TestDataProvider.getZipFile();
+		File zipFile = TestDataProvider.getZipFile(tempDir);
 
 		UnpackerService unpacker = new UnpackerServiceImpl();
 		unpacker.unpack(zipFile, tempDir);
