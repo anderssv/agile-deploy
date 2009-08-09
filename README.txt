@@ -20,6 +20,8 @@ It is loosely based around the following articles:
 ** Unpacking
 ** Download snapshot
 ** Installing configuration
+* Issues with clean up after run of deployer, some directories can not be deleted
+* Default config for all environments, can be overrided by env
 
 = TODO =
 * Installing the application by
@@ -28,7 +30,6 @@ It is loosely based around the following articles:
 * Run with daemon? JSW might have licence issues
 * Start/stop scripts
 * Recommended practices
-* Issues with clean up after run of deployer, some directories can not be deleted
 * Correct permissions on execute scripts
 
 Some of these parts should probably be in something

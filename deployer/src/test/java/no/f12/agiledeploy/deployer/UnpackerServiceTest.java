@@ -4,9 +4,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Test;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class UnpackerServiceTest {
 
@@ -20,12 +24,28 @@ public class UnpackerServiceTest {
 
 		UnpackerService unpacker = new UnpackerServiceImpl();
 		unpacker.unpack(zipFile, tempDir);
-		FileUtil.moveOneUp(tempDir, "myapp-server-0.1-SNAPSHOT");
+		FileUtil.moveOneUp(new File(tempDir, "myapp-server-0.1-SNAPSHOT"));
 
 		assertTrue(new File(tempDir, "bin").exists());
 		assertTrue(new File(tempDir, "repo").exists());
 		assertTrue(new File(tempDir, "bin/myapp").exists());
 		assertTrue(new File(tempDir, "bin/myapp.bat").exists());
+	}
+	
+	@Test
+	public void shouldUnpackContents() throws IOException {
+		tempDir.mkdir();
+		File zipFile = TestDataProvider.getZipFile(tempDir);
+
+		UnpackerService unpacker = new UnpackerServiceImpl();
+		unpacker.unpack(zipFile, tempDir);
+		FileUtil.moveOneUp(new File(tempDir, "myapp-server-0.1-SNAPSHOT"));
+
+		File fileToCheck = new File(tempDir, "properties/system.properties");
+		assertTrue(fileToCheck.exists());
+		Resource propertyFile = new DefaultResourceLoader().getResource("file:" + fileToCheck.getAbsolutePath());
+		Properties props = PropertiesLoaderUtils.loadProperties(propertyFile);
+		assertTrue(props.propertyNames().hasMoreElements());
 	}
 
 	@After

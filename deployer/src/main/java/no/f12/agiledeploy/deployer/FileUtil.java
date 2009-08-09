@@ -51,13 +51,19 @@ public class FileUtil {
 		}
 	}
 
-	public static void moveOneUp(File deployDirectory, String directoryName) {
-		File dir = new File(deployDirectory, directoryName);
+	public static void moveOneUp(File directory) {
+		File dir = directory;
+		File parent = dir.getParentFile();
 		File[] subFiles = dir.listFiles();
 		if (subFiles != null) {
 			for (File file : subFiles) {
-				File target = new File(deployDirectory, file.getName());
-				file.renameTo(target);
+				File target = new File(parent, file.getName());
+				boolean success = file.renameTo(target);
+				LOG.debug("Moved file from " + file + " to " + target);
+				if (!success) {
+					LOG.warn("Rename returned false for " + file);
+					//throw new IllegalStateException("Rename returned false for " + file);
+				}
 			}
 		}
 		dir.delete();

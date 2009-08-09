@@ -12,13 +12,19 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	@Override
 	public void configure(File unpackDir, String environment) {
-		File propDir = new File(unpackDir, "properties/" + environment);
+		File propDir = new File(unpackDir, "properties");
+		File environmentPropDir = new File(propDir, environment);
 		LOG.info("Updating configuration");
+		installProperties(unpackDir, environmentPropDir);
+		installProperties(unpackDir, propDir);
+	}
+
+	private void installProperties(File unpackDir, File propDir) {
 		if (propDir.exists()) {
 			File[] files = propDir.listFiles();
 			for (File source : files) {
 				File target = new File(unpackDir, source.getName());
-				if (!target.exists()) {
+				if (!target.exists() && source.isFile()) {
 					FileUtil.copyFile(source, target);
 					LOG.info("Installed configuration file: " + source);
 				} else {

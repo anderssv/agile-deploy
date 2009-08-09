@@ -52,7 +52,7 @@ public class DeployServiceImpl implements DeployService {
 	}
 
 	public static void removeArtifactAndVersionFromPath(File deployDirectory, PackageSpecification spec) {
-		FileUtil.moveOneUp(deployDirectory, spec.getArtifactFileName());
+		FileUtil.moveOneUp(new File(deployDirectory, spec.getArtifactFileName()));
 	}
 
 	@Override

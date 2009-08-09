@@ -8,9 +8,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Test;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class ConfigurationServiceTest {
 
@@ -28,7 +32,7 @@ public class ConfigurationServiceTest {
 		UnpackerService unpacker = new UnpackerServiceImpl();
 		File workingDirectory = TestDataProvider.getDefaultTempDir();
 		unpacker.unpack(TestDataProvider.getZipFile(workingDirectory), workingDirectory);
-		FileUtil.moveOneUp(workingDirectory, "myapp-server-0.1-SNAPSHOT");
+		FileUtil.moveOneUp(new File(workingDirectory, "myapp-server-0.1-SNAPSHOT"));
 		return workingDirectory;
 	}
 
@@ -48,6 +52,28 @@ public class ConfigurationServiceTest {
 		BufferedReader bReader = new BufferedReader(reader);
 		assertEquals("testing", bReader.readLine());
 		bReader.close();
+	}
+
+	@Test
+	public void shouldCopyFilesForAllEnvironments() throws IOException {
+		File workingDirectory = createFiles();
+
+		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		configService.configure(workingDirectory, "test");
+
+		assertTrue(new File(workingDirectory, "allenvs.properties").exists());
+	}
+
+	@Test
+	public void shouldNotOverWriteCustomFileForEnvironmentWithFileForAllEnvironments() throws IOException {
+		File workingDirectory = createFiles();
+
+		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		configService.configure(workingDirectory, "test");
+
+		Resource propertyFile = new DefaultResourceLoader().getResource("file:" + workingDirectory.getPath() + "/system.properties");
+		Properties props = PropertiesLoaderUtils.loadProperties(propertyFile);
+		assertTrue(props.get("env").equals("test"));
 	}
 
 	@After
