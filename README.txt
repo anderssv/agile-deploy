@@ -24,13 +24,16 @@ It is loosely based around the following articles:
 * Default config for all environments, can be overrided by env
 
 = TODO =
+* Upgrading the database
+* Start/stop scripts
+* Correct permissions on execute scripts
+
+= FUTURE =
+* Recommended practices
+* Merge in new settins in properties files into existing file on disk?
+* Run with daemon? JSW might have licence issues
 * Installing the application by
 ** Replacing Symlinks
-* Upgrading the database
-* Run with daemon? JSW might have licence issues
-* Start/stop scripts
-* Recommended practices
-* Correct permissions on execute scripts
 
 Some of these parts should probably be in something
 like Scala or JRuby, but I'll have to take the time
