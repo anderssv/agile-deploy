@@ -19,16 +19,17 @@ It is loosely based around the following articles:
 ** Download release
 ** Unpacking
 ** Download snapshot
+** Installing configuration
 
 = TODO =
 * Installing the application by
-** Installing configuration
 ** Replacing Symlinks
 * Upgrading the database
 * Run with daemon? JSW might have licence issues
 * Start/stop scripts
 * Recommended practices
 * Issues with clean up after run of deployer, some directories can not be deleted
+* Correct permissions on execute scripts
 
 Some of these parts should probably be in something
 like Scala or JRuby, but I'll have to take the time
