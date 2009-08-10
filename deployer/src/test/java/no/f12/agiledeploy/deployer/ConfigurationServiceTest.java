@@ -22,10 +22,16 @@ public class ConfigurationServiceTest {
 	public void shouldCopyFilesForCurrentEnvironmentIfTheyDontExist() throws IOException {
 		File workingDirectory = createFiles();
 
-		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		ConfigurationServiceImpl configService = createService();
 		configService.configure(workingDirectory, "test");
 
 		assertTrue(new File(workingDirectory, "datasource.properties").exists());
+	}
+
+	private ConfigurationServiceImpl createService() {
+		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		configService.setFileSystemAdapter(new FileSystemAdapterImpl());
+		return configService;
 	}
 
 	private File createFiles() throws IOException {
@@ -45,7 +51,7 @@ public class ConfigurationServiceTest {
 		writer.write("testing");
 		writer.close();
 
-		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		ConfigurationServiceImpl configService = createService();
 		configService.configure(workingDirectory, "test");
 
 		FileReader reader = new FileReader(target);
@@ -58,7 +64,7 @@ public class ConfigurationServiceTest {
 	public void shouldCopyFilesForAllEnvironments() throws IOException {
 		File workingDirectory = createFiles();
 
-		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		ConfigurationServiceImpl configService = createService();
 		configService.configure(workingDirectory, "test");
 
 		assertTrue(new File(workingDirectory, "allenvs.properties").exists());
@@ -68,10 +74,11 @@ public class ConfigurationServiceTest {
 	public void shouldNotOverWriteCustomFileForEnvironmentWithFileForAllEnvironments() throws IOException {
 		File workingDirectory = createFiles();
 
-		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		ConfigurationServiceImpl configService = createService();
 		configService.configure(workingDirectory, "test");
 
-		Resource propertyFile = new DefaultResourceLoader().getResource("file:" + workingDirectory.getPath() + "/system.properties");
+		Resource propertyFile = new DefaultResourceLoader().getResource("file:" + workingDirectory.getPath()
+				+ "/system.properties");
 		Properties props = PropertiesLoaderUtils.loadProperties(propertyFile);
 		assertTrue(props.get("env").equals("test"));
 	}

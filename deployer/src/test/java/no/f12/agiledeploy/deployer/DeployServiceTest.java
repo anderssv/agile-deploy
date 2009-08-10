@@ -17,6 +17,7 @@ public class DeployServiceTest {
 	private RepositoryService repoServ;
 	private UnpackerService unpackServ;
 	private ConfigurationService configServ;
+	private FileSystemAdapter fsAdapter;
 
 	private DeployServiceImpl dServ;
 	
@@ -29,6 +30,7 @@ public class DeployServiceTest {
 		repoServ = mock(RepositoryService.class);
 		unpackServ = mock(UnpackerService.class);
 		configServ = mock(ConfigurationService.class);
+		fsAdapter = mock(FileSystemAdapter.class);
 
 		when(repoServ.fetchPackage((PackageSpecification) anyObject(), (File) anyObject())).thenReturn(downloaded);
 	}
@@ -42,6 +44,7 @@ public class DeployServiceTest {
 		dServ.setRepositoryService(repoServ);
 		dServ.setUnpackerService(unpackServ);
 		dServ.setConfigurationService(configServ);
+		dServ.setFileSystemAdapter(fsAdapter);
 	}
 
 	@Test

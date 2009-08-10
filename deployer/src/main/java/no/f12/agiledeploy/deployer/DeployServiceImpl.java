@@ -8,14 +8,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeployServiceImpl implements DeployService {
 
-	@Autowired
+	@Autowired(required=true)
 	private RepositoryService repositoryService;
-	@Autowired
+	@Autowired(required=true)
 	private UnpackerService unpackerService;
-	@Autowired
+	@Autowired(required=true)
 	private File workingDirectory = new File(".");
-	@Autowired
+	@Autowired(required=true)
 	private ConfigurationService configurationService;
+	@Autowired(required=true)
+	private FileSystemAdapter fileSystemAdapter;
 
 	public void setRepositoryService(RepositoryService repoServ) {
 		this.repositoryService = repoServ;
@@ -44,15 +46,15 @@ public class DeployServiceImpl implements DeployService {
 	private File prepareDeployDirectory(File workingPath, PackageSpecification spec, String environment) {
 		File deployDirectory = new File(workingPath, spec.getInstallationPath(environment));
 		if (deployDirectory.exists()) {
-			FileUtil.deleteDir(deployDirectory);
+			fileSystemAdapter.deleteDir(deployDirectory);
 		} else if (!deployDirectory.mkdirs()) {
 			throw new IllegalStateException("Could not create directory to deploy to: " + deployDirectory);
 		}
 		return deployDirectory;
 	}
 
-	public static void removeArtifactAndVersionFromPath(File deployDirectory, PackageSpecification spec) {
-		FileUtil.moveOneUp(new File(deployDirectory, spec.getArtifactFileName()));
+	public void removeArtifactAndVersionFromPath(File deployDirectory, PackageSpecification spec) {
+		fileSystemAdapter.moveOneUp(new File(deployDirectory, spec.getArtifactFileName()));
 	}
 
 	@Override
@@ -62,6 +64,10 @@ public class DeployServiceImpl implements DeployService {
 
 	public void setConfigurationService(ConfigurationService configServ) {
 		this.configurationService = configServ;
+	}
+
+	public void setFileSystemAdapter(FileSystemAdapter adapter) {
+		this.fileSystemAdapter = adapter;
 	}
 
 }

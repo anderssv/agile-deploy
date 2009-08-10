@@ -25,7 +25,7 @@ public class TestDataProvider {
 
 		workingdirectory.mkdirs();
 		File result = new File(workingdirectory, zipFile.getName());
-		FileUtil.copyFile(zipFile, result);
+		new FileSystemAdapterImpl().copyFile(zipFile, result);
 		
 		return result;
 	}
