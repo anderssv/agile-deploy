@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileSystemAdapterImpl implements FileSystemAdapter {
 
-	public static final String DEFAULT_SYMLINKCOMMAND = "ln -s %1$s %2$s"; 
+	public static final String DEFAULT_SYMLINKCOMMAND = "ln -s %1$s %2$s";
 	private String symLinkCommand = DEFAULT_SYMLINKCOMMAND;
 
 	@Override
@@ -28,8 +28,10 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 
 	@Override
 	public void createSymbolicLink(File source, File symLink) {
+
 		try {
-			Runtime.getRuntime().exec(String.format(symLinkCommand, source, symLink));
+			String command = String.format(symLinkCommand, source.getCanonicalPath(), symLink.getCanonicalPath());
+			Process proc = Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
 			throw new IllegalStateException("Could not create symlink", e);
 		}

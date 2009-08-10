@@ -33,6 +33,10 @@ public class TestDataProvider {
 	public static File getDefaultTempDir() {
 		return new File("./target/temp");
 	}
+	
+	public static File getDefaultArtifactDir() {
+		return new File(getDefaultTempDir(), "test-artifact");
+	}
 
 	@Test
 	public void shouldNotFailMavenBuildJustBecauseThereIsNoTestsInThisClass() {

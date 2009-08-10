@@ -37,7 +37,7 @@ public class ConfigurationServiceTest {
 
 	private File createFiles() throws IOException {
 		UnpackerService unpacker = new UnpackerServiceImpl();
-		File workingDirectory = TestDataProvider.getDefaultTempDir();
+		File workingDirectory = TestDataProvider.getDefaultArtifactDir();
 		unpacker.unpack(TestDataProvider.getZipFile(workingDirectory), workingDirectory);
 		FileUtil.moveOneUp(new File(workingDirectory, "myapp-server-0.1-SNAPSHOT"));
 		return workingDirectory;
@@ -99,7 +99,7 @@ public class ConfigurationServiceTest {
 	}
 
 	private File createDataDir(File workingDirectory) {
-		File dataDir = new File(workingDirectory, "data");
+		File dataDir = new File(workingDirectory.getParent(), "data");
 		dataDir.mkdirs();
 		return dataDir;
 	}

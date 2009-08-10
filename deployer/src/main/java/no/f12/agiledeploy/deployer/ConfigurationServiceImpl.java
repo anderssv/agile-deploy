@@ -18,7 +18,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	public void configure(File unpackDir, String environment) {
 		File propDir = new File(unpackDir, "properties");
 		File environmentPropDir = new File(propDir, environment);
-		File dataDir = new File(unpackDir, "data");
+		File dataDir = new File(unpackDir.getParent(), "data");
 
 		LOG.info("Updating configuration");
 		installProperties(unpackDir, environmentPropDir);

@@ -22,9 +22,11 @@ It is loosely based around the following articles:
 ** Installing configuration
 * Issues with clean up after run of deployer, some directories can not be deleted
 * Default config for all environments, can be overrided by env
+* Data directory in the environment dir that is not deleted on redeploy
+* Sym link to data directory
 
 = TODO =
-* Handle data-files?
+* Copy files to env dir and sym link to current
 * Upgrading the database
 * Start/stop scripts
 * Correct permissions on execute scripts
@@ -33,8 +35,6 @@ It is loosely based around the following articles:
 * Recommended practices
 * Merge in new settins in properties files into existing file on disk?
 * Run with daemon? JSW might have licence issues
-* Installing the application by
-** Replacing Symlinks
 
 Some of these parts should probably be in something
 like Scala or JRuby, but I'll have to take the time
