@@ -24,6 +24,7 @@ It is loosely based around the following articles:
 * Default config for all environments, can be overrided by env
 
 = TODO =
+* Handle data-files?
 * Upgrading the database
 * Start/stop scripts
 * Correct permissions on execute scripts
