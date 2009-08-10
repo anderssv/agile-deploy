@@ -11,16 +11,28 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	private static final Logger LOG = Logger.getLogger(ConfigurationServiceImpl.class);
 
-	@Autowired(required=true)
+	@Autowired(required = true)
 	private FileSystemAdapter fileSystemAdapter;
 
 	@Override
 	public void configure(File unpackDir, String environment) {
 		File propDir = new File(unpackDir, "properties");
 		File environmentPropDir = new File(propDir, environment);
+		File dataDir = new File(unpackDir, "data");
+
 		LOG.info("Updating configuration");
 		installProperties(unpackDir, environmentPropDir);
 		installProperties(unpackDir, propDir);
+
+		LOG.info("Creating links");
+		if (dataDir.exists()) {
+			try {
+				fileSystemAdapter.createSymbolicLink(dataDir, new File(unpackDir, "data"));
+			} catch (IllegalStateException e) {
+				LOG.warn("Could not create sym link to data directory at " + dataDir
+						+ ". Please make sure your application does not write to a data dir under your root.", e);
+			}
+		}
 	}
 
 	private void installProperties(File unpackDir, File propDir) {

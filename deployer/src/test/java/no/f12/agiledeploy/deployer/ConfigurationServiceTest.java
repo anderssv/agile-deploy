@@ -1,6 +1,7 @@
 package no.f12.agiledeploy.deployer;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -63,8 +64,8 @@ public class ConfigurationServiceTest {
 	@Test
 	public void shouldCopyFilesForAllEnvironments() throws IOException {
 		File workingDirectory = createFiles();
-
 		ConfigurationServiceImpl configService = createService();
+
 		configService.configure(workingDirectory, "test");
 
 		assertTrue(new File(workingDirectory, "allenvs.properties").exists());
@@ -73,14 +74,34 @@ public class ConfigurationServiceTest {
 	@Test
 	public void shouldNotOverWriteCustomFileForEnvironmentWithFileForAllEnvironments() throws IOException {
 		File workingDirectory = createFiles();
-
 		ConfigurationServiceImpl configService = createService();
+
 		configService.configure(workingDirectory, "test");
 
 		Resource propertyFile = new DefaultResourceLoader().getResource("file:" + workingDirectory.getPath()
 				+ "/system.properties");
 		Properties props = PropertiesLoaderUtils.loadProperties(propertyFile);
 		assertTrue(props.get("env").equals("test"));
+	}
+
+	@Test
+	public void shouldSymLinkToDataDirectoryIfItExists() throws IOException {
+		File workingDirectory = createFiles();
+		File dataDir = createDataDir(workingDirectory);
+
+		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		FileSystemAdapter fsAdapter = mock(FileSystemAdapter.class);
+		configService.setFileSystemAdapter(fsAdapter);
+		
+		configService.configure(workingDirectory, "test");
+		
+		verify(fsAdapter).createSymbolicLink(dataDir, new File(workingDirectory, "data"));
+	}
+
+	private File createDataDir(File workingDirectory) {
+		File dataDir = new File(workingDirectory, "data");
+		dataDir.mkdirs();
+		return dataDir;
 	}
 
 	@After

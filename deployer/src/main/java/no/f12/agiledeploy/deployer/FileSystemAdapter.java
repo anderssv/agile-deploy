@@ -9,5 +9,8 @@ public interface FileSystemAdapter {
 	public void deleteDir(File deployDirectory);
 
 	public void moveOneUp(File file);
-	
+
+	public void createSymbolicLink(File source, File symLink);
+
+
 }
