@@ -91,20 +91,21 @@ public class ConfigurationServiceTest {
 
 	@Test
 	public void shouldSymLinkToDataDirectoryIfItExists() throws IOException {
-		File workingDirectory = createFiles();
-		File dataDir = createDataDir(workingDirectory);
+		File environmentDirectory = createFiles();
+		File artifactDirectory = environmentDirectory.getParentFile();
+		createDataDir(environmentDirectory);
 
 		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
 		FileSystemAdapter fsAdapter = mock(FileSystemAdapter.class);
 		configService.setFileSystemAdapter(fsAdapter);
 
-		configService.configure(workingDirectory, "test");
+		configService.configure(environmentDirectory, "test");
 
-		verify(fsAdapter).createSymbolicLink(dataDir, new File(workingDirectory, "data"));
+		verify(fsAdapter).createSymbolicLink(new File(artifactDirectory, "test/data"), new File(artifactDirectory, "test/current/data"));
 	}
 
-	private File createDataDir(File workingDirectory) {
-		File dataDir = new File(workingDirectory, "data");
+	private File createDataDir(File baseDirectory) {
+		File dataDir = new File(baseDirectory, "data");
 		dataDir.mkdirs();
 		return dataDir;
 	}

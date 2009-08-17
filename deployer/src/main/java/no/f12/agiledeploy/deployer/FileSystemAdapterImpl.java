@@ -28,7 +28,6 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 
 	@Override
 	public void createSymbolicLink(File source, File symLink) {
-
 		try {
 			String command = String.format(symLinkCommand, source.getCanonicalPath(), symLink.getCanonicalPath());
 			Runtime.getRuntime().exec(command);
