@@ -23,21 +23,22 @@ public class RepositoryServiceImpl implements RepositoryService {
 
 	public File fetchPackage(PackageSpecification spec, File workingDirectory) {
 		if (spec.isSnapshot()) {
-			File metadataFile = repositoryRepo.fetchFile(spec.getArtifactPath(), spec.getMetadataFilename(),
-					workingDirectory);
+			File metadataFile = repositoryRepo.fetchFile(spec.getRepositoryInformation().getArtifactPath(), spec
+					.getMetadataFilename(), workingDirectory);
 			Document parsedDoc = parseXmlFile(metadataFile);
 			metadataFile.delete();
 
 			String timestamp = extractElementValue(parsedDoc, "timestamp");
 			String buildNumber = extractElementValue(parsedDoc, "buildNumber");
 
-			File artifactFile = repositoryRepo.fetchFile(spec.getArtifactPath(), spec.getArtifactFilename(timestamp
-					+ "-" + buildNumber)
+			File artifactFile = repositoryRepo.fetchFile(spec.getRepositoryInformation().getArtifactPath(), spec
+					.getArtifactFilename(timestamp + "-" + buildNumber)
 					+ "." + spec.getPackageType(), workingDirectory);
 			return artifactFile;
 		} else {
-			return repositoryRepo.fetchFile(spec.getArtifactPath(), spec.getArtifactFileName() + "."
-					+ spec.getPackageType(), workingDirectory);
+			return repositoryRepo.fetchFile(spec.getRepositoryInformation().getArtifactPath(), spec
+					.getArtifactFileName()
+					+ "." + spec.getPackageType(), workingDirectory);
 		}
 	}
 

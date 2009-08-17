@@ -1,5 +1,7 @@
 package no.f12.agiledeploy.deployer;
 
+import java.io.File;
+
 public class PackageSpecification {
 
 	private String groupId;
@@ -18,10 +20,6 @@ public class PackageSpecification {
 		this.packageType = packageType;
 	}
 
-	public String getArtifactPath() {
-		return this.groupId.replaceAll("\\.", "/") + "/" + this.artifactId + "/" + version;
-	}
-
 	public String getArtifactFileName() {
 		return artifactId + "-" + version;
 	}
@@ -32,10 +30,6 @@ public class PackageSpecification {
 
 	public String getMetadataFilename() {
 		return "maven-metadata.xml";
-	}
-
-	public String getFullFilename() {
-		return this.getArtifactPath() + "/" + this.getArtifactFileName();
 	}
 
 	public String getArtifactId() {
@@ -50,13 +44,64 @@ public class PackageSpecification {
 		return this.getArtifactFileName().replaceAll("-SNAPSHOT", "-" + snapshotReplacement);
 	}
 
-	public String getInstallationPath(String environment) {
-		return this.artifactId + "/" + environment + "/current";
+	public File getInstallationPath(File parent, String environment) {
+		return new File(parent, this.artifactId + "/" + environment + "/current");
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.groupId + ":" + this.artifactId + ":" + this.version;
 	}
 
+	public RepositoryInformation getRepositoryInformation() {
+		return new RepositoryInformation(this);
+	}
+	
+	public FileSystemInformation getFileSystemInformation() {
+		return new FileSystemInformation(this);
+	}
+
+	public class RepositoryInformation {
+		private PackageSpecification spec;
+
+		private RepositoryInformation(PackageSpecification spec) {
+			this.spec = spec;
+		}
+
+		public String getArtifactPath() {
+			return spec.groupId.replaceAll("\\.", "/") + "/" + spec.artifactId + "/" + version;
+		}
+
+		public String getFullFilename() {
+			return this.getArtifactPath() + "/" + spec.getArtifactFileName();
+		}
+	}
+
+	public class FileSystemInformation {
+		private PackageSpecification spec;
+
+		private FileSystemInformation(PackageSpecification spec) {
+			this.spec = spec;
+		}
+
+		public File getArtifactPath(File workingPath) {
+			return new File(workingPath, spec.getArtifactId());
+		}
+
+		public File getArtifactDataDirectory(File workingPath, String environment) {
+			return new File(getArtifactEnvironmentDirectory(workingPath, environment), "data");
+		}
+
+		private File getArtifactEnvironmentDirectory(File workingPath, String environment) {
+			return new File(getArtifactPath(workingPath), environment);
+		}
+
+		public File getArtifactPropertiesDirectory(File workingPath, String environment) {
+			return new File(getArtifactInstallationDirectory(workingPath, environment), "properties");
+		}
+
+		public File getArtifactInstallationDirectory(File workingPath, String environment) {
+			return new File(getArtifactEnvironmentDirectory(workingPath, environment), "current");
+		}
+	}
 }

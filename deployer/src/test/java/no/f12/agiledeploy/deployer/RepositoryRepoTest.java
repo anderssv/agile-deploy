@@ -25,7 +25,8 @@ public class RepositoryRepoTest {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		String fileName = spec.getArtifactFileName() + ".jar";
 
-		File downloadedFile = repo.fetchFile(spec.getArtifactPath(), fileName, new File("."));
+		File downloadedFile = repo
+				.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName, new File("."));
 
 		assertTrue(downloadedFile.exists());
 		assertTrue(downloadedFile.getName().equals(fileName));
