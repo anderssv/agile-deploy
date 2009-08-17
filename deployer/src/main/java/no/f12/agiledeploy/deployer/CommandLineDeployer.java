@@ -12,7 +12,7 @@ public class CommandLineDeployer {
 	private static final Logger LOG = Logger.getLogger(CommandLineDeployer.class);
 
 	private DeployService deployService;
-	private File workingDirectory;
+	private File workingDirectory = new File(".");
 
 	public CommandLineDeployer(String context) {
 		BeanFactory factory = new ClassPathXmlApplicationContext(context);

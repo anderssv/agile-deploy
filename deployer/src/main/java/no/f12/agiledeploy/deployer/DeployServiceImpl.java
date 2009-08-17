@@ -13,8 +13,6 @@ public class DeployServiceImpl implements DeployService {
 	@Autowired(required=true)
 	private UnpackerService unpackerService;
 	@Autowired(required=true)
-	private File workingDirectory = new File(".");
-	@Autowired(required=true)
 	private ConfigurationService configurationService;
 	@Autowired(required=true)
 	private FileSystemAdapter fileSystemAdapter;
@@ -55,11 +53,6 @@ public class DeployServiceImpl implements DeployService {
 
 	public void removeArtifactAndVersionFromPath(File deployDirectory, PackageSpecification spec) {
 		fileSystemAdapter.moveOneUp(new File(deployDirectory, spec.getArtifactFileName()));
-	}
-
-	@Override
-	public void deploy(PackageSpecification ps, String environment) {
-		deploy(ps, environment, workingDirectory);
 	}
 
 	public void setConfigurationService(ConfigurationService configServ) {
