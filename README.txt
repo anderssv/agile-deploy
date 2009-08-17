@@ -24,9 +24,9 @@ It is loosely based around the following articles:
 * Default config for all environments, can be overrided by env
 * Data directory in the environment dir that is not deleted on redeploy
 * Sym link to data directory
+* Copy files to env dir and sym link to current
 
 = TODO =
-* Copy files to env dir and sym link to current
 * Upgrading the database
 * Start/stop scripts
 * Correct permissions on execute scripts

@@ -24,7 +24,22 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		installProperties(environmentDirectory, propDir);
 
 		LOG.info("Creating links");
-		createLinks(environmentDirectory);
+		createDataLinks(environmentDirectory);
+		createPropertyLinks(environmentDirectory);
+	}
+
+	private void createPropertyLinks(File environmentDirectory) {
+		File installationDirectory = getLatestVersionInstallationDirectory(environmentDirectory);
+		File[] files = environmentDirectory.listFiles();
+		for (File file : files) {
+			if (!file.isDirectory()) {
+				try {
+					this.fileSystemAdapter.createSymbolicLink(file, new File(installationDirectory, file.getName()));
+				} catch (IllegalStateException e) {
+					this.fileSystemAdapter.copyFile(file, new File(installationDirectory, file.getName()));
+				}
+			}
+		}
 	}
 
 	private File getDataDirectory(File environmentDirectory) {
@@ -43,12 +58,13 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		return new File(environmentDirectory, "current");
 	}
 
-	private void createLinks(File environmentDirectory) {
+	private void createDataLinks(File environmentDirectory) {
 		File dataDir = getDataDirectory(environmentDirectory);
 		File installationDirectory = getLatestVersionInstallationDirectory(environmentDirectory);
 		if (dataDir.exists()) {
 			try {
 				fileSystemAdapter.createSymbolicLink(dataDir, new File(installationDirectory, "data"));
+				LOG.info("Created link to " + dataDir);
 			} catch (IllegalStateException e) {
 				LOG.warn("Could not create sym link to data directory at " + dataDir
 						+ ". Please make sure your application does not write to a data dir under your root.", e);

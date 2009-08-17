@@ -38,6 +38,7 @@ public class FileUtil {
 	}
 
 	public static void copyFile(File source, File target) {
+		LOG.debug("Copying file " + source + " to " + target);
 		try {
 			FileChannel in = (new FileInputStream(source)).getChannel();
 			FileChannel out = (new FileOutputStream(target)).getChannel();
@@ -61,8 +62,7 @@ public class FileUtil {
 				boolean success = file.renameTo(target);
 				LOG.debug("Moved file from " + file + " to " + target);
 				if (!success) {
-					LOG.warn("Rename returned false for " + file);
-					//throw new IllegalStateException("Rename returned false for " + file);
+					throw new IllegalStateException("Rename returned false for " + file);
 				}
 			}
 		}

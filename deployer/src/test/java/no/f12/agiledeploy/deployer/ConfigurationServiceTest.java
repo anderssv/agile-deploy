@@ -1,8 +1,7 @@
 package no.f12.agiledeploy.deployer;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,6 +82,36 @@ public class ConfigurationServiceTest {
 				new File(workingDirectory, "test-artifact/test/current/data"));
 	}
 
+	@Test
+	public void shouldSymLinkToPropertiesFiles() {
+		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		FileSystemAdapter fsAdapter = spy(new FileSystemAdapterImpl());
+		configService.setFileSystemAdapter(fsAdapter);
+
+		configService.configure(environmentDirectory, "test");
+
+		verify(fsAdapter).createSymbolicLink(new File(workingDirectory, "test-artifact/test/allenvs.properties"),
+				new File(workingDirectory, "test-artifact/test/current/allenvs.properties"));
+	}
+
+	@Test
+	public void shouldCopyIfSymLinkFails() throws IOException {
+		File target = new File(workingDirectory, "test-artifact/test/datasource.properties");
+		TestDataProvider.writeContentToFile(target, "testing");
+		
+		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		FileSystemAdapter fsAdapter = mock(FileSystemAdapter.class);
+		configService.setFileSystemAdapter(fsAdapter);
+
+		doThrow(new IllegalStateException("No symlinks here")).when(fsAdapter).createSymbolicLink((File) anyObject(),
+				(File) anyObject());
+
+		configService.configure(environmentDirectory, "test");
+
+		verify(fsAdapter).copyFile(new File(workingDirectory, "test-artifact/test/datasource.properties"),
+				new File(workingDirectory, "test-artifact/test/current/datasource.properties"));
+	}
+
 	private File createDataDir(File baseDirectory) {
 		File dataDir = new File(baseDirectory, "data");
 		dataDir.mkdirs();
@@ -103,7 +132,7 @@ public class ConfigurationServiceTest {
 	}
 
 	@After
-	public void removeDir() {
+	public void removeDir() throws InterruptedException {
 		FileUtil.deleteDir(TestDataProvider.getDefaultTempDir());
 	}
 

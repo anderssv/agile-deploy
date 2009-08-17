@@ -30,8 +30,14 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 	public void createSymbolicLink(File source, File symLink) {
 		try {
 			String command = String.format(symLinkCommand, source.getCanonicalPath(), symLink.getCanonicalPath());
-			Runtime.getRuntime().exec(command);
+			Process proc = Runtime.getRuntime().exec(command);
+			int returnCode = proc.waitFor();
+			if (returnCode != 0) {
+				throw new IllegalStateException("Could not create symlink, process returned " + returnCode);
+			}
 		} catch (IOException e) {
+			throw new IllegalStateException("Could not create symlink", e);
+		} catch (InterruptedException e) {
 			throw new IllegalStateException("Could not create symlink", e);
 		}
 	}
