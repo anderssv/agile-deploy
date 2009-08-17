@@ -38,7 +38,7 @@ public class DeployServiceImpl implements DeployService {
 		unpackerService.unpack(downloadedFile, deployDirectory);
 		removeArtifactAndVersionFromPath(deployDirectory, spec);
 
-		configurationService.configure(deployDirectory, environment);
+		configurationService.configure(deployDirectory.getParentFile(), environment);
 
 		downloadedFile.deleteOnExit();
 	}

@@ -21,12 +21,12 @@ public class ConfigurationServiceTest {
 
 	@Test
 	public void shouldCopyFilesForCurrentEnvironmentIfTheyDontExist() throws IOException {
-		File workingDirectory = createFiles();
+		File installationDirectory = createFiles();
 
 		ConfigurationServiceImpl configService = createService();
-		configService.configure(workingDirectory, "test");
+		configService.configure(installationDirectory, "test");
 
-		assertTrue(new File(workingDirectory, "datasource.properties").exists());
+		assertTrue(new File(installationDirectory, "datasource.properties").exists());
 	}
 
 	private ConfigurationServiceImpl createService() {
@@ -36,11 +36,16 @@ public class ConfigurationServiceTest {
 	}
 
 	private File createFiles() throws IOException {
+		File baseArtifactDir = TestDataProvider.getDefaultArtifactDir();
+		File environmentDir = new File(baseArtifactDir, "test");
+		File installDir = new File(environmentDir, "current");
+
 		UnpackerService unpacker = new UnpackerServiceImpl();
-		File workingDirectory = TestDataProvider.getDefaultArtifactDir();
-		unpacker.unpack(TestDataProvider.getZipFile(workingDirectory), workingDirectory);
-		FileUtil.moveOneUp(new File(workingDirectory, "myapp-server-0.1-SNAPSHOT"));
-		return workingDirectory;
+		unpacker.unpack(TestDataProvider.getZipFile(baseArtifactDir), installDir);
+
+		FileUtil.moveOneUp(new File(installDir, "myapp-server-0.1-SNAPSHOT"));
+
+		return environmentDir;
 	}
 
 	@Test
@@ -92,14 +97,14 @@ public class ConfigurationServiceTest {
 		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
 		FileSystemAdapter fsAdapter = mock(FileSystemAdapter.class);
 		configService.setFileSystemAdapter(fsAdapter);
-		
+
 		configService.configure(workingDirectory, "test");
-		
+
 		verify(fsAdapter).createSymbolicLink(dataDir, new File(workingDirectory, "data"));
 	}
 
 	private File createDataDir(File workingDirectory) {
-		File dataDir = new File(workingDirectory.getParent(), "data");
+		File dataDir = new File(workingDirectory, "data");
 		dataDir.mkdirs();
 		return dataDir;
 	}

@@ -57,7 +57,7 @@ public class DeployServiceTest {
 
 		verify(repoServ).fetchPackage(spec, tempDir);
 		verify(unpackServ).unpack(downloadedFile, unpackDir);
-		verify(configServ).configure(unpackDir, "test");
+		verify(configServ).configure(unpackDir.getParentFile(), "test");
 	}
 
 	@Test
