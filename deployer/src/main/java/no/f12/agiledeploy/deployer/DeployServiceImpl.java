@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeployServiceImpl implements DeployService {
 
-	@Autowired(required=true)
+	@Autowired(required = true)
 	private RepositoryService repositoryService;
-	@Autowired(required=true)
+	@Autowired(required = true)
 	private UnpackerService unpackerService;
-	@Autowired(required=true)
+	@Autowired(required = true)
 	private ConfigurationService configurationService;
-	@Autowired(required=true)
+	@Autowired(required = true)
 	private FileSystemAdapter fileSystemAdapter;
 
 	public void setRepositoryService(RepositoryService repoServ) {
@@ -27,28 +27,30 @@ public class DeployServiceImpl implements DeployService {
 
 	@Override
 	public void deploy(PackageSpecification spec, String environment, File workingDirectory) {
+		File installationDirectory = spec.getFileSystemInformation().getArtifactInstallationDirectory(workingDirectory,
+				environment);
+		File environmentDirectory = spec.getFileSystemInformation().getArtifactEnvironmentDirectory(workingDirectory,
+				environment);
 		workingDirectory.mkdirs();
 
 		File downloadedFile = repositoryService.fetchPackage(spec, workingDirectory);
 
-		File deployDirectory = prepareDeployDirectory(workingDirectory, spec, environment);
+		prepareInstallationDirectory(installationDirectory, spec, environment);
 
-		unpackerService.unpack(downloadedFile, deployDirectory);
-		removeArtifactAndVersionFromPath(deployDirectory, spec);
+		unpackerService.unpack(downloadedFile, installationDirectory);
+		removeArtifactAndVersionFromPath(installationDirectory, spec);
 
-		configurationService.configure(deployDirectory.getParentFile(), environment);
+		configurationService.configure(environmentDirectory, environment);
 
 		downloadedFile.deleteOnExit();
 	}
 
-	private File prepareDeployDirectory(File workingPath, PackageSpecification spec, String environment) {
-		File deployDirectory = spec.getInstallationPath(workingPath, environment);
-		if (deployDirectory.exists()) {
-			fileSystemAdapter.deleteDir(deployDirectory);
-		} else if (!deployDirectory.mkdirs()) {
-			throw new IllegalStateException("Could not create directory to deploy to: " + deployDirectory);
+	private void prepareInstallationDirectory(File installationDirectory, PackageSpecification spec, String environment) {
+		if (installationDirectory.exists()) {
+			fileSystemAdapter.deleteDir(installationDirectory);
+		} else if (!installationDirectory.mkdirs()) {
+			throw new IllegalStateException("Could not create directory to deploy to: " + installationDirectory);
 		}
-		return deployDirectory;
 	}
 
 	public void removeArtifactAndVersionFromPath(File deployDirectory, PackageSpecification spec) {

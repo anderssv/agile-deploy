@@ -4,6 +4,6 @@ import java.io.File;
 
 public interface ConfigurationService {
 
-	void configure(File unpackDir, String environment);
+	void configure(File environmentDirectory, String environment);
 
 }

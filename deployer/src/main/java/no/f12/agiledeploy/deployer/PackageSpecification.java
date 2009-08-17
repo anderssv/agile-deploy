@@ -92,7 +92,7 @@ public class PackageSpecification {
 			return new File(getArtifactEnvironmentDirectory(workingPath, environment), "data");
 		}
 
-		private File getArtifactEnvironmentDirectory(File workingPath, String environment) {
+		public File getArtifactEnvironmentDirectory(File workingPath, String environment) {
 			return new File(getArtifactPath(workingPath), environment);
 		}
 
