@@ -11,6 +11,7 @@ public interface FileSystemAdapter {
 	public void moveOneUp(File file);
 
 	public void createSymbolicLink(File source, File symLink);
+	
 
 
 }

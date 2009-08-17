@@ -31,7 +31,7 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 
 		try {
 			String command = String.format(symLinkCommand, source.getCanonicalPath(), symLink.getCanonicalPath());
-			Process proc = Runtime.getRuntime().exec(command);
+			Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
 			throw new IllegalStateException("Could not create symlink", e);
 		}
