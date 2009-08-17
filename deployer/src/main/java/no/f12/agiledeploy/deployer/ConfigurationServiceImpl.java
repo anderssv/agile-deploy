@@ -26,6 +26,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		installProperties(environmentDirectory, propDir);
 
 		LOG.info("Creating links");
+		createLinks(environmentDirectory, dataDir);
+	}
+
+	private void createLinks(File environmentDirectory, File dataDir) {
 		if (dataDir.exists()) {
 			try {
 				fileSystemAdapter.createSymbolicLink(dataDir, new File(environmentDirectory, "data"));
