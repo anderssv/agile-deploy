@@ -1,11 +1,14 @@
 package no.f12.agiledeploy.deployer;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
@@ -14,27 +17,37 @@ public class FileUtil {
 	private static final Logger LOG = Logger.getLogger(FileUtil.class);
 
 	public static boolean deleteDir(File file) {
-		return deleteRecursive(file);
+		return deleteRecursive(file, null);
 	}
 
-	private static boolean deleteRecursive(File file) {
-		boolean success = false;
+	private static boolean deleteRecursive(File file, FileFilter filter) {
 		if (file != null && file.exists()) {
+			Collection<File> failed = new ArrayList<File>();
 			if (file.isDirectory()) {
-				File[] children = file.listFiles();
-				for (File child : children) {
-					deleteRecursive(child);
+				for (File child : file.listFiles()) {
+					if (matchesFilter(child, filter) && !deleteRecursive(child, filter)) {
+						failed.add(file);
+					}
 				}
-				success = file.delete();
+			}
+			if (matchesFilter(file, filter)) {
+				if (file.delete()) {
+					LOG.debug("Deleted " + file);
+				} else {
+					failed.add(file);
+				}
 			} else {
-				success = file.delete();
+				LOG.debug("Skipped file because it did not match filter " + file);
 			}
-			if (!success) {
-				LOG.warn("Could not delete " + file);
+			if (failed.size() > 0) {
+				return false;
 			}
-			return success;
 		}
 		return true;
+	}
+
+	private static boolean matchesFilter(File file, FileFilter filter) {
+		return filter == null || filter.accept(file);
 	}
 
 	public static void copyFile(File source, File target) {
@@ -67,6 +80,10 @@ public class FileUtil {
 			}
 		}
 		dir.delete();
+	}
+
+	public static void deleteDir(File dir, FileFilter filter) {
+		deleteRecursive(dir, filter);
 	}
 
 }

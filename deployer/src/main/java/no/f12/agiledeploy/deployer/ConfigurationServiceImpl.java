@@ -34,12 +34,19 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		for (File file : files) {
 			if (!file.isDirectory()) {
 				try {
-					this.fileSystemAdapter.createSymbolicLink(file, new File(installationDirectory, file.getName()));
+					linkInto(file, installationDirectory);
 				} catch (IllegalStateException e) {
 					this.fileSystemAdapter.copyFile(file, new File(installationDirectory, file.getName()));
+					LOG.info("Unable to link. Copied " + file);
 				}
 			}
 		}
+	}
+
+	private void linkInto(File realFile, File installationDirectory) {
+		File link = new File(installationDirectory, realFile.getName());
+		this.fileSystemAdapter.createSymbolicLink(realFile, link);
+		LOG.info("Created link for " + realFile + " at " + link);
 	}
 
 	private File getDataDirectory(File environmentDirectory) {
@@ -61,14 +68,15 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	private void createDataLinks(File environmentDirectory) {
 		File dataDir = getDataDirectory(environmentDirectory);
 		File installationDirectory = getLatestVersionInstallationDirectory(environmentDirectory);
-		if (dataDir.exists()) {
-			try {
-				fileSystemAdapter.createSymbolicLink(dataDir, new File(installationDirectory, "data"));
-				LOG.info("Created link to " + dataDir);
-			} catch (IllegalStateException e) {
-				LOG.warn("Could not create sym link to data directory at " + dataDir
-						+ ". Please make sure your application does not write to a data dir under your root.", e);
-			}
+		if (!dataDir.exists()) {
+			dataDir.mkdirs();
+		}
+
+		try {
+			linkInto(dataDir, installationDirectory);
+		} catch (IllegalStateException e) {
+			LOG.warn("Could not create sym link to data directory at " + dataDir
+					+ ". Please make sure your application does not write to a data dir under your root.", e);
 		}
 	}
 

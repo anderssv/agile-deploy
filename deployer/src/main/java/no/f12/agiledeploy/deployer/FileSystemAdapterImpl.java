@@ -1,6 +1,7 @@
 package no.f12.agiledeploy.deployer;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import org.springframework.stereotype.Component;
@@ -44,6 +45,10 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 
 	public void setSymLinkCommand(String command) {
 		this.symLinkCommand = command;
+	}
+
+	public void deleteDir(File dir, FileFilter filter) {
+		FileUtil.deleteDir(dir, filter);
 	}
 
 }

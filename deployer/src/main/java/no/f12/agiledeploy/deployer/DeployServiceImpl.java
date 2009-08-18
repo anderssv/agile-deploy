@@ -1,6 +1,7 @@
 package no.f12.agiledeploy.deployer;
 
 import java.io.File;
+import java.io.FileFilter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,7 +48,15 @@ public class DeployServiceImpl implements DeployService {
 
 	private void prepareInstallationDirectory(File installationDirectory, PackageSpecification spec, String environment) {
 		if (installationDirectory.exists()) {
-			fileSystemAdapter.deleteDir(installationDirectory);
+			fileSystemAdapter.deleteDir(installationDirectory, new FileFilter() {
+				@Override
+				public boolean accept(File pathname) {
+					if (pathname.getName().equals("data")) {
+						return false;
+					}
+					return true;
+				}
+			});
 		} else if (!installationDirectory.mkdirs()) {
 			throw new IllegalStateException("Could not create directory to deploy to: " + installationDirectory);
 		}
