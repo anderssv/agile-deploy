@@ -45,8 +45,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	private void linkInto(File realFile, File installationDirectory) {
 		File link = new File(installationDirectory, realFile.getName());
-		this.fileSystemAdapter.createSymbolicLink(realFile, link);
-		LOG.info("Created link for " + realFile + " at " + link);
+		if (!link.exists()) {
+			this.fileSystemAdapter.createSymbolicLink(realFile, link);
+			LOG.info("Created link for " + realFile + " at " + link);
+		}
 	}
 
 	private File getDataDirectory(File environmentDirectory) {
@@ -72,6 +74,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 			dataDir.mkdirs();
 		}
 
+		
 		try {
 			linkInto(dataDir, installationDirectory);
 		} catch (IllegalStateException e) {
