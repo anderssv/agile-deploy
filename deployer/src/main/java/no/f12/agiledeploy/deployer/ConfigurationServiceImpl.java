@@ -45,10 +45,15 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	private void linkInto(File realFile, File installationDirectory) {
 		File link = new File(installationDirectory, realFile.getName());
-		if (!link.exists()) {
-			this.fileSystemAdapter.createSymbolicLink(realFile, link);
-			LOG.info("Created link for " + realFile + " at " + link);
+		if (link.exists()) {
+			boolean deleted = link.delete();
+			if (!deleted) {
+				LOG.warn("Tried to create symlink, but it already existed and could not be deleted: " + link);
+				return;
+			}
 		}
+		this.fileSystemAdapter.createSymbolicLink(realFile, link);
+		LOG.info("Created link for " + realFile + " at " + link);
 	}
 
 	private File getDataDirectory(File environmentDirectory) {
