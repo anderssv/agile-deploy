@@ -112,6 +112,18 @@ public class ConfigurationServiceTest {
 				new File(workingDirectory, "test-artifact/test/current/datasource.properties"));
 	}
 
+	@Test
+	public void shouldChangePermissionsOnBinaryDirectory() {
+		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
+		FileSystemAdapter fsAdapter = spy(new FileSystemAdapterImpl());
+		configService.setFileSystemAdapter(fsAdapter);
+
+		configService.configure(environmentDirectory, "test");
+
+		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/myapp"), "u+x");
+		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/myapp.bat"), "u+x");
+	}
+
 	private File createDataDir(File baseDirectory) {
 		File dataDir = new File(baseDirectory, "data");
 		dataDir.mkdirs();

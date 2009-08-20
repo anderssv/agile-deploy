@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 
 public class FileUtil {
 
+	public static final String DEFAULT_SYMLINKCOMMAND = "ln -s %1$s %2$s";
+
 	private static final Logger LOG = Logger.getLogger(FileUtil.class);
 
 	public static boolean deleteDir(File file) {
@@ -84,6 +86,38 @@ public class FileUtil {
 
 	public static void deleteDir(File dir, FileFilter filter) {
 		deleteRecursive(dir, filter);
+	}
+
+	public static void changePermissions(File file, String permission) {
+		try {
+			String command = String.format("chmod " + permission + " %1$s", file.getCanonicalPath());
+			executeAndWait(command);
+			LOG.debug("Changed permissions on " + file + " with command " + command);
+		} catch (IOException e) {
+			throw new IllegalStateException("Could not create symlink", e);
+		}
+	}
+
+	public static void createSymbolicLink(File source, File symLink) {
+		try {
+			String command = String.format(DEFAULT_SYMLINKCOMMAND, source.getCanonicalPath(), symLink.getCanonicalPath());
+			executeAndWait(command);
+			LOG.debug("Created symlink with command: " + command);
+		} catch (IOException e) {
+			throw new IllegalStateException("Could not create symlink", e);
+		}
+	}
+
+	private static void executeAndWait(String command) throws IOException {
+		try {
+			Process proc = Runtime.getRuntime().exec(command);
+			int returnCode = proc.waitFor();
+			if (returnCode != 0) {
+				throw new IllegalStateException("Could not execute " + command + ", process returned " + returnCode);
+			}
+		} catch (InterruptedException e) {
+			throw new IllegalStateException("Could not create execute command " + command, e);
+		}
 	}
 
 }

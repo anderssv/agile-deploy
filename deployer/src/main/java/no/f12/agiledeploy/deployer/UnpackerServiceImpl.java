@@ -26,6 +26,7 @@ public class UnpackerServiceImpl implements UnpackerService {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void unpack(File zipFile, File workingDirectory) {
 		LOG.info("Unpacking " + zipFile + " into " + workingDirectory);
 		try {
@@ -34,7 +35,7 @@ public class UnpackerServiceImpl implements UnpackerService {
 			ZipFile zip = new ZipFile(zipFile);
 
 			try {
-				Enumeration zipFileEntries = zip.entries();
+				Enumeration<ZipEntry> zipFileEntries = (Enumeration<ZipEntry>) zip.entries();
 				while (zipFileEntries.hasMoreElements()) {
 					ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
 

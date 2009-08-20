@@ -26,6 +26,21 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		LOG.info("Creating links");
 		createDataLinks(environmentDirectory);
 		createPropertyLinks(environmentDirectory);
+		
+		updateBinPermissions(environmentDirectory);
+	}
+
+	private void updateBinPermissions(File environmentDirectory) {
+		File binDir = new File(environmentDirectory, "current/bin");
+		if (binDir.exists()) {
+			for (File binFile : binDir.listFiles()) {
+				try {
+					fileSystemAdapter.changePermissionsOnFile(binFile, "u+x");
+				} catch (IllegalStateException e) {
+					LOG.warn("Could not set execute permissions on " + binFile, e);
+				}
+			}
+		}
 	}
 
 	private void createPropertyLinks(File environmentDirectory) {
