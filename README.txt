@@ -9,8 +9,36 @@ It is loosely based around the following articles:
 * http://blog.f12.no/wp/2009/07/08/java-migrations-tools/
 * http://blog.f12.no/wp/2009/01/24/the-new-guy-and-his-database/
 * http://blog.f12.no/wp/2009/01/03/migrations-for-java/
+* http://www.infoq.com/articles/deployment-is-the-goal
+
+= Pre requisites =
+Installed:
+* Maven
+* Java
+
+== Configuration ==
+To use the deployer you need a Maven repository.
+
+To compile you must add a repository to your ~/.m2/settings.xml:
+
+	<profile>
+		<id>extra-repo</id>
+		<activation>
+			<activeByDefault>true</activeByDefault>
+		</activation>
+		<repositories>
+			<repository>
+				<id>dbdeploy</id>
+				<url>http://dbdeploy.googlecode.com/svn/m2-repo/repository/</url>
+				<layout>default</layout>
+				<snapshotPolicy>always</snapshotPolicy>
+			</repository>
+		</repositories>
+	</profile>
+
 
 = How to use =
+If you understand Maven it will be a lot easier to figure this out. :)
 
 == Application template ==
 The template is meant to be an example of how to create a light weight 
@@ -83,6 +111,8 @@ In detail the deployer performs the following tasks:
 * Start/stop scripts
 
 == FUTURE ==
+* Stop before deploy
+* Start after deploy 
 * Upgrading the database
 * Recommended practices
 * Merge in new settins in properties files into existing file on disk?

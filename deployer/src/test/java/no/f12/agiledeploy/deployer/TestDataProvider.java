@@ -39,9 +39,12 @@ public class TestDataProvider {
 	public static File getDefaultTempDir() {
 		return new File("./target/temp");
 	}
-
-	public static File getDefaultArtifactDir() {
-		return new File(getDefaultTempDir(), "test-artifact");
+	
+	public static File getDefaultArtifactDirectory() {
+		return new File(getDefaultTempDir(), "spring-core");
+	}
+	public static File getDefaultTargetDirectory() {
+		return new File(getDefaultTempDir(), "spring-core/test/current");
 	}
 
 	public static void writeContentToFile(File target, String content) throws IOException {
@@ -57,8 +60,18 @@ public class TestDataProvider {
 		bReader.close();
 	}
 
+	public static void unpackDefaultTestZip(File targetDir) throws IOException {
+		targetDir.mkdir();
+		File zipFile = TestDataProvider.getZipFile(targetDir);
+
+		UnpackerService unpacker = new UnpackerServiceImpl();
+		unpacker.unpack(zipFile, targetDir);
+		FileUtil.moveOneUp(new File(targetDir, "myapp-server-0.1-SNAPSHOT"));
+	}
+	
 	@Test
 	public void shouldNotFailMavenBuildJustBecauseThereIsNoTestsInThisClass() {
 
 	}
+
 }

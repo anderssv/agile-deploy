@@ -17,6 +17,8 @@ public class DeployServiceImpl implements DeployService {
 	private ConfigurationService configurationService;
 	@Autowired(required = true)
 	private FileSystemAdapter fileSystemAdapter;
+	@Autowired(required = true)
+	private DataBaseService databaseService;
 
 	public void setRepositoryService(RepositoryService repoServ) {
 		this.repositoryService = repoServ;
@@ -43,6 +45,8 @@ public class DeployServiceImpl implements DeployService {
 
 		configurationService.configure(environmentDirectory, environment);
 
+		databaseService.upgradeDatabase(installationDirectory);
+		
 		downloadedFile.deleteOnExit();
 	}
 
@@ -72,6 +76,10 @@ public class DeployServiceImpl implements DeployService {
 
 	public void setFileSystemAdapter(FileSystemAdapter adapter) {
 		this.fileSystemAdapter = adapter;
+	}
+
+	public void setDatabaseService(DataBaseService dbService) {
+		this.databaseService = dbService;
 	}
 
 }

@@ -20,7 +20,7 @@ public class FileSystemAdapterTest {
 
 	@Test
 	public void shouldNotDeleteContentsMatchingAFilter() throws IOException {
-		File artifactDir = TestDataProvider.getDefaultArtifactDir();
+		File artifactDir = TestDataProvider.getDefaultArtifactDirectory();
 		File testDir = new File(artifactDir, "data");
 		testDir.mkdirs();
 		File testFile = new File(testDir, "testfile");
