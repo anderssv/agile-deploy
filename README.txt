@@ -20,6 +20,10 @@ achieved by using the Maven app-assembler and assembly plugin. Have a
 look inside the target folder and the ZIP to figure out what is 
 happening. 
 
+You can use this for most webapplications. In my opinion you really 
+don't need a big app server most of the time. A future version might
+include an embedded version og Tomcat.
+
 This would be suitable for a Maven Archetype, but I didn't find any good 
 information on creating a multi project archetype. I'll have to look 
 into it later. 
