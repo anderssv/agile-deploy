@@ -33,7 +33,7 @@ The deployer is packaged as a JAR with a manifest that says which class
 to execute. To launch the deployer enter the following on the command 
 line: 
 
-java -jar agile-deployer-0.1-SNAPSHOT.jar <env> <groupId> <artifactId> <version> 
+java -jar deployer-0.1-SNAPSHOT.jar <env> <groupId> <artifactId> <version> 
 
 By default it downloads artifacts from the Maven repository 
 (http://repo1.maven.org/maven2), but you can change this in a property 
