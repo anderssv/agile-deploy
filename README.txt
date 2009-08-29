@@ -88,6 +88,8 @@ In detail the deployer performs the following tasks:
 * Merge in new settins in properties files into existing file on disk?
 * Run with daemon? JSW might have licence issues
 * Separate SNAPSHOT and release repo
+* Common project for defining dependencies between server and web. Is now
+  duplicated.
 
 = Finally =
 Some of these parts should probably be in something like Scala or JRuby, 

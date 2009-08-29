@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans">
+
+
+	<!--
+		This enables us to load properties from several places. If a property
+		exists in more than one place, the last property loaded will overwrite
+		the old one. Meaning that the lowest file in this list wins. The first
+		file should contain sensible defaults for anything that is not
+		critical. Other things like datasource parameters should not have
+		defaults. The application should fail if started without anyone
+		choosing the datasource settings.
+	-->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:system.properties</value>
+				<value>classpath:server-system.properties</value>
+				<value>file:system.properties</value>
+			</list>
+		</property>
+	</bean>
+
+
+</beans>
