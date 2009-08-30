@@ -43,6 +43,8 @@ change the repo.
 
 repo.url=http://myrepo.myorg.com/maven2/ 
 
+NOTE So far this only supports http based repositories.
+
 === What it does ===
 The deployer handles some basic things:
 * Unpacking
@@ -88,8 +90,10 @@ In detail the deployer performs the following tasks:
 * Merge in new settins in properties files into existing file on disk?
 * Run with daemon? JSW might have licence issues
 * Separate SNAPSHOT and release repo
-* Common project for defining dependencies between server and web. Is now
-  duplicated.
+* Support for file based repositories?
+* Maven archetype for the template. Don't know how to create one for a project
+  with two subprojects.
+
 
 = Finally =
 Some of these parts should probably be in something like Scala or JRuby, 
