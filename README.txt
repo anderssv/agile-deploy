@@ -2,7 +2,8 @@ This is my preferred setup when it comes to creating
 Java web applications. It handles several issues.
 
 This is an early version and used for preparing for
-my JavaZone 2009 talk on Agile Deployment.
+my JavaZone 2009 talk on Agile Deployment. In it's current
+state I guess it is best suited for inspiration.
 
 It is loosely based around the following articles:
 * http://blog.f12.no/wp/2009/03/27/agile-deployment-talk-retro/
