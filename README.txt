@@ -16,9 +16,7 @@ Installed:
 * Maven
 * Java
 
-== Configuration ==
-To use the deployer you need a Maven repository.
-
+== Compiling ==
 To compile you must add a repository to your ~/.m2/settings.xml:
 
 	<profile>
@@ -30,11 +28,16 @@ To compile you must add a repository to your ~/.m2/settings.xml:
 			<repository>
 				<id>dbdeploy</id>
 				<url>http://dbdeploy.googlecode.com/svn/m2-repo/repository/</url>
-				<layout>default</layout>
-				<snapshotPolicy>always</snapshotPolicy>
 			</repository>
 		</repositories>
 	</profile>
+
+After that just run "mvn clean install" and find the jar in the target directory.
+
+== Configuration ==
+To use the deployer you need a Maven repository. So far, only http
+repositories are supported. See below for instructions on setting the
+repository.
 
 
 = How to use =
@@ -70,6 +73,12 @@ you are running the JAR from, and adding a property like below you can
 change the repo. 
 
 repo.url=http://myrepo.myorg.com/maven2/ 
+
+=== DBDeploy ===
+To use DBDeploy with the deployer you must include a datasource.properties
+in your application. This is handled as regular for deployment, but DBDeploy
+will look in the "current" directory for this file. See the example file
+in the application template for the necessary settings.
 
 === What it does ===
 The deployer handles some basic things:
@@ -111,15 +120,15 @@ In detail the deployer performs the following tasks:
 * Start/stop scripts
 
 == FUTURE ==
-* Stop before deploy
-* Start after deploy 
 * Upgrading the database
-* Recommended practices
 * Merge in new settins in properties files into existing file on disk?
 * Run with daemon? JSW might have licence issues
+* Recommended practices
 * Separate SNAPSHOT and release repo
 * Clean up exception handling. Way too many IllegalStateExceptions
 * Separate log config for tests
+* Stop before deploy
+* Start after deploy 
 
 = Finally =
 Some of these parts should probably be in something like Scala or JRuby, 
