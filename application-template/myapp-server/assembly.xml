@@ -25,5 +25,14 @@
                 <include>**/*</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <lineEnding>unix</lineEnding>
+            <fileMode>750</fileMode>
+            <directory>${basedir}/src/main/db</directory>
+            <outputDirectory>db</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
     </fileSets>
 </assembly>

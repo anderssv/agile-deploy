@@ -1,0 +1,4 @@
+-- Script 1
+CREATE TABLE TEST1 (
+	ID NUMBER;
+)
