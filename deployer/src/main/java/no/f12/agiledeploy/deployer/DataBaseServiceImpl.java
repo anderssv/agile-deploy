@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,8 @@ import com.dbdeploy.DbDeploy;
 @Component
 public class DataBaseServiceImpl implements DataBaseService {
 
+	private static final Logger LOG = Logger.getLogger(DataBaseServiceImpl.class);
+	
 	private String databaseUrl;
 	private String password;
 	private String username;
@@ -67,6 +70,7 @@ public class DataBaseServiceImpl implements DataBaseService {
 
 			deployer.go();
 		} catch (Exception e) {
+			LOG.debug("Could not execute DBDeploy", e);
 			throw new DatabaseInspectionException("Could not execute DBDeploy", e);
 		}
 

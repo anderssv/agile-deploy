@@ -51,8 +51,8 @@ public class DeployServiceImpl implements DeployService {
 		try {
 			databaseService.upgradeDatabase(installationDirectory);
 		} catch (DatabaseInspectionException e) {
-			LOG.warn("Could not inspect database for upgrade details, skipping");
-			LOG.info("Could not inspect database for upgrade details, skipping", e);
+			// Not too happy about this one. Any suggestions?
+			LOG.info("Could not inspect database for upgrade details, skipping. Increase logging for no.f12.agiledeploy.deployer.DataBaseServiceImpl to see details.");
 		}
 		
 		downloadedFile.deleteOnExit();

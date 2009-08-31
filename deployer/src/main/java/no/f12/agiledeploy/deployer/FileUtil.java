@@ -165,14 +165,8 @@ public class FileUtil {
 	}
 
 	private static boolean hasSupportForUnixCommands() {
-		String ostype = System.getProperty("OSTYPE");
-		if (ostype != null) {
-			if (ostype.equalsIgnoreCase("cygwin")) {
-				return false;
-			}
-			return true;
-		}
-		return false;
+		if (isWindows()) return false;
+		return true;
 	}
 
 	public static String readToString(File resultingFile) throws IOException {
@@ -185,6 +179,23 @@ public class FileUtil {
 		br.close();
 		fr.close();
 		return result;
+	}
+
+	public static boolean isWindows() {
+		String os = System.getProperty("os.name").toLowerCase();
+		return (os.indexOf("win") >= 0);
+	}
+
+	public static boolean isMac() {
+		String os = System.getProperty("os.name").toLowerCase();
+		// Mac
+		return (os.indexOf("mac") >= 0);
+	}
+
+	public static boolean isUnix() {
+		String os = System.getProperty("os.name").toLowerCase();
+		// linux or unix
+		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
 	}
 
 }
