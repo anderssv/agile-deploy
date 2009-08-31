@@ -24,8 +24,7 @@ h2. Compiling
 
 To compile you must add a repository to your ~/.m2/settings.xml:
 
-pre.
-	<profile>
+pre. <profile>
 		<id>extra-repo</id>
 		<activation>
 			<activeByDefault>true</activeByDefault>
