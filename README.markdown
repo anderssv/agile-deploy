@@ -6,6 +6,7 @@ my JavaZone 2009 talk on Agile Deployment. In it's current
 state I guess it is best suited for inspiration.
 
 It is loosely based around the following articles:
+
 - http://blog.f12.no/wp/2009/03/27/agile-deployment-talk-retro/
 - http://blog.f12.no/wp/2009/07/08/java-migrations-tools/
 - http://blog.f12.no/wp/2009/01/24/the-new-guy-and-his-database/
@@ -13,7 +14,9 @@ It is loosely based around the following articles:
 - http://www.infoq.com/articles/deployment-is-the-goal
 
 # Pre requisites 
+
 Installed:
+
 - Maven
 - Java
 
