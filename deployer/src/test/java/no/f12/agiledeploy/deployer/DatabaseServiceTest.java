@@ -17,6 +17,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.context.ContextConfiguration;
@@ -28,6 +29,7 @@ public class DatabaseServiceTest {
 
 	@Autowired
 	private ConfigurationService configService;
+	private JdbcTemplate jdbcTemplate;
 
 	@Test
 	public void shouldLoadPropertiesFromLocalDatasourceFile() throws IOException {
@@ -57,23 +59,51 @@ public class DatabaseServiceTest {
 		DataBaseServiceImpl service = new DataBaseServiceImpl();
 		service.generateScripts(targetDirectory);
 
-		File resultingFile = new File(targetDirectory, "db-upgrade.sql");
+		File resultingFile = service.getScriptFile(targetDirectory);
 		assertTrue(resultingFile.exists());
 		String fileContents = FileUtil.readToString(resultingFile);
-		assertTrue(fileContents.contains("TEST1"));
-		assertTrue(fileContents.contains("TEST2"));
+		assertTrue(fileContents, fileContents.contains("test1"));
+		assertTrue(fileContents, fileContents.contains("test2"));
+	}
+
+	@Test
+	public void shouldExecuteScriptThroughJdbc() throws IOException, SQLException {
+		File targetDirectory = unpackAndConfigure();
+		createVersionTable(targetDirectory);
+
+		DataBaseServiceImpl service = new DataBaseServiceImpl();
+		service.upgradeDatabase(targetDirectory);
+
+		getJdbcTemplate().execute("select * from test1");
 	}
 
 	private void createVersionTable(File targetDirectory) throws SQLException, FileNotFoundException, IOException {
 		// This works because HSQLDB uses static variables for the memory DB.
 		// Not something you really want. Should probably be put in the Spring
 		// context instead.
-		DriverManager.registerDriver(new jdbcDriver());
-		DataSource ds = new SingleConnectionDataSource("jdbc:hsqldb:mem:test", "sa", "", false);
-		JdbcTemplate template = new JdbcTemplate(ds);
-		String tableSql = FileUtil.readToString(new File(targetDirectory,
-				"db/dbdeploy/createSchemaVersionTable.hsql.sql"));
-		template.execute(tableSql);
+		JdbcTemplate template = getJdbcTemplate();
+		boolean changelogExists = false;
+		try {
+			template.execute("select * from changelog");
+			changelogExists = true;
+		} catch (DataAccessException e) {
+			// Do nothing
+		}
+
+		if (!changelogExists) {
+			String tableSql = FileUtil.readToString(new File(targetDirectory,
+					"db/dbdeploy/createSchemaVersionTable.hsql.sql"));
+			template.execute(tableSql);
+		}
+	}
+
+	private JdbcTemplate getJdbcTemplate() throws SQLException {
+		if (this.jdbcTemplate == null) {
+			DriverManager.registerDriver(new jdbcDriver());
+			DataSource ds = new SingleConnectionDataSource("jdbc:hsqldb:mem:test", "sa", "", false);
+			this.jdbcTemplate = new JdbcTemplate(ds);
+		}
+		return this.jdbcTemplate;
 	}
 
 	@After

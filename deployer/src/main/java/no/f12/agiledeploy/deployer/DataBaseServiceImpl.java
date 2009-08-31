@@ -4,8 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.util.Properties;
 
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.stereotype.Component;
 
 import com.dbdeploy.DbDeploy;
@@ -21,6 +27,8 @@ public class DataBaseServiceImpl implements DataBaseService {
 
 	@Override
 	public void upgradeDatabase(File installationDirectory) {
+		generateScripts(installationDirectory);
+		executeScript(getScriptFile(installationDirectory));
 	}
 
 	@Override
@@ -48,7 +56,7 @@ public class DataBaseServiceImpl implements DataBaseService {
 	public void generateScripts(File targetDir) {
 		loadSettings(targetDir);
 		DbDeploy deployer = new DbDeploy();
-		deployer.setOutputfile(new File(targetDir, "db-upgrade.sql"));
+		deployer.setOutputfile(getScriptFile(targetDir));
 		deployer.setScriptdirectory(new File(targetDir, "db/migrations"));
 		deployer.setUrl(this.databaseUrl);
 		deployer.setPassword(this.password);
@@ -62,6 +70,29 @@ public class DataBaseServiceImpl implements DataBaseService {
 			throw new IllegalStateException("Could not execute DBDeploy", e);
 		}
 
+	}
+
+	File getScriptFile(File targetDir) {
+		return new File(targetDir, "db-upgrade.sql");
+	}
+
+	public void executeScript(File dbScript) {
+		registerDriver(this.driver);
+		DataSource ds = new SingleConnectionDataSource(this.databaseUrl, this.username, this.password, false);
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
+		try {
+			jdbcTemplate.execute(FileUtil.readToString(dbScript));
+		} catch (IOException e) {
+			throw new IllegalStateException("Could not read file with SQL " + dbScript, e);
+		}
+	}
+
+	private void registerDriver(String driver) {
+		try {
+			DriverManager.registerDriver((Driver) Class.forName(driver).newInstance());
+		} catch (Exception e) {
+			throw new IllegalStateException("Could not register driver", e);
+		}
 	}
 
 }
