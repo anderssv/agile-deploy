@@ -25,7 +25,7 @@ public class ConfigurationServiceTest {
 		this.workingDirectory = TestDataProvider.getDefaultTempDir();
 		this.environmentDirectory = new File(workingDirectory, "test-artifact/test");
 		this.installationDirectory = new File(workingDirectory, "test-artifact/test/current");
-		createFiles(installationDirectory, workingDirectory);
+		TestDataProvider.unpackDefaultTestZip(this.installationDirectory);
 	}
 
 	@Test
@@ -134,13 +134,6 @@ public class ConfigurationServiceTest {
 		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
 		configService.setFileSystemAdapter(new FileSystemAdapterImpl());
 		return configService;
-	}
-
-	private void createFiles(File unpackDir, File workingDir) throws IOException {
-		UnpackerService unpacker = new UnpackerServiceImpl();
-		unpacker.unpack(TestDataProvider.getZipFile(workingDir), unpackDir);
-
-		FileUtil.moveOneUp(new File(unpackDir, "myapp-server-0.1-SNAPSHOT"));
 	}
 
 	@After

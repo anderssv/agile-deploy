@@ -14,34 +14,23 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class UnpackerServiceTest {
 
-	File tempDir = TestDataProvider.getDefaultTempDir();
+	File unpackDir = TestDataProvider.getDefaultTargetDirectory();
 
 	@Test
 	public void shouldUnpackCorrectly() throws IOException {
-		tempDir.mkdir();
+		TestDataProvider.unpackDefaultTestZip(unpackDir);
 
-		File zipFile = TestDataProvider.getZipFile(tempDir);
-
-		UnpackerService unpacker = new UnpackerServiceImpl();
-		unpacker.unpack(zipFile, tempDir);
-		FileUtil.moveOneUp(new File(tempDir, "myapp-server-0.1-SNAPSHOT"));
-
-		assertTrue(new File(tempDir, "bin").exists());
-		assertTrue(new File(tempDir, "repo").exists());
-		assertTrue(new File(tempDir, "bin/myapp").exists());
-		assertTrue(new File(tempDir, "bin/myapp.bat").exists());
+		assertTrue(new File(unpackDir, "bin").exists());
+		assertTrue(new File(unpackDir, "repo").exists());
+		assertTrue(new File(unpackDir, "bin/myapp").exists());
+		assertTrue(new File(unpackDir, "bin/myapp.bat").exists());
 	}
 	
 	@Test
 	public void shouldUnpackContents() throws IOException {
-		tempDir.mkdir();
-		File zipFile = TestDataProvider.getZipFile(tempDir);
-
-		UnpackerService unpacker = new UnpackerServiceImpl();
-		unpacker.unpack(zipFile, tempDir);
-		FileUtil.moveOneUp(new File(tempDir, "myapp-server-0.1-SNAPSHOT"));
-
-		File fileToCheck = new File(tempDir, "properties/system.properties");
+		TestDataProvider.unpackDefaultTestZip(unpackDir);
+		
+		File fileToCheck = new File(unpackDir, "properties/system.properties");
 		assertTrue(fileToCheck.exists());
 		Resource propertyFile = new DefaultResourceLoader().getResource("file:" + fileToCheck.getAbsolutePath());
 		Properties props = PropertiesLoaderUtils.loadProperties(propertyFile);
@@ -50,7 +39,7 @@ public class UnpackerServiceTest {
 
 	@After
 	public void cleanupFiles() {
-		FileUtil.deleteDir(tempDir);
+		FileUtil.deleteDir(TestDataProvider.getDefaultTempDir());
 	}
 
 }

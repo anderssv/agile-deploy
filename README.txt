@@ -12,7 +12,36 @@ It is loosely based around the following articles:
 * http://blog.f12.no/wp/2009/01/03/migrations-for-java/
 * http://www.infoq.com/articles/deployment-is-the-goal
 
+= Pre requisites =
+Installed:
+* Maven
+* Java
+
+== Compiling ==
+To compile you must add a repository to your ~/.m2/settings.xml:
+
+	<profile>
+		<id>extra-repo</id>
+		<activation>
+			<activeByDefault>true</activeByDefault>
+		</activation>
+		<repositories>
+			<repository>
+				<id>dbdeploy</id>
+				<url>http://dbdeploy.googlecode.com/svn/m2-repo/repository/</url>
+			</repository>
+		</repositories>
+	</profile>
+
+After that just run "mvn clean install" and find the jar in the target directory.
+
+== Configuration ==
+To use the deployer you need a Maven repository. So far, only http
+repositories are supported. See below for instructions on setting the
+repository.
+
 = How to use =
+If you understand Maven it will be a lot easier to figure this out. :)
 
 == Application template ==
 The template is meant to be an example of how to create a light weight 
@@ -46,6 +75,11 @@ change the repo.
 repo.url=http://myrepo.myorg.com/maven2/ 
 
 NOTE So far this only supports http based repositories.
+=== DBDeploy ===
+To use DBDeploy with the deployer you must include a datasource.properties
+in your application. This is handled as regular for deployment, but DBDeploy
+will look in the "current" directory for this file. See the example file
+in the application template for the necessary settings.
 
 === What it does ===
 The deployer handles some basic things:
@@ -82,20 +116,24 @@ In detail the deployer performs the following tasks:
 * Sym link to data directory
 * Copy files to env dir and sym link to current
 * Correct permissions on execute scripts
+* Upgrading the database
 
 == TODO ==
-* Start/stop scripts
 
 == FUTURE ==
-* Upgrading the database
-* Recommended practices
+* Start/stop scripts
 * Merge in new settins in properties files into existing file on disk?
 * Run with daemon? JSW might have licence issues
+* Other options for executing DB script?
+* Recommended practices
 * Separate SNAPSHOT and release repo
 * Support for file based repositories?
 * Maven archetype for the template. Don't know how to create one for a project
   with two subprojects.
-
+* Clean up exception handling. Way too many IllegalStateExceptions
+* Separate log config for tests
+* Stop before deploy
+* Start after deploy 
 
 = Finally =
 Some of these parts should probably be in something like Scala or JRuby, 

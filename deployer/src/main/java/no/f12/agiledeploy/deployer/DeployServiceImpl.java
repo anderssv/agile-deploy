@@ -3,12 +3,15 @@ package no.f12.agiledeploy.deployer;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DeployServiceImpl implements DeployService {
 
+	private static final Logger LOG = Logger.getLogger(DeployServiceImpl.class);
+	
 	@Autowired(required = true)
 	private RepositoryService repositoryService;
 	@Autowired(required = true)
@@ -17,6 +20,8 @@ public class DeployServiceImpl implements DeployService {
 	private ConfigurationService configurationService;
 	@Autowired(required = true)
 	private FileSystemAdapter fileSystemAdapter;
+	@Autowired(required = true)
+	private DataBaseService databaseService;
 
 	public void setRepositoryService(RepositoryService repoServ) {
 		this.repositoryService = repoServ;
@@ -43,6 +48,13 @@ public class DeployServiceImpl implements DeployService {
 
 		configurationService.configure(environmentDirectory, environment);
 
+		try {
+			databaseService.upgradeDatabase(installationDirectory);
+		} catch (DatabaseInspectionException e) {
+			// Not too happy about this one. Any suggestions?
+			LOG.info("Could not inspect database for upgrade details, skipping. Increase logging for no.f12.agiledeploy.deployer.DataBaseServiceImpl to see details.");
+		}
+		
 		downloadedFile.deleteOnExit();
 	}
 
@@ -72,6 +84,10 @@ public class DeployServiceImpl implements DeployService {
 
 	public void setFileSystemAdapter(FileSystemAdapter adapter) {
 		this.fileSystemAdapter = adapter;
+	}
+
+	public void setDatabaseService(DataBaseService dbService) {
+		this.databaseService = dbService;
 	}
 
 }
