@@ -12,7 +12,7 @@ It is loosely based around the following articles:
 * http://blog.f12.no/wp/2009/01/03/migrations-for-java/
 * http://www.infoq.com/articles/deployment-is-the-goal
 
-= Pre requisites =
+# Pre requisites 
 Installed:
 * Maven
 * Java
