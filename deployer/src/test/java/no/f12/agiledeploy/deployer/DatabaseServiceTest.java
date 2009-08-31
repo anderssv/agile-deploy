@@ -2,11 +2,12 @@ package no.f12.agiledeploy.deployer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Ignore;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,15 @@ public class DatabaseServiceTest {
 
 	@Autowired
 	private ConfigurationService configService;
-	
+
 	@Test
-	@Ignore
 	public void shouldLoadPropertiesFromLocalDatasourceFile() throws IOException {
 		File targetDirectory = TestDataProvider.getDefaultTargetDirectory();
 		
 		TestDataProvider.unpackDefaultTestZip(targetDirectory);
 		configService.configure(targetDirectory.getParentFile(), "test");
+		File expected = new File(targetDirectory, "datasource.properties");
+		assertTrue(expected.toString(), expected.exists());
 		
 		DataBaseServiceImpl service = new DataBaseServiceImpl();
 		service.loadSettings(targetDirectory);
@@ -36,7 +38,7 @@ public class DatabaseServiceTest {
 		assertEquals("test", service.getDatabaseUrl());
 	}
 	
-	//@After
+	@After
 	public void cleanUp() {
 		FileUtil.deleteDir(TestDataProvider.getDefaultTempDir());
 	}

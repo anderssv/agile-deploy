@@ -87,6 +87,20 @@ public class DeployServiceTest {
 
 		verify(this.dbService).upgradeDatabase((File) anyObject());
 	}
+	
+	@Test
+	public void shouldContinueWithoutDBUpgradeIfNoPropertiesCouldBeLoaded() {
+		createMocks();
+		createService();
+		mockDownload(new File("."));
+
+	
+		doThrow(new IllegalStateException()).when(dbService).upgradeDatabase((File) anyObject());
+		
+		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
+		dServ.deploy(spec, "test", tempDir);
+		// Expect to continue
+	}
 
 	@After
 	public void removeTempDir() {

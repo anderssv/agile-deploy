@@ -3,12 +3,15 @@ package no.f12.agiledeploy.deployer;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DeployServiceImpl implements DeployService {
 
+	private static final Logger LOG = Logger.getLogger(DeployServiceImpl.class);
+	
 	@Autowired(required = true)
 	private RepositoryService repositoryService;
 	@Autowired(required = true)
@@ -45,7 +48,13 @@ public class DeployServiceImpl implements DeployService {
 
 		configurationService.configure(environmentDirectory, environment);
 
-		databaseService.upgradeDatabase(installationDirectory);
+		try {
+			databaseService.upgradeDatabase(installationDirectory);
+		} catch (IllegalStateException e) {
+			// Is this any smart?
+			LOG.warn("Could not upgrade database, skipping");
+			LOG.info("Could not upgrade database, details", e);
+		}
 		
 		downloadedFile.deleteOnExit();
 	}

@@ -118,6 +118,7 @@ In detail the deployer performs the following tasks:
 * Merge in new settins in properties files into existing file on disk?
 * Run with daemon? JSW might have licence issues
 * Separate SNAPSHOT and release repo
+* Clean up exception handling. Way too many IllegalStateExceptions
 
 = Finally =
 Some of these parts should probably be in something like Scala or JRuby, 
