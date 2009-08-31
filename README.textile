@@ -100,15 +100,15 @@ The deployer handles some basic things:
 
 In detail the deployer performs the following tasks:
 * Downloads the specified artifact from the Maven repo
-* Unpacks the zip into <artifactId>/<env>/current
+* Unpacks the zip into bq. <artifactId>/<env>/current
 * Copies settings (if they don't exist, no overwriting) from 
-  pre. <artifactId>/<env>/current/properties and 
+  bq. <artifactId>/<env>/current/properties and 
   <artifactId>/<env>/current/properties/<env> into
   <artifactId>/<env>
 * Creates symlink from <artifactId>/<env>/*.properties into
-  pre. <artifactId>/<env>/current (copy if not symlink capable)
+  bq. <artifactId>/<env>/current (copy if not symlink capable)
 * Creates symlink from <artifactId>/<env>/data into
-  pre. <artifactId>/<env>/current
+  bq. <artifactId>/<env>/current
 
 h1. Tasks and features
 
