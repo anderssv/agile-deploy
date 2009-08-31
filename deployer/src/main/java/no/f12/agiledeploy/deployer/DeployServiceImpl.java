@@ -50,10 +50,9 @@ public class DeployServiceImpl implements DeployService {
 
 		try {
 			databaseService.upgradeDatabase(installationDirectory);
-		} catch (IllegalStateException e) {
-			// Is this any smart?
-			LOG.warn("Could not upgrade database, skipping");
-			LOG.info("Could not upgrade database, details", e);
+		} catch (DatabaseInspectionException e) {
+			LOG.warn("Could not inspect database for upgrade details, skipping");
+			LOG.info("Could not inspect database for upgrade details, skipping", e);
 		}
 		
 		downloadedFile.deleteOnExit();

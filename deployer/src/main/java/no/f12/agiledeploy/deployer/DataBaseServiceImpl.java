@@ -31,7 +31,6 @@ public class DataBaseServiceImpl implements DataBaseService {
 		executeScript(getScriptFile(installationDirectory));
 	}
 
-	@Override
 	public void loadSettings(File targetDirectory) {
 		Properties props = new Properties();
 		File propertyFile = new File(targetDirectory, "datasource.properties");
@@ -54,20 +53,21 @@ public class DataBaseServiceImpl implements DataBaseService {
 	}
 
 	public void generateScripts(File targetDir) {
-		loadSettings(targetDir);
-		DbDeploy deployer = new DbDeploy();
-		deployer.setOutputfile(getScriptFile(targetDir));
-		deployer.setScriptdirectory(new File(targetDir, "db/migrations"));
-		deployer.setUrl(this.databaseUrl);
-		deployer.setPassword(this.password);
-		deployer.setUserid(this.username);
-		deployer.setDriver(this.driver);
-		deployer.setDbms(this.dbms);
-
 		try {
+			loadSettings(targetDir);
+
+			DbDeploy deployer = new DbDeploy();
+			deployer.setOutputfile(getScriptFile(targetDir));
+			deployer.setScriptdirectory(new File(targetDir, "db/migrations"));
+			deployer.setUrl(this.databaseUrl);
+			deployer.setPassword(this.password);
+			deployer.setUserid(this.username);
+			deployer.setDriver(this.driver);
+			deployer.setDbms(this.dbms);
+
 			deployer.go();
 		} catch (Exception e) {
-			throw new IllegalStateException("Could not execute DBDeploy", e);
+			throw new DatabaseInspectionException("Could not execute DBDeploy", e);
 		}
 
 	}

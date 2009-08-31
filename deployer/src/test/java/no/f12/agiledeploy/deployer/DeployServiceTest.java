@@ -94,13 +94,13 @@ public class DeployServiceTest {
 		createService();
 		mockDownload(new File("."));
 
-		doThrow(new IllegalStateException()).when(dbService).upgradeDatabase((File) anyObject());
+		doThrow(new DatabaseInspectionException("Could not upgrade database")).when(dbService).upgradeDatabase((File) anyObject());
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		dServ.deploy(spec, "test", tempDir);
 		// Expect to continue
 	}
-
+	
 	@After
 	public void removeTempDir() {
 		FileUtil.deleteDir(tempDir);

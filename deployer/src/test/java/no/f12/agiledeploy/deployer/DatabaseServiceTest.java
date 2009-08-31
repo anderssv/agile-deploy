@@ -77,6 +77,12 @@ public class DatabaseServiceTest {
 		getJdbcTemplate().execute("select * from test1");
 	}
 
+	@Test(expected = DatabaseInspectionException.class)
+	public void shouldThrowInspectionExceptionOnFailure() {
+		DataBaseServiceImpl dbService = new DataBaseServiceImpl();
+		dbService.upgradeDatabase(new File("."));
+	}
+
 	private void createVersionTable(File targetDirectory) throws SQLException, FileNotFoundException, IOException {
 		// This works because HSQLDB uses static variables for the memory DB.
 		// Not something you really want. Should probably be put in the Spring

@@ -6,6 +6,4 @@ public interface DataBaseService {
 
 	void upgradeDatabase(File installationDirectory);
 
-	void loadSettings(File targetDirectory);
-
 }
