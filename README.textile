@@ -20,7 +20,7 @@ Installed:
 * Maven
 * Java
 
-h1.h1. Compiling
+h2. Compiling
 To compile you must add a repository to your ~/.m2/settings.xml:
 
 	<profile>
