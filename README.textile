@@ -104,10 +104,12 @@ In detail the deployer performs the following tasks:
 * Downloads the specified artifact from the Maven repo
 * Unpacks the zip into <pre><artifactId>/<env>/current</pre>
 * Copies settings (if they don't exist, no overwriting) from 
+  <pre><code>
   <artifactId>/<env>/current/properties and 
   <artifactId>/<env>/current/properties/<env> into
   <artifactId>/<env>
-* Creates symlink from <artifactId>/<env>/*.properties into
+  </code></pre>
+* Creates symlink from <code><artifactId>/<env>/*.properties</code> into
   <artifactId>/<env>/current (copy if not symlink capable)
 * Creates symlink from <artifactId>/<env>/data into
   <artifactId>/<env>/current
