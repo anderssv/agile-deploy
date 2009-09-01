@@ -24,7 +24,8 @@ h2. Compiling
 
 To compile you must add a repository to your ~/.m2/settings.xml:
 
-pre. 	<profile>
+<pre><code>
+ 	<profile>
 		<id>extra-repo</id>
 		<activation>
 			<activeByDefault>true</activeByDefault>
@@ -36,6 +37,7 @@ pre. 	<profile>
 			</repository>
 		</repositories>
 	</profile>
+</code></pre>
 
 After that just run "mvn clean install" and find the jar in the target directory.
 
@@ -72,7 +74,7 @@ The deployer is packaged as a JAR with a manifest that says which class
 to execute. To launch the deployer enter the following on the command 
 line: 
 
-pre. java -jar deployer-0.1-SNAPSHOT.jar <env> <groupId> <artifactId> <version> 
+<pre>java -jar deployer-0.1-SNAPSHOT.jar <env> <groupId> <artifactId> <version></pre>
 
 By default it downloads artifacts from the Maven repository 
 (http://repo1.maven.org/maven2), but you can change this in a property 
@@ -80,7 +82,7 @@ file called deploy.properties . By placing this file in the directory
 you are running the JAR from, and adding a property like below you can 
 change the repo. 
 
-pre. repo.url=http://myrepo.myorg.com/maven2/ 
+<pre>repo.url=http://myrepo.myorg.com/maven2/</pre>
 
 NOTE So far this only supports http based repositories.
 
@@ -100,7 +102,7 @@ The deployer handles some basic things:
 
 In detail the deployer performs the following tasks:
 * Downloads the specified artifact from the Maven repo
-* Unpacks the zip into <artifactId>/<env>/current
+* Unpacks the zip into <pre><artifactId>/<env>/current</pre>
 * Copies settings (if they don't exist, no overwriting) from 
   <artifactId>/<env>/current/properties and 
   <artifactId>/<env>/current/properties/<env> into
