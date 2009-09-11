@@ -5,6 +5,9 @@ This is an early version and used for preparing for
 my JavaZone 2009 talk on Agile Deployment. In it's current
 state I guess it is best suited for inspiration.
 
+You can find the slides (Norwegian only) here:
+http://www.slideshare.net/anderssv/javazone2009-smidig-utrulling
+
 It is loosely based around the following articles:
 
 * http://www.infoq.com/articles/deployment-is-the-goal
