@@ -10,6 +10,8 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;

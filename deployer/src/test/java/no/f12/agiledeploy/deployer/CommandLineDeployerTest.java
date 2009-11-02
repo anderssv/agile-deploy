@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+
 import org.junit.After;
 import org.junit.Test;
 

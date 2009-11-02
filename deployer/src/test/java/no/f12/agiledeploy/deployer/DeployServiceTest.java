@@ -7,6 +7,12 @@ import static org.mockito.Mockito.*;
 import java.io.File;
 import java.io.IOException;
 
+import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationService;
+import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
+import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+import no.f12.agiledeploy.deployer.repo.PackageSpecification;
+import no.f12.agiledeploy.deployer.repo.RepositoryService;
+
 import org.junit.After;
 import org.junit.Test;
 

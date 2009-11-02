@@ -3,6 +3,11 @@ package no.f12.agiledeploy.deployer;
 import java.io.File;
 import java.io.FileFilter;
 
+import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationService;
+import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
+import no.f12.agiledeploy.deployer.repo.PackageSpecification;
+import no.f12.agiledeploy.deployer.repo.RepositoryService;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

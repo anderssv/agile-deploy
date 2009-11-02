@@ -8,6 +8,9 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Arrays;
 
+import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
+import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+
 import org.junit.Test;
 
 public class FileSystemAdapterTest {

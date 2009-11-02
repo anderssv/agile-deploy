@@ -1,6 +1,7 @@
-package no.f12.agiledeploy.deployer;
+package no.f12.agiledeploy.deployer.repo;
 
 import java.io.File;
+
 
 public interface RepositoryService {
 

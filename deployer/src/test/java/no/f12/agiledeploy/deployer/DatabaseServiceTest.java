@@ -12,6 +12,9 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationService;
+import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+
 import org.hsqldb.jdbcDriver;
 import org.junit.After;
 import org.junit.Test;

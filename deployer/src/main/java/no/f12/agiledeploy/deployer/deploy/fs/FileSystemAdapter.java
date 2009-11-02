@@ -1,4 +1,4 @@
-package no.f12.agiledeploy.deployer;
+package no.f12.agiledeploy.deployer.deploy.fs;
 
 import java.io.File;
 import java.io.FileFilter;

@@ -7,6 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
+import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationServiceImpl;
+import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
+import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
+import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

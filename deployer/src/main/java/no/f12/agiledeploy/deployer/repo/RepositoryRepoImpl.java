@@ -1,4 +1,4 @@
-package no.f12.agiledeploy.deployer;
+package no.f12.agiledeploy.deployer.repo;
 
 import java.io.BufferedInputStream;
 import java.io.File;

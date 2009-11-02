@@ -8,6 +8,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+import no.f12.agiledeploy.deployer.repo.PackageSpecification;
+import no.f12.agiledeploy.deployer.repo.RepositoryRepo;
+import no.f12.agiledeploy.deployer.repo.RepositoryServiceImpl;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

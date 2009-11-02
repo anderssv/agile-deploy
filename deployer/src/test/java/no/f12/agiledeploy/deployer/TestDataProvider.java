@@ -9,6 +9,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
+import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+import no.f12.agiledeploy.deployer.repo.PackageSpecification;
+
 import org.junit.Test;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;

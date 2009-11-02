@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
+import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.core.io.DefaultResourceLoader;

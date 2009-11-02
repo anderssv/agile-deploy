@@ -3,6 +3,8 @@ package no.f12.agiledeploy.deployer;
 import java.io.File;
 import java.util.Date;
 
+import no.f12.agiledeploy.deployer.repo.PackageSpecification;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

@@ -6,6 +6,9 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import no.f12.agiledeploy.deployer.repo.PackageSpecification;
+import no.f12.agiledeploy.deployer.repo.RepositoryRepoImpl;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.annotation.IfProfileValue;

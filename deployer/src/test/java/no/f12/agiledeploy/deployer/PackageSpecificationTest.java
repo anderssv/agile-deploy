@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import no.f12.agiledeploy.deployer.repo.PackageSpecification;
+
 import org.junit.Test;
 
 public class PackageSpecificationTest {
