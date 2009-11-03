@@ -8,7 +8,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -23,34 +22,31 @@ public class RepositoryServiceImpl implements RepositoryService {
 	@Autowired
 	@Qualifier("release")
 	private RepositoryRepo repositoryRepo;
-	
+
 	@Autowired
 	@Qualifier("snapshot")
 	private RepositoryRepo snapshotRepo;
 
 	public File fetchPackage(PackageSpecification spec, File workingDirectory) {
 		RepositoryRepo repo = repositoryRepo;
-		String artifactPath = spec.getRepositoryInformation().getArtifactPath();
 		String fileName = spec.getArtifactFileName() + "." + spec.getPackageType();
 
 		// Change filename and repo if SNAPSHOT
 		if (spec.isSnapshot()) {
 			repo = snapshotRepo;
-			Document parsedDoc = readMetadataContents(spec, repo, workingDirectory, artifactPath);
+			Document parsedDoc = readMetadataContents(spec, repo, workingDirectory);
 
 			String timestamp = extractElementValue(parsedDoc, "timestamp");
 			String buildNumber = extractElementValue(parsedDoc, "buildNumber");
 
-			fileName = spec
-					.getArtifactFilename(timestamp + "-" + buildNumber)
-					+ "." + spec.getPackageType();
+			fileName = spec.getArtifactFilename(timestamp + "-" + buildNumber) + "." + spec.getPackageType();
 		}
-		return repo.fetchFile(artifactPath, fileName, workingDirectory);
+		return repo.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName, workingDirectory, true);
 	}
 
-	private Document readMetadataContents(PackageSpecification spec, RepositoryRepo repo, File workingDirectory, String artifactPath) {
-		File metadataFile = repo.fetchFile(artifactPath, spec
-				.getMetadataFilename(), workingDirectory);
+	private Document readMetadataContents(PackageSpecification spec, RepositoryRepo repo, File workingDirectory) {
+		File metadataFile = repo.fetchFile(spec.getRepositoryInformation().getMetadataPath(), spec
+				.getRepositoryInformation().getMetadataFilename(), workingDirectory, false);
 		Document parsedDoc = parseXmlFile(metadataFile);
 		metadataFile.delete();
 		return parsedDoc;

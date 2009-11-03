@@ -28,10 +28,6 @@ public class PackageSpecification {
 		return this.version.endsWith("-SNAPSHOT");
 	}
 
-	public String getMetadataFilename() {
-		return "maven-metadata.xml";
-	}
-
 	public String getArtifactId() {
 		return this.artifactId;
 	}
@@ -56,7 +52,7 @@ public class PackageSpecification {
 	public RepositoryInformation getRepositoryInformation() {
 		return new RepositoryInformation(this);
 	}
-	
+
 	public FileSystemInformation getFileSystemInformation() {
 		return new FileSystemInformation(this);
 	}
@@ -69,11 +65,26 @@ public class PackageSpecification {
 		}
 
 		public String getArtifactPath() {
-			return spec.groupId.replaceAll("\\.", "/") + "/" + spec.artifactId + "/" + version;
+			return getArtifactInternalPath() + "/" + version;
+		}
+
+		private String getArtifactInternalPath() {
+			return spec.groupId.replaceAll("\\.", "/") + "/" + spec.artifactId;
 		}
 
 		public String getFullFilename() {
 			return this.getArtifactPath() + "/" + spec.getArtifactFileName();
+		}
+
+		public String getMetadataFilename() {
+			return "maven-metadata.xml";
+		}
+
+		public String getMetadataPath() {
+			if (spec.isSnapshot()) {
+				return this.getArtifactPath();
+			}
+			return this.getArtifactInternalPath();
 		}
 	}
 

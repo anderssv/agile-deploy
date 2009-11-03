@@ -10,6 +10,6 @@ public interface RepositoryRepo {
 	 * @param file The file to retireve
 	 * @return The downloaded file
 	 */
-	File fetchFile(String filePath, String fileName, File workingDirectory);
+	File fetchFile(String filePath, String fileName, File workingDirectory, boolean binary);
 
 }

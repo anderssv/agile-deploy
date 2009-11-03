@@ -29,7 +29,7 @@ public class RepositoryServiceTest {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		repoService.fetchPackage(spec, new File("."));
 
-		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.zip", new File("."));
+		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.zip", new File("."), true);
 	}
 
 	private void createRepoServiceAndMockRepo() {
@@ -47,7 +47,7 @@ public class RepositoryServiceTest {
 		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", "2.5.6", "jar");
 		repoService.fetchPackage(spec, new File("."));
 
-		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.jar", new File("."));
+		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.jar", new File("."), true);
 	}
 
 	@Test
@@ -55,22 +55,21 @@ public class RepositoryServiceTest {
 		createRepoServiceAndMockRepo();
 		File resultingFile = createMavenMetadataFile();
 
-		when(snapshotRepo.fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT", "maven-metadata.xml", tempDir))
+		when(snapshotRepo.fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT", "maven-metadata.xml", tempDir, false))
 				.thenReturn(resultingFile);
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		repoService.fetchPackage(spec, tempDir);
 
-		verify(snapshotRepo, times(2)).fetchFile(anyString(), anyString(), any(File.class));
-		verify(snapshotRepo, atLeastOnce()).fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT", "maven-metadata.xml", tempDir);
+		verify(snapshotRepo, atLeastOnce()).fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT", "maven-metadata.xml", tempDir, false);
 		verify(snapshotRepo, atLeastOnce()).fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT",
-				"spring-core-2.5.6-20090720.085251-1.zip", tempDir);
+				"spring-core-2.5.6-20090720.085251-1.zip", tempDir, true);
 	}
 	
 	@Test(expected=IllegalStateException.class)
 	public void shouldReportMissingRepoOnIllegalState() {
 		createRepoServiceAndMockRepo();
-		when(snapshotRepo.fetchFile(anyString(), anyString(), any(File.class))).thenThrow(new IllegalStateException("No repo configured"));
+		when(snapshotRepo.fetchFile(anyString(), anyString(), any(File.class), anyBoolean())).thenThrow(new IllegalStateException("No repo configured"));
 		
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		this.repoService.fetchPackage(spec, tempDir);

@@ -18,7 +18,7 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 	private URL repositoryURL;
 
 	@Override
-	public File fetchFile(String filePath, String fileName, File workingDirectory) {
+	public File fetchFile(String filePath, String fileName, File workingDirectory, boolean binary) {
 		if (this.repositoryURL == null) {
 			throw new IllegalStateException("No repository specified for this repo");
 		}
@@ -34,13 +34,20 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 		}
 		
 		LOG.info("Downloading package from " + fileUrl);
+		resultingFile = downloadFile(fileName, workingDirectory, binary, resultingFile, fileUrl);
+		return resultingFile;
+	}
+
+	private File downloadFile(String fileName, File workingDirectory, boolean binary, File resultingFile, URL fileUrl) {
 		try {
 			FileOutputStream out = null;
 			InputStream fileInputstream = null;
 			try {
 				URLConnection connection = fileUrl.openConnection();
 				int contentLength = connection.getContentLength();
-				checkContentType(connection, contentLength);
+				if (binary) {
+					checkContentType(connection, contentLength);
+				}
 
 				byte[] data = new byte[contentLength];
 				fileInputstream = readBytes(connection, contentLength, data);

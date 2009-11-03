@@ -28,22 +28,38 @@ public class RepositoryRepoTest {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		String fileName = spec.getArtifactFileName() + ".jar";
 
-		File downloadedFile = repo
-				.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName, workingDirectory());
+		File downloadedFile = repo.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName,
+				workingDirectory(), true);
 
 		assertTrue(downloadedFile.exists());
 		assertTrue(downloadedFile.getName().equals(fileName));
 		downloadedFile.delete();
 	}
-	
-	@Test(expected=IllegalStateException.class)
+
+	@Test
+	public void shouldDownloadMetadataFileAndWriteToDisk() throws MalformedURLException {
+		RepositoryRepoImpl repo = new RepositoryRepoImpl();
+		repo.setRepositoryURL(repoUrl());
+
+		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
+		String fileName = spec.getRepositoryInformation().getMetadataFilename();
+
+		File downloadedFile = repo.fetchFile(spec.getRepositoryInformation().getMetadataPath(), fileName,
+				workingDirectory(), false);
+
+		assertTrue(downloadedFile.exists());
+		assertTrue(downloadedFile.getName().equals(fileName));
+		downloadedFile.delete();
+	}
+
+	@Test(expected = IllegalStateException.class)
 	public void shouldFailCorrectlyWhenNoRepositoryIsSpecified() throws MalformedURLException {
 		RepositoryRepoImpl repo = new RepositoryRepoImpl();
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		String fileName = spec.getArtifactFileName() + ".jar";
-		
-		repo.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName, workingDirectory());
+
+		repo.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName, workingDirectory(), true);
 	}
 
 	private File workingDirectory() {
