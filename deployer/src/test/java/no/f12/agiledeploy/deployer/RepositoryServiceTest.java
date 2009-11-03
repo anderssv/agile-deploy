@@ -1,8 +1,6 @@
 package no.f12.agiledeploy.deployer;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,12 +17,14 @@ import org.junit.Test;
 
 public class RepositoryServiceTest {
 
-	RepositoryServiceImpl repoService;
-	File tempDir = TestDataProvider.getDefaultTempDir();
+	private RepositoryServiceImpl repoService;
+	private File tempDir = TestDataProvider.getDefaultTempDir();
+	private RepositoryRepo snapshotRepo;
+	private RepositoryRepo repo;
 
 	@Test
 	public void shouldFetchFileGivenCorrectSpec() {
-		RepositoryRepo repo = createRepoServiceAndMockRepo();
+		createRepoServiceAndMockRepo();
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		repoService.fetchPackage(spec, new File("."));
@@ -32,16 +32,17 @@ public class RepositoryServiceTest {
 		verify(repo).fetchFile("org/springframework/spring-core/2.5.6", "spring-core-2.5.6.zip", new File("."));
 	}
 
-	private RepositoryRepo createRepoServiceAndMockRepo() {
+	private void createRepoServiceAndMockRepo() {
 		repoService = new RepositoryServiceImpl();
-		RepositoryRepo repo = mock(RepositoryRepo.class);
+		repo = mock(RepositoryRepo.class);
 		repoService.setRepositoryRepo(repo);
-		return repo;
+		snapshotRepo = mock(RepositoryRepo.class);
+		repoService.setSnapshotRepositoryRepo(snapshotRepo);
 	}
 
 	@Test
 	public void shouldFetchFileGivenArtifactType() {
-		RepositoryRepo repo = createRepoServiceAndMockRepo();
+		createRepoServiceAndMockRepo();
 
 		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", "2.5.6", "jar");
 		repoService.fetchPackage(spec, new File("."));
@@ -50,19 +51,29 @@ public class RepositoryServiceTest {
 	}
 
 	@Test
-	public void shouldResolveCorrectFilenameForSnapshot() throws IOException {
-		RepositoryRepo repo = createRepoServiceAndMockRepo();
+	public void shouldResolveCorrectFilenameForSnapshotAndFetchFromCorrectRepo() throws IOException {
+		createRepoServiceAndMockRepo();
 		File resultingFile = createMavenMetadataFile();
 
-		when(repo.fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT", "maven-metadata.xml", tempDir))
+		when(snapshotRepo.fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT", "maven-metadata.xml", tempDir))
 				.thenReturn(resultingFile);
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		repoService.fetchPackage(spec, tempDir);
 
-		verify(repo).fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT", "maven-metadata.xml", tempDir);
-		verify(repo).fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT",
+		verify(snapshotRepo, times(2)).fetchFile(anyString(), anyString(), any(File.class));
+		verify(snapshotRepo, atLeastOnce()).fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT", "maven-metadata.xml", tempDir);
+		verify(snapshotRepo, atLeastOnce()).fetchFile("org/springframework/spring-core/2.5.6-SNAPSHOT",
 				"spring-core-2.5.6-20090720.085251-1.zip", tempDir);
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void shouldReportMissingRepoOnIllegalState() {
+		createRepoServiceAndMockRepo();
+		when(snapshotRepo.fetchFile(anyString(), anyString(), any(File.class))).thenThrow(new IllegalStateException("No repo configured"));
+		
+		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
+		this.repoService.fetchPackage(spec, tempDir);
 	}
 	
 	@Before

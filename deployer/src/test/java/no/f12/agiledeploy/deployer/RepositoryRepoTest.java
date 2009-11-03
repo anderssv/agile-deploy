@@ -23,16 +23,34 @@ public class RepositoryRepoTest {
 	@Test
 	public void shouldDownloadFileAndWriteToDisk() throws MalformedURLException {
 		RepositoryRepoImpl repo = new RepositoryRepoImpl();
-		repo.setRepositoryURL(new URL("http://repo1.maven.org/maven2/"));
+		repo.setRepositoryURL(repoUrl());
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		String fileName = spec.getArtifactFileName() + ".jar";
 
 		File downloadedFile = repo
-				.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName, new File("."));
+				.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName, workingDirectory());
 
 		assertTrue(downloadedFile.exists());
 		assertTrue(downloadedFile.getName().equals(fileName));
 		downloadedFile.delete();
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void shouldFailCorrectlyWhenNoRepositoryIsSpecified() throws MalformedURLException {
+		RepositoryRepoImpl repo = new RepositoryRepoImpl();
+
+		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
+		String fileName = spec.getArtifactFileName() + ".jar";
+		
+		repo.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName, workingDirectory());
+	}
+
+	private File workingDirectory() {
+		return new File(".");
+	}
+
+	private URL repoUrl() throws MalformedURLException {
+		return new URL("http://repo1.maven.org/maven2/");
 	}
 }

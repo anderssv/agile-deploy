@@ -10,19 +10,19 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class RepositoryRepoImpl implements RepositoryRepo {
 
 	private static final Logger LOG = Logger.getLogger(RepositoryRepoImpl.class);
 
-	@Autowired
 	private URL repositoryURL;
 
 	@Override
 	public File fetchFile(String filePath, String fileName, File workingDirectory) {
+		if (this.repositoryURL == null) {
+			throw new IllegalStateException("No repository specified for this repo");
+		}
+		
 		String fullFilePath = filePath + "/" + fileName;
 		File resultingFile = null;
 

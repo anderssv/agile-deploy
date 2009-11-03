@@ -10,8 +10,24 @@
 	<context:annotation-config />
 	<context:component-scan base-package="no.f12.agiledeploy.deployer" />
 
-	<bean id="repoUrl" class="java.net.URL">
+	<bean class="no.f12.agiledeploy.deployer.repo.RepositoryRepoImpl">
+		<qualifier value="release" />
+		<property name="repositoryURL" ref="releaseUrl" />
+	</bean>
+
+	<bean class="no.f12.agiledeploy.deployer.repo.RepositoryRepoImpl">
+		<qualifier value="snapshot" />
+		<property name="repositoryURL" ref="snapshotUrl" />
+	</bean>
+
+	<bean id="releaseUrl" class="java.net.URL">
+		<qualifier value="release" />
 		<constructor-arg value="${repo.url}" />
+	</bean>
+
+	<bean id="snapshotUrl" class="java.net.URL">
+		<qualifier value="snapshot" />
+		<constructor-arg value="${repo.snapshot.url}" />
 	</bean>
 
 	<bean id="workingDirectory" class="java.io.File">
