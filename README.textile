@@ -5,8 +5,9 @@ This is an early version and used for preparing for
 my JavaZone 2009 talk on Agile Deployment. In it's current
 state I guess it is best suited for inspiration.
 
-You can find the slides (Norwegian only) here:
-http://www.slideshare.net/anderssv/javazone2009-smidig-utrulling
+You can find the the talks here (Norwegian only):
+* Slides: http://www.slideshare.net/anderssv/javazone2009-smidig-utrulling
+* Video: http://tcs.java.no/tcs/?id=2E72A3F8-CD11-4C5C-A29A-63EB3E95149F
 
 It is loosely based around the following articles:
 
