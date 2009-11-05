@@ -4,9 +4,9 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class ConfigurationServiceImpl implements ConfigurationService {
 
 	private static final Logger LOG = Logger.getLogger(ConfigurationServiceImpl.class);

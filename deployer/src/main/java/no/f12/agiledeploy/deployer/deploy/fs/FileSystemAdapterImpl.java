@@ -3,9 +3,9 @@ package no.f12.agiledeploy.deployer.deploy.fs;
 import java.io.File;
 import java.io.FileFilter;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class FileSystemAdapterImpl implements FileSystemAdapter {
 
 	@Override

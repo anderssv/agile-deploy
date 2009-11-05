@@ -2,7 +2,10 @@ package no.f12.agiledeploy.deployer;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +13,7 @@ import java.io.IOException;
 import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationService;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
 import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
+import no.f12.agiledeploy.deployer.deploy.fs.ResourceConverterService;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 import no.f12.agiledeploy.deployer.repo.RepositoryService;
 
@@ -23,6 +27,7 @@ public class DeployServiceTest {
 	private ConfigurationService configServ;
 	private FileSystemAdapter fsAdapter;
 	private DataBaseService dbService;
+	private ResourceConverterService resConvService;
 
 	private DeployServiceImpl dServ;
 
@@ -37,6 +42,7 @@ public class DeployServiceTest {
 		configServ = mock(ConfigurationService.class);
 		fsAdapter = mock(FileSystemAdapter.class);
 		dbService = mock(DataBaseService.class);
+		resConvService = mock(ResourceConverterService.class);
 	}
 
 	private void mockDownload(File downloaded) {
@@ -51,6 +57,7 @@ public class DeployServiceTest {
 		dServ.setConfigurationService(configServ);
 		dServ.setFileSystemAdapter(fsAdapter);
 		dServ.setDatabaseService(dbService);
+		dServ.setResourceConverterService(resConvService);
 	}
 
 	@Test
@@ -100,13 +107,21 @@ public class DeployServiceTest {
 		createService();
 		mockDownload(new File("."));
 
-		doThrow(new DatabaseInspectionException("Could not upgrade database")).when(dbService).upgradeDatabase((File) anyObject());
+		doThrow(new DatabaseInspectionException("Could not upgrade database")).when(dbService).upgradeDatabase(
+				(File) anyObject());
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		dServ.deploy(spec, "test", tempDir);
 		// Expect to continue
 	}
-	
+
+	public void shouldInitiateConversion() {
+		createMocks();
+		createService();
+
+		verify(resConvService).convert(unpackDir);
+	}
+
 	@After
 	public void removeTempDir() {
 		FileUtil.deleteDir(tempDir);

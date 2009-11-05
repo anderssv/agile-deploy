@@ -5,14 +5,15 @@ import java.io.FileFilter;
 
 import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationService;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
+import no.f12.agiledeploy.deployer.deploy.fs.ResourceConverterService;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 import no.f12.agiledeploy.deployer.repo.RepositoryService;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class DeployServiceImpl implements DeployService {
 
 	private static final Logger LOG = Logger.getLogger(DeployServiceImpl.class);
@@ -27,6 +28,8 @@ public class DeployServiceImpl implements DeployService {
 	private FileSystemAdapter fileSystemAdapter;
 	@Autowired(required = true)
 	private DataBaseService databaseService;
+	@Autowired(required = true)
+	private ResourceConverterService resourceConverterService;
 
 	public void setRepositoryService(RepositoryService repoServ) {
 		this.repositoryService = repoServ;
@@ -50,6 +53,8 @@ public class DeployServiceImpl implements DeployService {
 
 		unpackerService.unpack(downloadedFile, installationDirectory);
 		removeArtifactAndVersionFromPath(installationDirectory, spec);
+		
+		resourceConverterService.convert(installationDirectory);
 
 		configurationService.configure(environmentDirectory, environment);
 
@@ -93,6 +98,10 @@ public class DeployServiceImpl implements DeployService {
 
 	public void setDatabaseService(DataBaseService dbService) {
 		this.databaseService = dbService;
+	}
+
+	public void setResourceConverterService(ResourceConverterService resourceConverterService) {
+		this.resourceConverterService = resourceConverterService;
 	}
 
 }

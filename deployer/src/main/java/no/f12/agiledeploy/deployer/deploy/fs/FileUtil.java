@@ -8,10 +8,18 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -73,6 +81,8 @@ public class FileUtil {
 	public static void moveOneUp(File directory) {
 		File dir = directory;
 		File parent = dir.getParentFile();
+		Map<File, File> failedFiles = new HashMap<File,File>();
+		
 		File[] subFiles = dir.listFiles();
 		if (subFiles != null) {
 			for (File file : subFiles) {
@@ -80,10 +90,19 @@ public class FileUtil {
 				boolean success = file.renameTo(target);
 				LOG.debug("Moved file from " + file + " to " + target);
 				if (!success) {
-					throw new IllegalStateException("Rename returned false for " + file);
+					failedFiles.put(file, target);
 				}
 			}
 		}
+
+		// Verify that the erronous moves completed
+		Set<File> fileIter = failedFiles.keySet();
+		for (File file : fileIter) {
+			if (!failedFiles.get(file).exists()) {
+				throw new IllegalStateException("Rename returned false for " + file);
+			}
+		}
+		
 		dir.delete();
 	}
 
@@ -165,7 +184,8 @@ public class FileUtil {
 	}
 
 	private static boolean hasSupportForUnixCommands() {
-		if (isWindows()) return false;
+		if (isWindows())
+			return false;
 		return true;
 	}
 
@@ -196,6 +216,53 @@ public class FileUtil {
 		String os = System.getProperty("os.name").toLowerCase();
 		// linux or unix
 		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
+	}
+
+	public static void writeStringToFile(File file, String encoding, String content) throws FileNotFoundException,
+			UnsupportedEncodingException, IOException {
+
+		FileOutputStream outStream = null;
+		OutputStreamWriter writer = null;
+		try {
+			outStream = new FileOutputStream(file, false);
+			writer = new OutputStreamWriter(outStream, encoding);
+			writer.write(content);
+		} finally {
+			if (writer != null)
+				writer.close();
+
+			if (outStream != null)
+				outStream.close();
+		}
+	}
+
+	public static String readFile(File file, String encoding) throws FileNotFoundException, IOException {
+		FileInputStream stream = null;
+		InputStreamReader reader = null;
+		LineNumberReader lineReader = null;
+
+		String content = "";
+		try {
+			stream = new FileInputStream(file);
+			reader = new InputStreamReader(stream, Charset.forName(encoding));
+			lineReader = new LineNumberReader(reader);
+
+			String line = null;
+			while ((line = lineReader.readLine()) != null) {
+				content = content + "\n" + line;
+			}
+
+		} finally {
+			if (lineReader != null)
+				lineReader.close();
+
+			if (reader != null)
+				reader.close();
+
+			if (stream != null)
+				stream.close();
+		}
+		return content;
 	}
 
 }
