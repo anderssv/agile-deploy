@@ -3,40 +3,36 @@ package no.f12.agiledeploy.deployer.deploy.fs;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-
-import no.f12.agiledeploy.deployer.EncodingConversion;
+import java.util.HashSet;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
 
-@Service
 public class ResourceConverterServiceImpl implements ResourceConverterService {
 
 	private static final Logger LOG = Logger.getLogger(ResourceConverterServiceImpl.class);
 
-	private Collection<EncodingConversion> conversions = new ArrayList<EncodingConversion>();
-
-	public ResourceConverterServiceImpl() {
-		this.conversions.add(new EncodingConversion("bin", "UTF-8", "Cp1047"));
-	}
-
-	public void setConversions(Collection<EncodingConversion> conversions) {
-		this.conversions = conversions;
-	}
+	private Collection<String> paths;
+	private String sourceEncoding;
+	private String targetEncoding;
 
 	@Override
 	public void convert(File target) {
-		for (EncodingConversion conversion : conversions) {
-			File currentFile = new File(target, conversion.getPath());
+		if (sourceEncoding == null || sourceEncoding.trim().equals("")) {
+			return;
+		}
+		LOG.info("Starting conversion of resource encoding from " + sourceEncoding + " to " + targetEncoding);
+		
+		for (String path : paths) {
+			File currentFile = new File(target, path);
 			if (!currentFile.exists()) {
-				LOG.warn("Specified conversion does not exist: " + conversion);
+				LOG.warn("Specified conversion path does not exist: " + path);
 				return;
 			}
 
 			try {
-				convertFile(currentFile, conversion);
+				convertFile(currentFile);
 			} catch (FileNotFoundException e) {
 				// Not possible
 			} catch (IOException e) {
@@ -45,16 +41,51 @@ public class ResourceConverterServiceImpl implements ResourceConverterService {
 		}
 	}
 
-	private void convertFile(File file, EncodingConversion conversion) throws IOException {
+	private void convertFile(File file) throws IOException {
 		if (file.isDirectory()) {
+			LOG.info("Converting " + file);
 			File[] files = file.listFiles();
 			for (File subFile : files) {
-				convertFile(subFile, conversion);
+				convertFile(subFile);
 			}
 		} else {
-			String content = FileUtil.readFile(file, conversion.getSourceEncoding());
-			FileUtil.writeStringToFile(file, conversion.getTargetEncoding(), content);
+			LOG.debug("Converting " + file);
+			String content = FileUtil.readFile(file, this.getSourceEncoding());
+			FileUtil.writeStringToFile(file, this.getTargetEncoding(), content);
 		}
+	}
+
+	private String getTargetEncoding() {
+		return this.targetEncoding;
+	}
+
+	private String getSourceEncoding() {
+		return this.sourceEncoding;
+	}
+
+	public void setPaths(Collection<String> paths) {
+		this.paths = paths;
+	}
+
+	public void setSourceEncoding(String sourceEncoding) {
+		this.sourceEncoding = sourceEncoding;
+	}
+
+	public void setTargetEncoding(String targetEncoding) {
+		this.targetEncoding = targetEncoding;
+	}
+
+	public void setPathsString(String string) {
+		paths = new HashSet<String>();
+		StringTokenizer tokenizer = new StringTokenizer(string, ";");
+		while (tokenizer.hasMoreElements()) {
+			String element = tokenizer.nextToken();
+			paths.add(element.trim());
+		}
+	}
+
+	public Collection<String> getPaths() {
+		return this.paths;
 	}
 
 }

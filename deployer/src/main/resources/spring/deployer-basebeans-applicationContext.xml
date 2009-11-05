@@ -10,6 +10,12 @@
 	<context:annotation-config />
 	<context:component-scan base-package="no.f12.agiledeploy.deployer" />
 
+	<bean class="no.f12.agiledeploy.deployer.deploy.fs.ResourceConverterServiceImpl">
+		<property name="pathsString" value="${conversion.paths}" />
+		<property name="sourceEncoding" value="${conversion.encoding.source}" />
+		<property name="targetEncoding" value="${conversion.encoding.target}" />
+	</bean>
+
 	<bean class="no.f12.agiledeploy.deployer.repo.RepositoryRepoImpl">
 		<qualifier value="release" />
 		<property name="repositoryURL" ref="releaseUrl" />

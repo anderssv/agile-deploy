@@ -21,12 +21,13 @@ public class ResourceConverterTest {
 		File target = TestDataProvider.getDefaultTargetDirectory();
 		TestDataProvider.unpackDefaultTestZip(target);
 
-		EncodingConversion conversion = new EncodingConversion("bin", "UTF-8", "Cp1047");
-		Collection<EncodingConversion> conversions = new ArrayList<EncodingConversion>();
-		conversions.add(conversion);
+		Collection<String> paths = new ArrayList<String>();
+		paths.add("bin");
 
 		ResourceConverterServiceImpl serviceImpl = new ResourceConverterServiceImpl();
-		serviceImpl.setConversions(conversions);
+		serviceImpl.setPaths(paths);
+		serviceImpl.setSourceEncoding("UTF-8");
+		serviceImpl.setTargetEncoding("Cp1047");
 
 		ResourceConverterService service = serviceImpl;
 		service.convert(target);
@@ -37,6 +38,39 @@ public class ResourceConverterTest {
 
 		assertFalse(wrong.contains("Windows_NT"));
 		assertTrue(right.contains("Windows_NT"));
+	}
+	
+	@Test
+	public void shouldNotDoConversionIfNoSourceEncodingIsGiven() throws IOException {
+		File target = TestDataProvider.getDefaultTargetDirectory();
+		TestDataProvider.unpackDefaultTestZip(target);
+		
+		Collection<String> paths = new ArrayList<String>();
+		paths.add("bin");
+
+		ResourceConverterServiceImpl serviceImpl = new ResourceConverterServiceImpl();
+		serviceImpl.setPaths(paths);
+
+		ResourceConverterService service = serviceImpl;
+		service.convert(target);
+
+		File testFile = new File(target, "bin/myapp.bat");
+		String right = FileUtil.readFile(testFile, "UTF-8");
+		String wrong = FileUtil.readFile(testFile, "Cp1047");
+
+		assertFalse(wrong.contains("Windows_NT"));
+		assertTrue(right.contains("Windows_NT"));
+	}
+	
+	@Test
+	public void shouldAcceptCommaDelimitedStringWithPaths() {
+		ResourceConverterServiceImpl service = new ResourceConverterServiceImpl();
+		service.setPathsString("bin;path/with/slashes; path/with/space ;hello");
+		Collection<String> paths = service.getPaths();
+		
+		assertEquals(4, paths.size());
+		assertTrue(paths.contains("bin"));
+		assertTrue(paths.contains("path/with/space"));
 	}
 
 	@After

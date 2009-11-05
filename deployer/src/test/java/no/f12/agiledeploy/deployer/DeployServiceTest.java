@@ -115,7 +115,7 @@ public class DeployServiceTest {
 		// Expect to continue
 	}
 
-	public void shouldInitiateConversion() {
+	public void shouldInitiateConversionIfEnabled() {
 		createMocks();
 		createService();
 
