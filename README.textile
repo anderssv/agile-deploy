@@ -93,6 +93,7 @@ change the repo.
 NOTE So far this only supports http based repositories.
 
 h3. Configuration
+
 Place a file called deploy.properties in the directory your are executing from
 The following are the valid parameters:
 
