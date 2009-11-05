@@ -64,9 +64,9 @@ achieved by using the Maven app-assembler and assembly plugin. Have a
 look inside the target folder and the ZIP to figure out what is 
 happening. 
 
-You can use this for most webapplications. In my opinion you really 
+You can use this for most web applications. In my opinion you really 
 don't need a big app server most of the time. A future version might
-include an embedded version og Tomcat.
+include an embedded version of Tomcat.
 
 For most projects where you're tied to the application server the current
 state of the project and deployer might suit your needs for batches.
@@ -79,8 +79,8 @@ into it later.
 h2. Deployer
 
 The deployer is packaged as a JAR with a manifest that says which class 
-to execute. To launch the deployer enter the following on the command 
-line: 
+to execute. To launch the deployer, package it with Maven and use the JAR.
+Enter the following on the command line: 
 
 <pre>java -jar deployer-0.1-SNAPSHOT.jar <env> <groupId> <artifactId> <version></pre>
 
@@ -90,9 +90,22 @@ file called deploy.properties . By placing this file in the directory
 you are running the JAR from, and adding a property like below you can 
 change the repo. 
 
-<pre>repo.url=http://myrepo.myorg.com/maven2/</pre>
-
 NOTE So far this only supports http based repositories.
+
+h3. Configuration
+Place a file called deploy.properties in the directory your are executing from
+The following are the valid parameters:
+
+|_. Property |_. Description |
+| repo.url | The full URL to the repository containing releases. |
+| repo.snapshot.url | The full URL to the repository containing SNAPSHOT releases. |
+| conversion.encoding.source | When deploying to systems with different encoding than 
+your origin you might want to convert script and settings files to the platform 
+encoding. If this setting is set the deployer will read the files in with this encoding
+and write with target. |
+| conversion.encoding.target | The target encoding to write files with |
+| conversion.paths | The paths to do conversion for. Multiple paths are separated
+by ; . Note that these paths must only contain text files. |
 
 h3. DBDeploy
 
@@ -104,6 +117,7 @@ in the application template for the necessary settings.
 h3. What it does
 
 The deployer handles some basic things:
+* Downloading
 * Unpacking
 * Finding the correct properties
 * Symlinking necessary directories
@@ -117,6 +131,7 @@ In detail the deployer performs the following tasks:
   <artifactId>/<env>/current/properties/<env> into
   <artifactId>/<env>
   </code></pre>
+* Converts text files from one encoding to another
 * Creates symlink from <code><artifactId>/<env>/*.properties</code> into
   <code><artifactId>/<env>/current</code> (copy if not symlink capable)
 * Creates symlink from <code><artifactId>/<env>/data</code> into
@@ -141,6 +156,8 @@ h2. DONE
 * Copy files to env dir and sym link to current
 * Correct permissions on execute scripts
 * Upgrading the database
+* Converting encoding of scripts and config
+* Separate SNAPSHOT and release repo
 
 h2. TODO
 
@@ -148,11 +165,9 @@ h2. FUTURE
 
 * Start/stop scripts
 * Merge in new settings in properties files into existing file on disk?
-* Option for disabling execution of DB scripts
 * Run with daemon? JSW might have licence issues
 * Other options for executing DB script?
 * Recommended practices
-* Separate SNAPSHOT and release repo
 * Support for file based repositories?
 * Maven archetype for the template. Don't know how to create one for a project
   with two subprojects.
