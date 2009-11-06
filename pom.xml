@@ -3,11 +3,55 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>no.f12</groupId>
 	<artifactId>agile-deploy</artifactId>
-	<packaging>pom</packaging>
 	<version>0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<name>agile-deploy</name>
+
+	<scm>
+		<connection>scm:git:git://github.com/anderssv/agile-deploy.git</connection>
+		<url>scm:git:git://github.com/anderssv/agile-deploy.git</url>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>no.f12.repo</id>
+			<url>scp://repo.f12.no/home/anderssv_mvn/public</url>
+		</repository>
+		<snapshotRepository>
+			<id>no.f12.repo</id>
+			<url>scp://repo.f12.no/home/anderssv_mvn/public-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<modules>
 		<module>application-template</module>
 		<module>deployer</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-gitexe</artifactId>
+						<version>1.1-db-1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-scm-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-gitexe</artifactId>
+						<version>1.1-db-1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 </project>
