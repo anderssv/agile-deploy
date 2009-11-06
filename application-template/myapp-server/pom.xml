@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>myapp</artifactId>
 		<groupId>org.mygroup</groupId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1</version>
 	</parent>
 	<groupId>org.mygroup</groupId>
 	<artifactId>myapp-server</artifactId>
@@ -29,6 +29,8 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
+				<!-- 1.0 beta 2 does not include wars when defining pom dependency -->
+				<version>1.0-alpha-2</version>
 				<configuration>
 					<programs>
 						<program>
@@ -41,8 +43,6 @@
 					<execution>
 						<phase>package</phase>
 						<goals>
-							<!-- This must be added or else the assembler plugin won't include the war -->
-							<goal>create-repository</goal>
 							<goal>assemble</goal>
 						</goals>
 					</execution>
