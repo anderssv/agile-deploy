@@ -3,17 +3,17 @@ it's not supposed to be some sort of big framework etc. but a utility.
 
 What to do with it?
 
-* Bootstrap a simple webproject easily. You could use Maven archetypes for this, but this 
+* *Bootstrap a simple webproject easily*. You could use Maven archetypes for this, but this 
 project also includes an embedded Jetty server and a packagin scheme for this. This means 
 you can have a project up and running, as well as an Servlet container to run it in in no 
 time.
 
-* Use the deployer to easily deploy new versions of the application from the Maven 
-repository. This can be a version of the webapp created from the template, or some sort of 
+* *Use the deployer to easily deploy new versions of the application from the Maven 
+repository*. This can be a version of the webapp created from the template, or some sort of 
 batch program. Right now it works with ZIP files that create one complete package to be run 
 from the command line.
 
-See "the wiki for more information":http://wiki.github.com/anderssv/agile-deploy
+See "the wiki for more information":http://wiki.github.com/anderssv/agile-deploy .
 
 
 -- Anders Sveen <anders@f12.no>
