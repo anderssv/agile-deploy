@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>myapp</artifactId>
 		<groupId>org.mygroup</groupId>
-		<version>0.1</version>
+		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>org.mygroup</groupId>
 	<artifactId>myapp-server</artifactId>
