@@ -3,6 +3,7 @@ package no.f12.agiledeploy.deployer;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -21,7 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class RepositoryRepoTest {
 
 	@Test
-	public void shouldDownloadFileAndWriteToDisk() throws MalformedURLException {
+	public void shouldDownloadFileAndWriteToDisk() throws MalformedURLException, FileNotFoundException {
 		RepositoryRepoImpl repo = new RepositoryRepoImpl();
 		repo.setRepositoryURL(repoUrl());
 
@@ -37,7 +38,7 @@ public class RepositoryRepoTest {
 	}
 
 	@Test
-	public void shouldDownloadMetadataFileAndWriteToDisk() throws MalformedURLException {
+	public void shouldDownloadMetadataFileAndWriteToDisk() throws MalformedURLException, FileNotFoundException {
 		RepositoryRepoImpl repo = new RepositoryRepoImpl();
 		repo.setRepositoryURL(repoUrl());
 
@@ -53,13 +54,21 @@ public class RepositoryRepoTest {
 	}
 
 	@Test(expected = IllegalStateException.class)
-	public void shouldFailCorrectlyWhenNoRepositoryIsSpecified() throws MalformedURLException {
+	public void shouldFailCorrectlyWhenNoRepositoryIsSpecified() throws MalformedURLException, FileNotFoundException {
 		RepositoryRepoImpl repo = new RepositoryRepoImpl();
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 		String fileName = spec.getArtifactFileName() + ".jar";
 
 		repo.fetchFile(spec.getRepositoryInformation().getArtifactPath(), fileName, workingDirectory(), true);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldExceptionOnMissingFile() throws MalformedURLException, FileNotFoundException {
+		RepositoryRepoImpl repo = new RepositoryRepoImpl();
+		repo.setRepositoryURL(new URL("http://repo1.maven.org"));
+
+		repo.fetchFile("somethingmissing", "alsomissing", workingDirectory(), true);
 	}
 
 	private File workingDirectory() {

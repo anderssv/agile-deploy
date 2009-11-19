@@ -2,9 +2,11 @@ package no.f12.agiledeploy.deployer.repo;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -22,7 +24,7 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 		if (this.repositoryURL == null) {
 			throw new IllegalStateException("No repository specified for this repo");
 		}
-		
+
 		String fullFilePath = filePath + "/" + fileName;
 		File resultingFile = null;
 
@@ -32,18 +34,26 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 		} catch (MalformedURLException e) {
 			throw new IllegalArgumentException("Malformed URL: " + fullFilePath, e);
 		}
-		
+
 		LOG.info("Downloading package from " + fileUrl);
-		resultingFile = downloadFile(fileName, workingDirectory, binary, resultingFile, fileUrl);
+		try {
+			resultingFile = downloadFile(fileName, workingDirectory, binary, resultingFile, fileUrl);
+		} catch (FileNotFoundException e) {
+			throw new IllegalArgumentException("Could not download file " + fileUrl, e);
+		}
 		return resultingFile;
 	}
 
-	private File downloadFile(String fileName, File workingDirectory, boolean binary, File resultingFile, URL fileUrl) {
+	private File downloadFile(String fileName, File workingDirectory, boolean binary, File resultingFile, URL fileUrl)
+			throws FileNotFoundException {
 		try {
 			FileOutputStream out = null;
 			InputStream fileInputstream = null;
 			try {
-				URLConnection connection = fileUrl.openConnection();
+				HttpURLConnection connection = (HttpURLConnection) fileUrl.openConnection();
+				if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
+					throw new FileNotFoundException(fileUrl + " not found (404)");
+				}
 				int contentLength = connection.getContentLength();
 				if (binary) {
 					checkContentType(connection, contentLength);
@@ -63,6 +73,8 @@ public class RepositoryRepoImpl implements RepositoryRepo {
 					out.close();
 				}
 			}
+		} catch (FileNotFoundException e) {
+			throw e;
 		} catch (IOException e) {
 			throw new IllegalStateException("Could not retrieve file: " + fileUrl, e);
 		}
