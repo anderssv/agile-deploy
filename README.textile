@@ -16,4 +16,4 @@ from the command line.
 See "the wiki for more information":http://wiki.github.com/anderssv/agile-deploy .
  
 
--- Anders "The King" Sveen <anders@f12.no>
+-- Anders R. Sveen <anders@f12.no>
