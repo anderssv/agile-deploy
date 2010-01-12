@@ -113,7 +113,7 @@
 		<dependency>
 			<artifactId>dbdeploy-core</artifactId>
 			<groupId>com.dbdeploy</groupId>
-			<version>3.0M1</version>
+			<version>3.0M2</version>
 		</dependency>
 	</dependencies>
 </project>
