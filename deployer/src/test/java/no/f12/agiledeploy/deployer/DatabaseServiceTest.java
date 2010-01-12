@@ -57,7 +57,7 @@ public class DatabaseServiceTest {
 	public void shouldGenerateScriptForTestDatabase() throws IOException, SQLException {
 
 		File targetDirectory = unpackAndConfigure();
-		createVersionTable(new File("./src"));
+		createVersionTable(new File("./src/main"));
 
 		DataBaseServiceImpl service = new DataBaseServiceImpl();
 		service.generateScripts(targetDirectory);
@@ -72,7 +72,7 @@ public class DatabaseServiceTest {
 	@Test
 	public void shouldExecuteScriptThroughJdbc() throws IOException, SQLException {
 		File targetDirectory = unpackAndConfigure();
-		createVersionTable(new File("./src"));
+		createVersionTable(new File("./src/main"));
 
 		DataBaseServiceImpl service = new DataBaseServiceImpl();
 		service.upgradeDatabase(targetDirectory);
