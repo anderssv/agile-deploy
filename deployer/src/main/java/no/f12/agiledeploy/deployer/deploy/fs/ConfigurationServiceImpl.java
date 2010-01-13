@@ -28,7 +28,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		createDirIfNotExists(getDataDirectory(environmentDirectory));
 		createDirIfNotExists(getLogDirectory(environmentDirectory));
 		createLinksToCurrent(environmentDirectory);
-		
+
 		updateBinPermissions(environmentDirectory);
 	}
 
@@ -83,20 +83,23 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		}
 
 		if (realFile.isDirectory()) {
-			try {
-				this.fileSystemAdapter.createSymbolicLink(realFile, link);
-				LOG.info("Created link for " + realFile + " at " + link);
-			} catch (IllegalStateException e) {
-				LOG.warn("Could not create sym link to " + realFile + " at " + installationDirectory
-						+ ". Please make sure your application does not write to any directories under your root.", e);
-			}
+			createSymbolicLink(realFile, link, false);
 		} else {
-			try {
-				this.fileSystemAdapter.createSymbolicLink(realFile, link);
-				LOG.info("Created link for " + realFile + " at " + link);
-			} catch (IllegalStateException e) {
-				this.fileSystemAdapter.copyFile(realFile, new File(installationDirectory, realFile.getName()));
+			createSymbolicLink(realFile, link, true);
+		}
+	}
+
+	private void createSymbolicLink(File realFile, File link, boolean copyFailover) {
+		try {
+			this.fileSystemAdapter.createSymbolicLink(realFile, link);
+			LOG.info("Created link for " + realFile + " at " + link);
+		} catch (IllegalStateException e) {
+			if (copyFailover && realFile.isFile()) {
+				this.fileSystemAdapter.copyFile(realFile, link);
 				LOG.info("Unable to link. Copied " + realFile);
+			} else {
+				LOG.warn("Could not create sym link to " + realFile + " at " + link
+						+ ". Please make sure your application does not write to any directories under your root.", e);
 			}
 		}
 	}
