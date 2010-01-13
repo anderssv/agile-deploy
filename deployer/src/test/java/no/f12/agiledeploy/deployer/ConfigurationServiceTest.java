@@ -1,7 +1,11 @@
 package no.f12.agiledeploy.deployer;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,19 +78,20 @@ public class ConfigurationServiceTest {
 	}
 
 	@Test
-	public void shouldSymLinkToDataDirectoryIfItExists() throws IOException {
-		createDataDir(environmentDirectory);
-
+	public void shouldCreateAndSymToDirectories() throws IOException {
 		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
 		FileSystemAdapter fsAdapter = mock(FileSystemAdapter.class);
 		configService.setFileSystemAdapter(fsAdapter);
 
 		configService.configure(environmentDirectory, "test");
 
-		verify(fsAdapter).createSymbolicLink(new File(workingDirectory, "test-artifact/test/data"),
-				new File(workingDirectory, "test-artifact/test/current/data"));
+		String[] dirNames = new String[] {"data", "logs"};
+		for (String dirName : dirNames) {
+			verify(fsAdapter).createSymbolicLink(new File(workingDirectory, "test-artifact/test/" + dirName),
+					new File(workingDirectory, "test-artifact/test/current/" + dirName));
+		}
 	}
-
+	
 	@Test
 	public void shouldSymLinkToPropertiesFiles() {
 		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
@@ -127,12 +132,6 @@ public class ConfigurationServiceTest {
 
 		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/myapp"), "u+x");
 		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/myapp.bat"), "u+x");
-	}
-
-	private File createDataDir(File baseDirectory) {
-		File dataDir = new File(baseDirectory, "data");
-		dataDir.mkdirs();
-		return dataDir;
 	}
 
 	private ConfigurationServiceImpl createService() {

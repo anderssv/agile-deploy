@@ -1,6 +1,7 @@
 package no.f12.agiledeploy.deployer.deploy.fs;
 
 import java.io.File;
+import java.io.FileFilter;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,38 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		installProperties(environmentDirectory, propDir);
 
 		LOG.info("Creating links");
-		createDataLinks(environmentDirectory);
-		createPropertyLinks(environmentDirectory);
+		createDirIfNotExists(getDataDirectory(environmentDirectory));
+		createDirIfNotExists(getLogDirectory(environmentDirectory));
+		createLinksToCurrent(environmentDirectory);
 		
 		updateBinPermissions(environmentDirectory);
+	}
+
+	private void createLinksToCurrent(File environmentDirectory) {
+		final File installDirectory = getLatestVersionInstallationDirectory(environmentDirectory);
+		File[] entries = environmentDirectory.listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File path) {
+				if (path.isDirectory() && path.equals(installDirectory)) {
+					return false;
+				}
+				return true;
+			}
+		});
+
+		for (File file : entries) {
+			linkInto(file, new File(environmentDirectory, "current"));
+		}
+	}
+
+	private File getLogDirectory(File environmentDirectory) {
+		return new File(environmentDirectory, "logs");
+	}
+
+	private void createDirIfNotExists(File dir) {
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
 	}
 
 	private void updateBinPermissions(File environmentDirectory) {
@@ -43,21 +72,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		}
 	}
 
-	private void createPropertyLinks(File environmentDirectory) {
-		File installationDirectory = getLatestVersionInstallationDirectory(environmentDirectory);
-		File[] files = environmentDirectory.listFiles();
-		for (File file : files) {
-			if (!file.isDirectory()) {
-				try {
-					linkInto(file, installationDirectory);
-				} catch (IllegalStateException e) {
-					this.fileSystemAdapter.copyFile(file, new File(installationDirectory, file.getName()));
-					LOG.info("Unable to link. Copied " + file);
-				}
-			}
-		}
-	}
-
 	private void linkInto(File realFile, File installationDirectory) {
 		File link = new File(installationDirectory, realFile.getName());
 		if (link.exists()) {
@@ -67,8 +81,24 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 				return;
 			}
 		}
-		this.fileSystemAdapter.createSymbolicLink(realFile, link);
-		LOG.info("Created link for " + realFile + " at " + link);
+
+		if (realFile.isDirectory()) {
+			try {
+				this.fileSystemAdapter.createSymbolicLink(realFile, link);
+				LOG.info("Created link for " + realFile + " at " + link);
+			} catch (IllegalStateException e) {
+				LOG.warn("Could not create sym link to " + realFile + " at " + installationDirectory
+						+ ". Please make sure your application does not write to any directories under your root.", e);
+			}
+		} else {
+			try {
+				this.fileSystemAdapter.createSymbolicLink(realFile, link);
+				LOG.info("Created link for " + realFile + " at " + link);
+			} catch (IllegalStateException e) {
+				this.fileSystemAdapter.copyFile(realFile, new File(installationDirectory, realFile.getName()));
+				LOG.info("Unable to link. Copied " + realFile);
+			}
+		}
 	}
 
 	private File getDataDirectory(File environmentDirectory) {
@@ -85,22 +115,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	private File getLatestVersionInstallationDirectory(File environmentDirectory) {
 		return new File(environmentDirectory, "current");
-	}
-
-	private void createDataLinks(File environmentDirectory) {
-		File dataDir = getDataDirectory(environmentDirectory);
-		File installationDirectory = getLatestVersionInstallationDirectory(environmentDirectory);
-		if (!dataDir.exists()) {
-			dataDir.mkdirs();
-		}
-
-		
-		try {
-			linkInto(dataDir, installationDirectory);
-		} catch (IllegalStateException e) {
-			LOG.warn("Could not create sym link to data directory at " + dataDir
-					+ ". Please make sure your application does not write to a data dir under your root.", e);
-		}
 	}
 
 	private void installProperties(File environmentDirectory, File propDir) {
