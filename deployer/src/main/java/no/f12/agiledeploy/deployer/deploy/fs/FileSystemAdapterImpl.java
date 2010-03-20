@@ -13,9 +13,9 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 	@Override
 	public void copyFile(File source, File target) {
 		try {
-			FileUtil.copyFile(source, target);
+			FileUtils.copyFile(source, target);
 		} catch (IOException e) {
-			// Something went wrong in cleanup, ignore
+			throw new IllegalStateException("Could not copy file from " + source + " to " + target, e);
 		}
 	}
 
@@ -35,7 +35,11 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 	}
 
 	public void deleteDir(File dir, FileFilter filter) {
-		FileUtil.deleteDir(dir, filter);
+		try {
+			FileUtil.deleteDir(dir, filter);
+		} catch (IOException e) {
+			throw new IllegalStateException("Could not delete directory " + dir, e);
+		}
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 public class ResourceConverterServiceImpl implements ResourceConverterService {
@@ -50,7 +51,7 @@ public class ResourceConverterServiceImpl implements ResourceConverterService {
 			}
 		} else {
 			LOG.debug("Converting " + file);
-			String content = FileUtil.readFile(file, this.getSourceEncoding());
+			String content = FileUtils.readFileToString(file, this.getSourceEncoding());
 			FileUtil.writeStringToFile(file, this.getTargetEncoding(), content);
 		}
 	}

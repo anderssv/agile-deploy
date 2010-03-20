@@ -1,21 +1,13 @@
 package no.f12.agiledeploy.deployer.deploy.fs;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,68 +21,6 @@ public class FileUtil {
 	public static final String DEFAULT_SYMLINKCOMMAND = "ln -s %1$s %2$s";
 
 	private static final Logger LOG = Logger.getLogger(FileUtil.class);
-
-	private static boolean deleteRecursive(File file, FileFilter filter) {
-		if (file != null && file.exists()) {
-			Collection<File> failed = new ArrayList<File>();
-			if (file.isDirectory()) {
-				for (File child : file.listFiles()) {
-					if (matchesFilter(child, filter) && !deleteRecursive(child, filter)) {
-						failed.add(file);
-					}
-				}
-			}
-			if (matchesFilter(file, filter)) {
-				if (file.delete()) {
-					LOG.debug("Deleted " + file);
-				} else {
-					failed.add(file);
-				}
-			} else {
-				LOG.debug("Skipped file because it did not match filter " + file);
-			}
-			if (failed.size() > 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private static boolean matchesFilter(File file, FileFilter filter) {
-		return filter == null || filter.accept(file);
-	}
-
-	public static void copyFile(File source, File target) throws IOException {
-		LOG.debug("Copying file " + source + " to " + target);
-		FileChannel in = null;
-		FileChannel out = null;
-		FileInputStream fis = null;
-		FileOutputStream fos = null;
-		try {
-			fis = new FileInputStream(source);
-			fos = new FileOutputStream(target);
-			in = fis.getChannel();
-			out = fos.getChannel();
-			in.transferTo(0, source.length(), out);
-		} catch (FileNotFoundException e) {
-			throw new IllegalStateException("File to copy from could not be found", e);
-		} catch (IOException e) {
-			throw new IllegalStateException("Error copying file " + source, e);
-		} finally {
-			if (in != null) {
-				in.close();
-			}
-			if (out != null) {
-				out.close();
-			}
-			if (fis != null) {
-				fis.close();
-			}
-			if (fos != null) {
-				fos.close();
-			}
-		}
-	}
 
 	public static void moveOneUp(File directory) {
 		File dir = directory;
@@ -120,8 +50,11 @@ public class FileUtil {
 		dir.delete();
 	}
 
-	public static void deleteDir(File dir, FileFilter filter) {
-		deleteRecursive(dir, filter);
+	public static void deleteDir(File dir, FileFilter filter) throws IOException {
+		File[] files = dir.listFiles(filter);
+		for (File file : files) {
+			FileUtils.deleteDirectory(file);
+		}
 	}
 
 	public static void changePermissions(File file, String permission) {
@@ -203,18 +136,6 @@ public class FileUtil {
 		return true;
 	}
 
-	public static String readToString(File resultingFile) throws IOException {
-		FileReader fr = new FileReader(resultingFile);
-		BufferedReader br = new BufferedReader(fr);
-		String result = "";
-		while (br.ready()) {
-			result += br.readLine() + "\n";
-		}
-		br.close();
-		fr.close();
-		return result;
-	}
-
 	public static boolean isWindows() {
 		String os = System.getProperty("os.name").toLowerCase();
 		return (os.indexOf("win") >= 0);
@@ -248,35 +169,6 @@ public class FileUtil {
 			if (outStream != null)
 				outStream.close();
 		}
-	}
-
-	public static String readFile(File file, String encoding) throws FileNotFoundException, IOException {
-		FileInputStream stream = null;
-		InputStreamReader reader = null;
-		LineNumberReader lineReader = null;
-
-		String content = "";
-		try {
-			stream = new FileInputStream(file);
-			reader = new InputStreamReader(stream, Charset.forName(encoding));
-			lineReader = new LineNumberReader(reader);
-
-			String line = null;
-			while ((line = lineReader.readLine()) != null) {
-				content = content + "\n" + line;
-			}
-
-		} finally {
-			if (lineReader != null)
-				lineReader.close();
-
-			if (reader != null)
-				reader.close();
-
-			if (stream != null)
-				stream.close();
-		}
-		return content;
 	}
 
 	public static void deleteDirectory(File dir) {

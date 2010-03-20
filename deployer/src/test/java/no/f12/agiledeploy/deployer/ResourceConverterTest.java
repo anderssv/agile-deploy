@@ -1,13 +1,14 @@
 package no.f12.agiledeploy.deployer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
 import no.f12.agiledeploy.deployer.deploy.fs.ResourceConverterService;
 import no.f12.agiledeploy.deployer.deploy.fs.ResourceConverterServiceImpl;
 
@@ -34,8 +35,8 @@ public class ResourceConverterTest {
 		service.convert(target);
 
 		File testFile = new File(target, "bin/myapp.bat");
-		String wrong = FileUtil.readFile(testFile, "UTF-8");
-		String right = FileUtil.readFile(testFile, "Cp1047");
+		String wrong = FileUtils.readFileToString(testFile, "UTF-8");
+		String right = FileUtils.readFileToString(testFile, "Cp1047");
 
 		assertFalse(wrong.contains("Windows_NT"));
 		assertTrue(right.contains("Windows_NT"));
@@ -56,8 +57,8 @@ public class ResourceConverterTest {
 		service.convert(target);
 
 		File testFile = new File(target, "bin/myapp.bat");
-		String right = FileUtil.readFile(testFile, "UTF-8");
-		String wrong = FileUtil.readFile(testFile, "Cp1047");
+		String right = FileUtils.readFileToString(testFile, "UTF-8");
+		String wrong = FileUtils.readFileToString(testFile, "Cp1047");
 
 		assertFalse(wrong.contains("Windows_NT"));
 		assertTrue(right.contains("Windows_NT"));

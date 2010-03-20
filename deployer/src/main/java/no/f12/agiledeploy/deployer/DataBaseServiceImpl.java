@@ -10,8 +10,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
-
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
@@ -97,7 +96,7 @@ public class DataBaseServiceImpl implements DataBaseService {
 		DataSource ds = new SingleConnectionDataSource(this.databaseUrl, this.username, this.password, false);
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
 		try {
-			jdbcTemplate.execute(FileUtil.readToString(dbScript));
+			jdbcTemplate.execute(FileUtils.readFileToString(dbScript));
 		} catch (IOException e) {
 			throw new IllegalStateException("Could not read file with SQL " + dbScript, e);
 		}

@@ -65,7 +65,7 @@ public class DatabaseServiceTest {
 
 		File resultingFile = service.getScriptFile(targetDirectory);
 		assertTrue(resultingFile.exists());
-		String fileContents = FileUtil.readToString(resultingFile);
+		String fileContents = FileUtils.readFileToString(resultingFile);
 		assertTrue(fileContents, fileContents.contains("test1"));
 		assertTrue(fileContents, fileContents.contains("test2"));
 	}
@@ -101,7 +101,7 @@ public class DatabaseServiceTest {
 		}
 
 		if (!changelogExists) {
-			String tableSql = FileUtil.readToString(new File(targetDirectory,
+			String tableSql = FileUtils.readFileToString(new File(targetDirectory,
 					"db/dbdeploy/createSchemaVersionTable.hsql.sql"));
 			template.execute(tableSql);
 		}
