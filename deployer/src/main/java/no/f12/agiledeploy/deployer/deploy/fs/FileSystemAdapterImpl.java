@@ -2,7 +2,9 @@ package no.f12.agiledeploy.deployer.deploy.fs;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,12 +12,16 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 
 	@Override
 	public void copyFile(File source, File target) {
-		FileUtil.copyFile(source, target);
+		try {
+			FileUtil.copyFile(source, target);
+		} catch (IOException e) {
+			// Something went wrong in cleanup, ignore
+		}
 	}
 
 	@Override
-	public void deleteDir(File directory) {
-		FileUtil.deleteDir(directory);
+	public void deleteDir(File directory) throws IOException {
+		FileUtils.deleteDirectory(directory);
 	}
 
 	@Override

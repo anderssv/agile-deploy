@@ -3,9 +3,9 @@ package no.f12.agiledeploy.deployer;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 
-import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
-
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
@@ -58,8 +58,9 @@ public class CommandLineDeployerTest {
 	}
 
 	@After
-	public void cleanupDir() {
-		FileUtil.deleteDir(workingDirectory);
+	public void cleanupDir() throws IOException {
+		if (workingDirectory != null)
+			FileUtils.deleteDirectory(workingDirectory);
 	}
 
 }

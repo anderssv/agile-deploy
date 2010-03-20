@@ -111,6 +111,11 @@
 			<version>1.2.14</version>
 		</dependency>
 		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
 			<artifactId>dbdeploy-core</artifactId>
 			<groupId>com.dbdeploy</groupId>
 			<version>3.0M2</version>

@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationService;
 import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
 
+import org.apache.commons.io.FileUtils;
 import org.hsqldb.jdbcDriver;
 import org.junit.After;
 import org.junit.Test;
@@ -116,7 +117,7 @@ public class DatabaseServiceTest {
 	}
 
 	@After
-	public void cleanUp() {
-		FileUtil.deleteDir(TestDataProvider.getDefaultTempDir());
+	public void cleanUp() throws IOException {
+		FileUtil.deleteDirectory(TestDataProvider.getDefaultTempDir());
 	}
 }

@@ -11,6 +11,7 @@ import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
 import no.f12.agiledeploy.deployer.deploy.fs.ResourceConverterService;
 import no.f12.agiledeploy.deployer.deploy.fs.ResourceConverterServiceImpl;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
@@ -74,8 +75,8 @@ public class ResourceConverterTest {
 	}
 
 	@After
-	public void removeTempDir() {
-		FileUtil.deleteDir(TestDataProvider.getDefaultTempDir());
+	public void removeTempDir() throws IOException {
+		FileUtils.deleteDirectory(TestDataProvider.getDefaultTempDir());
 	}
 
 }

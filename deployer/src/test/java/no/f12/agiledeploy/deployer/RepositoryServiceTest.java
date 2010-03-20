@@ -1,16 +1,22 @@
 package no.f12.agiledeploy.deployer;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 import no.f12.agiledeploy.deployer.repo.RepositoryRepo;
 import no.f12.agiledeploy.deployer.repo.RepositoryServiceImpl;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,8 +87,8 @@ public class RepositoryServiceTest {
 	}
 	
 	@After
-	public void cleanupTemp() {
-		FileUtil.deleteDir(tempDir);
+	public void cleanupTemp() throws IOException {
+		FileUtils.deleteDirectory(tempDir);
 	}
 
 	/**

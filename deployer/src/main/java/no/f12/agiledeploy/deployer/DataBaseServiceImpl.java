@@ -39,18 +39,29 @@ public class DataBaseServiceImpl implements DataBaseService {
 	public void loadSettings(File targetDirectory) {
 		Properties props = new Properties();
 		File propertyFile = new File(targetDirectory, "datasource.properties");
+		FileReader propertyReader = null;
 		try {
-			props.load(new FileReader(propertyFile.getCanonicalPath()));
+			propertyReader = new FileReader(propertyFile.getCanonicalPath());
+			props.load(propertyReader);
 		} catch (FileNotFoundException e) {
 			throw new IllegalStateException("Could not load properties from file", e);
 		} catch (IOException e) {
 			throw new IllegalStateException("Could not load properties from file", e);
+		} finally {
+			if (propertyReader != null) {
+				try {
+					propertyReader.close();
+				} catch (IOException e) {
+					// Ignore
+				}
+			}
 		}
 		this.databaseUrl = (String) props.get("db.url");
 		this.password = (String) props.get("db.password");
 		this.username = (String) props.get("db.username");
 		this.driver = (String) props.get("db.driver");
 		this.dbms = (String) props.get("db.dbms");
+		
 	}
 
 	public String getDatabaseUrl() {
@@ -75,7 +86,6 @@ public class DataBaseServiceImpl implements DataBaseService {
 			LOG.debug("Could not execute DBDeploy", e);
 			throw new DatabaseInspectionException("Could not execute DBDeploy", e);
 		}
-
 	}
 
 	File getScriptFile(File targetDir) {

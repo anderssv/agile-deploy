@@ -14,8 +14,8 @@ import java.util.Properties;
 import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationServiceImpl;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
-import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -141,8 +141,8 @@ public class ConfigurationServiceTest {
 	}
 
 	@After
-	public void removeDir() throws InterruptedException {
-		FileUtil.deleteDir(TestDataProvider.getDefaultTempDir());
+	public void removeDir() throws InterruptedException, IOException {
+		FileUtils.deleteDirectory(TestDataProvider.getDefaultTempDir());
 	}
 
 }

@@ -12,11 +12,11 @@ import java.io.IOException;
 
 import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationService;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
-import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
 import no.f12.agiledeploy.deployer.deploy.fs.ResourceConverterService;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 import no.f12.agiledeploy.deployer.repo.RepositoryService;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
@@ -123,8 +123,8 @@ public class DeployServiceTest {
 	}
 
 	@After
-	public void removeTempDir() {
-		FileUtil.deleteDir(tempDir);
+	public void removeTempDir() throws IOException {
+		FileUtils.deleteDirectory(tempDir);
 	}
 
 }

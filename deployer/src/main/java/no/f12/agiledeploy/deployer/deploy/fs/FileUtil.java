@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 public class FileUtil {
@@ -28,10 +29,6 @@ public class FileUtil {
 	public static final String DEFAULT_SYMLINKCOMMAND = "ln -s %1$s %2$s";
 
 	private static final Logger LOG = Logger.getLogger(FileUtil.class);
-
-	public static boolean deleteDir(File file) {
-		return deleteRecursive(file, null);
-	}
 
 	private static boolean deleteRecursive(File file, FileFilter filter) {
 		if (file != null && file.exists()) {
@@ -63,26 +60,43 @@ public class FileUtil {
 		return filter == null || filter.accept(file);
 	}
 
-	public static void copyFile(File source, File target) {
+	public static void copyFile(File source, File target) throws IOException {
 		LOG.debug("Copying file " + source + " to " + target);
+		FileChannel in = null;
+		FileChannel out = null;
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
 		try {
-			FileChannel in = (new FileInputStream(source)).getChannel();
-			FileChannel out = (new FileOutputStream(target)).getChannel();
+			fis = new FileInputStream(source);
+			fos = new FileOutputStream(target);
+			in = fis.getChannel();
+			out = fos.getChannel();
 			in.transferTo(0, source.length(), out);
-			in.close();
-			out.close();
 		} catch (FileNotFoundException e) {
 			throw new IllegalStateException("File to copy from could not be found", e);
 		} catch (IOException e) {
 			throw new IllegalStateException("Error copying file " + source, e);
+		} finally {
+			if (in != null) {
+				in.close();
+			}
+			if (out != null) {
+				out.close();
+			}
+			if (fis != null) {
+				fis.close();
+			}
+			if (fos != null) {
+				fos.close();
+			}
 		}
 	}
 
 	public static void moveOneUp(File directory) {
 		File dir = directory;
 		File parent = dir.getParentFile();
-		Map<File, File> failedFiles = new HashMap<File,File>();
-		
+		Map<File, File> failedFiles = new HashMap<File, File>();
+
 		File[] subFiles = dir.listFiles();
 		if (subFiles != null) {
 			for (File file : subFiles) {
@@ -102,7 +116,7 @@ public class FileUtil {
 				throw new IllegalStateException("Rename returned false for " + file);
 			}
 		}
-		
+
 		dir.delete();
 	}
 
@@ -263,6 +277,14 @@ public class FileUtil {
 				stream.close();
 		}
 		return content;
+	}
+
+	public static void deleteDirectory(File dir) {
+		try {
+			FileUtils.deleteDirectory(dir);
+		} catch (IOException e) {
+			LOG.warn("Could not delete directory: " + dir, e);
+		}
 	}
 
 }
