@@ -52,7 +52,7 @@ public class ResourceConverterServiceImpl implements ResourceConverterService {
 		} else {
 			LOG.debug("Converting " + file);
 			String content = FileUtils.readFileToString(file, this.getSourceEncoding());
-			FileUtil.writeStringToFile(file, this.getTargetEncoding(), content);
+			FileUtils.writeStringToFile(file, content, this.getTargetEncoding());
 		}
 	}
 

@@ -10,9 +10,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
-import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -43,10 +43,11 @@ public class TestDataProvider {
 	public static File getDefaultTempDir() {
 		return new File("./target/temp");
 	}
-	
+
 	public static File getDefaultArtifactDirectory() {
 		return new File(getDefaultTempDir(), "spring-core");
 	}
+
 	public static File getDefaultTargetDirectory() {
 		return new File(getDefaultTempDir(), "spring-core/test/current");
 	}
@@ -70,9 +71,18 @@ public class TestDataProvider {
 
 		UnpackerService unpacker = new UnpackerServiceImpl();
 		unpacker.unpack(zipFile, targetDir);
-		FileUtil.moveOneUp(new File(targetDir, "myapp-server-0.1-SNAPSHOT"));
+		File unpackedDir = new File(targetDir, "myapp-server-0.1-SNAPSHOT");
+		File[] filesToMove = unpackedDir.listFiles();
+		for (File file : filesToMove) {
+			if (file.isDirectory()) {
+				FileUtils.moveDirectoryToDirectory(file, targetDir, true);
+			} else {
+				FileUtils.moveFileToDirectory(file, targetDir, false);
+			}
+		}
+		unpackedDir.delete();
 	}
-	
+
 	@Test
 	public void shouldNotFailMavenBuildJustBecauseThereIsNoTestsInThisClass() {
 

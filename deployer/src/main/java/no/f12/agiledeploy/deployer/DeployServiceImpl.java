@@ -52,7 +52,6 @@ public class DeployServiceImpl implements DeployService {
 		prepareInstallationDirectory(installationDirectory, spec, environment);
 
 		unpackerService.unpack(downloadedFile, installationDirectory);
-		removeArtifactAndVersionFromPath(installationDirectory, spec);
 		
 		resourceConverterService.convert(installationDirectory);
 
@@ -82,10 +81,6 @@ public class DeployServiceImpl implements DeployService {
 		} else if (!installationDirectory.mkdirs()) {
 			throw new IllegalStateException("Could not create directory to deploy to: " + installationDirectory);
 		}
-	}
-
-	public void removeArtifactAndVersionFromPath(File deployDirectory, PackageSpecification spec) {
-		fileSystemAdapter.moveOneUp(new File(deployDirectory, spec.getArtifactFileName()));
 	}
 
 	public void setConfigurationService(ConfigurationService configServ) {

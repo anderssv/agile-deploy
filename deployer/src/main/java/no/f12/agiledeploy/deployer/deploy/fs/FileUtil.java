@@ -2,16 +2,9 @@ package no.f12.agiledeploy.deployer.deploy.fs;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -21,34 +14,6 @@ public class FileUtil {
 	public static final String DEFAULT_SYMLINKCOMMAND = "ln -s %1$s %2$s";
 
 	private static final Logger LOG = Logger.getLogger(FileUtil.class);
-
-	public static void moveOneUp(File directory) {
-		File dir = directory;
-		File parent = dir.getParentFile();
-		Map<File, File> failedFiles = new HashMap<File, File>();
-
-		File[] subFiles = dir.listFiles();
-		if (subFiles != null) {
-			for (File file : subFiles) {
-				File target = new File(parent, file.getName());
-				boolean success = file.renameTo(target);
-				LOG.debug("Moved file from " + file + " to " + target);
-				if (!success) {
-					failedFiles.put(file, target);
-				}
-			}
-		}
-
-		// Verify that the erronous moves completed
-		Set<File> fileIter = failedFiles.keySet();
-		for (File file : fileIter) {
-			if (!failedFiles.get(file).exists()) {
-				throw new IllegalStateException("Rename returned false for " + file);
-			}
-		}
-
-		dir.delete();
-	}
 
 	public static void deleteDir(File dir, FileFilter filter) throws IOException {
 		File[] files = dir.listFiles(filter);
@@ -151,24 +116,6 @@ public class FileUtil {
 		String os = System.getProperty("os.name").toLowerCase();
 		// linux or unix
 		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
-	}
-
-	public static void writeStringToFile(File file, String encoding, String content) throws FileNotFoundException,
-			UnsupportedEncodingException, IOException {
-
-		FileOutputStream outStream = null;
-		OutputStreamWriter writer = null;
-		try {
-			outStream = new FileOutputStream(file, false);
-			writer = new OutputStreamWriter(outStream, encoding);
-			writer.write(content);
-		} finally {
-			if (writer != null)
-				writer.close();
-
-			if (outStream != null)
-				outStream.close();
-		}
 	}
 
 	public static void deleteDirectory(File dir) {

@@ -26,7 +26,11 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 
 	@Override
 	public void moveOneUp(File directory) {
-		FileUtil.moveOneUp(directory);
+		try {
+			FileUtils.moveDirectoryToDirectory(directory, directory.getParentFile(), true);
+		} catch (IOException e) {
+			throw new IllegalStateException("Could not move directory one up", e);
+		}
 	}
 
 	@Override
