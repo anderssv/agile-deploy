@@ -15,15 +15,13 @@ import no.f12.agiledeploy.deployer.deploy.fs.ConfigurationServiceImpl;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
-public class ConfigurationServiceTest {
+public class ConfigurationServiceTest extends AbstractFileSystemTest {
 
 	private File workingDirectory;
 	private File environmentDirectory;
@@ -140,9 +138,5 @@ public class ConfigurationServiceTest {
 		return configService;
 	}
 
-	@After
-	public void removeDir() throws InterruptedException, IOException {
-		FileUtils.deleteDirectory(TestDataProvider.getDefaultTempDir());
-	}
 
 }

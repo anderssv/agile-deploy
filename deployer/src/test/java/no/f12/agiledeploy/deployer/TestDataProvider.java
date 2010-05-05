@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 
@@ -72,15 +73,9 @@ public class TestDataProvider {
 		UnpackerService unpacker = new UnpackerServiceImpl();
 		unpacker.unpack(zipFile, targetDir);
 		File unpackedDir = new File(targetDir, "myapp-server-0.1-SNAPSHOT");
-		File[] filesToMove = unpackedDir.listFiles();
-		for (File file : filesToMove) {
-			if (file.isDirectory()) {
-				FileUtils.moveDirectoryToDirectory(file, targetDir, true);
-			} else {
-				FileUtils.moveFileToDirectory(file, targetDir, false);
-			}
-		}
-		unpackedDir.delete();
+		
+		FileSystemAdapter fsAdapter = new FileSystemAdapterImpl();
+		fsAdapter.moveOneUp(unpackedDir);
 	}
 
 	@Test

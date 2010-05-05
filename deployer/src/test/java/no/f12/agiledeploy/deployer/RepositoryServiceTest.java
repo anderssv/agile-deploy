@@ -21,7 +21,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RepositoryServiceTest {
+public class RepositoryServiceTest extends AbstractFileSystemTest {
 
 	private RepositoryServiceImpl repoService;
 	private File tempDir = TestDataProvider.getDefaultTempDir();
@@ -86,11 +86,6 @@ public class RepositoryServiceTest {
 		tempDir.mkdirs();
 	}
 	
-	@After
-	public void cleanupTemp() throws IOException {
-		FileUtils.deleteDirectory(tempDir);
-	}
-
 	/**
 	 * Should just be a test resource?
 	 */

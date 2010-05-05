@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class FileSystemAdapterImpl implements FileSystemAdapter {
@@ -27,7 +28,17 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 	@Override
 	public void moveOneUp(File directory) {
 		try {
-			FileUtils.moveDirectoryToDirectory(directory, directory.getParentFile(), true);
+			File targetDir = directory.getParentFile();
+			File[] filesToMove = directory.listFiles();
+			Assert.notEmpty(filesToMove);
+			for (File file : filesToMove) {
+				if (file.isDirectory()) {
+					FileUtils.moveDirectoryToDirectory(file, targetDir, true);
+				} else {
+					FileUtils.moveFileToDirectory(file, targetDir, false);
+				}
+			}
+			directory.delete();
 		} catch (IOException e) {
 			throw new IllegalStateException("Could not move directory one up", e);
 		}

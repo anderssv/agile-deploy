@@ -16,7 +16,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
-public class ResourceConverterTest {
+public class ResourceConverterTest extends AbstractFileSystemTest {
 
 	@Test
 	public void shouldConvertFileCorrectly() throws IOException {
@@ -73,11 +73,6 @@ public class ResourceConverterTest {
 		assertEquals(4, paths.size());
 		assertTrue(paths.contains("bin"));
 		assertTrue(paths.contains("path/with/space"));
-	}
-
-	@After
-	public void removeTempDir() throws IOException {
-		FileUtils.deleteDirectory(TestDataProvider.getDefaultTempDir());
 	}
 
 }

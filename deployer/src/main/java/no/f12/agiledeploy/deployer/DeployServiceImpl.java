@@ -52,6 +52,11 @@ public class DeployServiceImpl implements DeployService {
 		prepareInstallationDirectory(installationDirectory, spec, environment);
 
 		unpackerService.unpack(downloadedFile, installationDirectory);
+		// TODO Because tests download a file without a directroy. Bad fix.
+		File artifactNamedDir = new File(installationDirectory, spec.getArtifactFileName());
+		if (artifactNamedDir.exists()) {
+			fileSystemAdapter.moveOneUp(artifactNamedDir);
+		}
 		
 		resourceConverterService.convert(installationDirectory);
 

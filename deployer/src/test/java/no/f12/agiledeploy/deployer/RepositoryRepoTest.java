@@ -12,13 +12,11 @@ import no.f12.agiledeploy.deployer.repo.RepositoryRepoImpl;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/blank-applicationContext.xml" })
-@IfProfileValue(name = "test-group", values = { "external-integration-tests", "all" })
 public class RepositoryRepoTest {
 
 	@Test

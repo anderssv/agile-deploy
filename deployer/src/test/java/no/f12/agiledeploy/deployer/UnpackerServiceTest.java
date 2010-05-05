@@ -6,14 +6,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
 import org.junit.Test;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
-public class UnpackerServiceTest {
+public class UnpackerServiceTest extends AbstractFileSystemTest {
 
 	File unpackDir = TestDataProvider.getDefaultTargetDirectory();
 
@@ -36,11 +34,6 @@ public class UnpackerServiceTest {
 		Resource propertyFile = new DefaultResourceLoader().getResource("file:" + fileToCheck.getAbsolutePath());
 		Properties props = PropertiesLoaderUtils.loadProperties(propertyFile);
 		assertTrue(props.propertyNames().hasMoreElements());
-	}
-
-	@After
-	public void cleanupFiles() throws IOException {
-		FileUtils.deleteDirectory(TestDataProvider.getDefaultTempDir());
 	}
 
 }
