@@ -16,8 +16,6 @@ import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 import no.f12.agiledeploy.deployer.repo.RepositoryRepo;
 import no.f12.agiledeploy.deployer.repo.RepositoryServiceImpl;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 

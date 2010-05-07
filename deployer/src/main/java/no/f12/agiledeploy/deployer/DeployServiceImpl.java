@@ -18,6 +18,16 @@ public class DeployServiceImpl implements DeployService {
 
 	private static final Logger LOG = Logger.getLogger(DeployServiceImpl.class);
 	
+	private static final FileFilter PROTECTED_FILES_FILTER = new FileFilter() {
+		@Override
+		public boolean accept(File pathname) {
+			if (pathname.getName().equals("data") || pathname.getName().equals("logs")) {
+				return false;
+			}
+			return true;
+		}
+	};
+	
 	@Autowired(required = true)
 	private RepositoryService repositoryService;
 	@Autowired(required = true)
@@ -74,15 +84,7 @@ public class DeployServiceImpl implements DeployService {
 
 	private void prepareInstallationDirectory(File installationDirectory, PackageSpecification spec, String environment) {
 		if (installationDirectory.exists()) {
-			fileSystemAdapter.deleteDir(installationDirectory, new FileFilter() {
-				@Override
-				public boolean accept(File pathname) {
-					if (pathname.getName().equals("data")) {
-						return false;
-					}
-					return true;
-				}
-			});
+			fileSystemAdapter.deleteDir(installationDirectory, PROTECTED_FILES_FILTER);
 		} else if (!installationDirectory.mkdirs()) {
 			throw new IllegalStateException("Could not create directory to deploy to: " + installationDirectory);
 		}

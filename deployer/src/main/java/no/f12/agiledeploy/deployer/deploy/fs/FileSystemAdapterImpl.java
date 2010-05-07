@@ -21,8 +21,12 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 	}
 
 	@Override
-	public void deleteDir(File directory) throws IOException {
-		FileUtils.deleteDirectory(directory);
+	public void deleteDir(File directory) {
+		try {
+			FileUtils.deleteDirectory(directory);
+		} catch (IOException e) {
+			throw new IllegalStateException("Could not delete directory " + directory, e);
+		}
 	}
 
 	@Override
@@ -51,7 +55,18 @@ public class FileSystemAdapterImpl implements FileSystemAdapter {
 
 	public void deleteDir(File dir, FileFilter filter) {
 		try {
-			FileUtil.deleteDir(dir, filter);
+			File[] files = dir.listFiles();
+			for (File file : files) {
+				if (filter.accept(file)) {
+					if (file.isDirectory()) {
+						FileUtils.deleteDirectory(file);
+					} else {
+						file.delete();
+					}
+				} else {
+					file.delete();
+				}
+			}
 		} catch (IOException e) {
 			throw new IllegalStateException("Could not delete directory " + dir, e);
 		}

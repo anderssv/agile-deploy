@@ -13,7 +13,6 @@ import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;

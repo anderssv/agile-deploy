@@ -2,13 +2,12 @@ package no.f12.agiledeploy.deployer.deploy.fs;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 
 public interface FileSystemAdapter {
 
 	public void copyFile(File source, File target);
 
-	public void deleteDir(File deployDirectory) throws IOException;
+	public void deleteDir(File deployDirectory);
 
 	public void deleteDir(File deployDirectory, FileFilter filter);
 

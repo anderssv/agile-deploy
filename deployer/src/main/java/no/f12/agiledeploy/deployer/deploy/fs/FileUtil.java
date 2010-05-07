@@ -1,7 +1,6 @@
 package no.f12.agiledeploy.deployer.deploy.fs;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +13,6 @@ public class FileUtil {
 	public static final String DEFAULT_SYMLINKCOMMAND = "ln -s %1$s %2$s";
 
 	private static final Logger LOG = Logger.getLogger(FileUtil.class);
-
-	public static void deleteDir(File dir, FileFilter filter) throws IOException {
-		File[] files = dir.listFiles(filter);
-		for (File file : files) {
-			FileUtils.deleteDirectory(file);
-		}
-	}
 
 	public static void changePermissions(File file, String permission) {
 		if (!hasSupportForUnixCommands()) {
