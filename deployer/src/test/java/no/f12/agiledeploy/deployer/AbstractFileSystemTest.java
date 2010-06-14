@@ -16,7 +16,7 @@ public class AbstractFileSystemTest {
 
 	protected File getWorkingDirectory() {
 		if (this.workingDirectory == null) {
-			this.workingDirectory = new File("./target/temp");
+			this.workingDirectory = new File("./target/temp/" + getClass().getSimpleName());
 		}
 		return this.workingDirectory;
 	}
