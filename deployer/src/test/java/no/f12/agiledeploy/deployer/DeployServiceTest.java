@@ -20,7 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
-public class DeployServiceTest {
+public class DeployServiceTest extends AbstractFileSystemTest {
 
 	private RepositoryService repoServ;
 	private UnpackerService unpackServ;
@@ -32,9 +32,9 @@ public class DeployServiceTest {
 	private DeployServiceImpl dServ;
 
 	private File downloadedFile;
-	private File tempDir = TestDataProvider.getDefaultTempDir();
-	private File unpackDir = TestDataProvider.getDefaultTargetDirectory();
-	private File artifactDir = TestDataProvider.getDefaultArtifactDirectory();
+	private File tempDir = getWorkingDirectory();
+	private File unpackDir = TestDataProvider.getDefaultTargetDirectory(tempDir);
+	private File artifactDir = TestDataProvider.getDefaultArtifactDirectory(tempDir);
 
 	public void createMocks() {
 		repoServ = mock(RepositoryService.class);

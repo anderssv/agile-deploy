@@ -19,7 +19,7 @@ public class ResourceConverterTest extends AbstractFileSystemTest {
 
 	@Test
 	public void shouldConvertFileCorrectly() throws IOException {
-		File target = TestDataProvider.getDefaultTargetDirectory();
+		File target = getWorkingDirectory();
 		TestDataProvider.unpackDefaultTestZip(target);
 
 		Collection<String> paths = new ArrayList<String>();
@@ -43,7 +43,7 @@ public class ResourceConverterTest extends AbstractFileSystemTest {
 	
 	@Test
 	public void shouldNotDoConversionIfNoSourceEncodingIsGiven() throws IOException {
-		File target = TestDataProvider.getDefaultTargetDirectory();
+		File target = getWorkingDirectory();
 		TestDataProvider.unpackDefaultTestZip(target);
 		
 		Collection<String> paths = new ArrayList<String>();

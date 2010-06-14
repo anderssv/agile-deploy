@@ -12,6 +12,15 @@ import org.junit.Test;
 
 public class AbstractFileSystemTest {
 
+	private File workingDirectory;
+
+	protected File getWorkingDirectory() {
+		if (this.workingDirectory == null) {
+			this.workingDirectory = new File("./target/temp");
+		}
+		return this.workingDirectory;
+	}
+
 	@Test
 	public void emptyTestToAvoidFailure() {
 
@@ -19,7 +28,7 @@ public class AbstractFileSystemTest {
 
 	@After
 	public void deleteWorkingFiles() throws InterruptedException, IOException {
-		deleteDirectoryWithDbDeployFix(TestDataProvider.getDefaultTempDir(), null);
+		deleteDirectoryWithDbDeployFix(getWorkingDirectory(), null);
 	}
 
 	/**

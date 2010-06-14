@@ -29,7 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/deployer-test-applicationContext.xml" })
-public class DatabaseServiceTest {
+public class DatabaseServiceTest extends AbstractFileSystemTest {
 
 	@Autowired
 	private ConfigurationService configService;
@@ -47,7 +47,7 @@ public class DatabaseServiceTest {
 	}
 
 	private File unpackAndConfigure() throws IOException {
-		File targetDirectory = TestDataProvider.getDefaultTargetDirectory();
+		File targetDirectory = TestDataProvider.getDefaultTargetDirectory(getWorkingDirectory());
 
 		TestDataProvider.unpackDefaultTestZip(targetDirectory);
 		configService.configure(targetDirectory.getParentFile(), "test");
@@ -118,6 +118,6 @@ public class DatabaseServiceTest {
 
 	@After
 	public void cleanUp() throws IOException {
-		FileUtil.deleteDirectory(TestDataProvider.getDefaultTempDir());
+		FileUtil.deleteDirectory(getWorkingDirectory());
 	}
 }

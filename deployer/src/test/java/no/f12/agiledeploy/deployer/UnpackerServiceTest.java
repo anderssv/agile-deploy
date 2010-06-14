@@ -13,7 +13,7 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class UnpackerServiceTest extends AbstractFileSystemTest {
 
-	File unpackDir = TestDataProvider.getDefaultTargetDirectory();
+	File unpackDir = getWorkingDirectory();
 
 	@Test
 	public void shouldUnpackCorrectly() throws IOException {

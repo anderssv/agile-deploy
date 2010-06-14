@@ -22,7 +22,7 @@ public class FileSystemAdapterTest extends AbstractFileSystemTest {
 
 	@Test
 	public void shouldNotDeleteContentsMatchingAFilter() throws IOException {
-		File artifactDir = TestDataProvider.getDefaultArtifactDirectory();
+		File artifactDir = getWorkingDirectory();
 		File testDir = new File(artifactDir, "data");
 		testDir.mkdirs();
 		File testFile = new File(testDir, "testfile");
@@ -43,5 +43,4 @@ public class FileSystemAdapterTest extends AbstractFileSystemTest {
 		deleteDirectoryWithDbDeployFix(artifactDir, null);
 	}
 	
-
 }

@@ -40,16 +40,12 @@ public class TestDataProvider {
 		return result;
 	}
 
-	public static File getDefaultTempDir() {
-		return new File("./target/temp");
+	public static File getDefaultArtifactDirectory(File base) {
+		return new File(base, "spring-core");
 	}
 
-	public static File getDefaultArtifactDirectory() {
-		return new File(getDefaultTempDir(), "spring-core");
-	}
-
-	public static File getDefaultTargetDirectory() {
-		return new File(getDefaultTempDir(), "spring-core/test/current");
+	public static File getDefaultTargetDirectory(File base) {
+		return new File(base, "spring-core/test/current");
 	}
 
 	public static void writeContentToFile(File target, String content) throws IOException {

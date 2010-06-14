@@ -22,7 +22,7 @@ import org.junit.Test;
 public class RepositoryServiceTest extends AbstractFileSystemTest {
 
 	private RepositoryServiceImpl repoService;
-	private File tempDir = TestDataProvider.getDefaultTempDir();
+	private File tempDir = getWorkingDirectory();
 	private RepositoryRepo snapshotRepo;
 	private RepositoryRepo repo;
 

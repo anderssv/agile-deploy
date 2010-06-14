@@ -29,7 +29,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 
 	@Before
 	public void setupDirectories() throws IOException {
-		this.workingDirectory = TestDataProvider.getDefaultTempDir();
+		this.workingDirectory = getWorkingDirectory();
 		this.environmentDirectory = new File(workingDirectory, "test-artifact/test");
 		this.installationDirectory = new File(workingDirectory, "test-artifact/test/current");
 		TestDataProvider.unpackDefaultTestZip(this.installationDirectory);
