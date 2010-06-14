@@ -8,7 +8,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Arrays;
 
-import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
 import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
 
 import org.junit.Test;
@@ -29,7 +28,6 @@ public class FileSystemAdapterTest extends AbstractFileSystemTest {
 		File testFile = new File(testDir, "testfile");
 		TestDataProvider.writeContentToFile(testFile, "testing123");
 
-		FileSystemAdapterImpl adapter = new FileSystemAdapterImpl();
 		FileFilter filter = new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {

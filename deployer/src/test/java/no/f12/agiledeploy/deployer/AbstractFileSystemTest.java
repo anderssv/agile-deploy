@@ -7,7 +7,6 @@ import java.io.IOException;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapter;
 import no.f12.agiledeploy.deployer.deploy.fs.FileSystemAdapterImpl;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
