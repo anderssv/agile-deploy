@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 public class FileUtil {
@@ -108,14 +107,6 @@ public class FileUtil {
 		String os = System.getProperty("os.name").toLowerCase();
 		// linux or unix
 		return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
-	}
-
-	public static void deleteDirectory(File dir) {
-		try {
-			FileUtils.deleteDirectory(dir);
-		} catch (IOException e) {
-			LOG.warn("Could not delete directory: " + dir, e);
-		}
 	}
 
 }
