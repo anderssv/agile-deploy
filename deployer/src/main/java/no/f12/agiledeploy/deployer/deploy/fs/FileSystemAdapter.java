@@ -7,7 +7,7 @@ public interface FileSystemAdapter {
 
 	public void copyFile(File source, File target);
 
-	public void deleteDir(File deployDirectory);
+	public void deleteDir(File deployDirectory) throws IllegalStateException;
 
 	public void deleteDir(File deployDirectory, FileFilter filter);
 

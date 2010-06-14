@@ -13,7 +13,7 @@ import no.f12.agiledeploy.deployer.deploy.fs.FileUtil;
 
 import org.junit.Test;
 
-public class FileSystemAdapterTest {
+public class FileSystemAdapterTest extends AbstractFileSystemTest {
 
 	@Test
 	public void shouldPerformExpectedSubstitution() {
@@ -39,10 +39,10 @@ public class FileSystemAdapterTest {
 				return false;
 			}
 		};
-		adapter.deleteDir(artifactDir, filter);
+		deleteDirectoryWithDbDeployFix(artifactDir, filter);
 		assertTrue(Arrays.asList(testDir.listFiles()).contains(testFile));
 		
-		adapter.deleteDir(artifactDir);
+		deleteDirectoryWithDbDeployFix(artifactDir, null);
 	}
 	
 

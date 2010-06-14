@@ -9,7 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
-public class CommandLineDeployerTest {
+public class CommandLineDeployerTest extends AbstractFileSystemTest {
 
 	String environment = "test";
 
@@ -55,12 +55,6 @@ public class CommandLineDeployerTest {
 	private void executeWithSpringStandard() {
 		String[] args = new String[] { environment, "org.springframework", "spring-core", "2.5.6", "jar" };
 		deployer.execute(args);
-	}
-
-	@After
-	public void cleanupDir() throws IOException {
-		if (workingDirectory != null)
-			FileUtils.deleteDirectory(workingDirectory);
 	}
 
 }
