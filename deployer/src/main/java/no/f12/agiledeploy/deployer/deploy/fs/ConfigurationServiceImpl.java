@@ -3,6 +3,7 @@ package no.f12.agiledeploy.deployer.deploy.fs;
 import java.io.File;
 import java.io.FileFilter;
 
+import no.f12.agiledeploy.deployer.DirectoryRegistry;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 
 import org.apache.log4j.Logger;
@@ -19,7 +20,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	@Override
 	public void configure(File environmentDirectory, String environment, PackageSpecification spec) {
-		File configDir = getConfigurationDirectory(environmentDirectory);
+		File configDir = DirectoryRegistry.getConfigurationDirectory(environmentDirectory);
 		File environmentConfigDir = getEnvironmentPropertiesDirectory(environment, environmentDirectory);
 
 		LOG.info("Updating configuration");
@@ -27,7 +28,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		installConfigurationFromDirectory(environmentDirectory, configDir);
 
 		LOG.info("Creating links");
-		createDirIfNotExists(getDataDirectory(environmentDirectory));
+		createDirIfNotExists(DirectoryRegistry.getDataDirectory(environmentDirectory));
 		createDirIfNotExists(spec.getFileSystemInformation().getLogDirectory(environmentDirectory));
 		createLinksToCurrent(environmentDirectory, spec);
 
@@ -35,7 +36,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	}
 
 	private void createLinksToCurrent(File environmentDirectory, PackageSpecification spec) {
-		final File installDirectory = getLatestVersionInstallationDirectory(environmentDirectory);
+		final File installDirectory = DirectoryRegistry.getLastInstalledVersionDirectory(environmentDirectory);
 		File[] entries = environmentDirectory.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File path) {
@@ -51,10 +52,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		}
 	}
 
-	private File getLogDirectory(File environmentDirectory) {
-		return new File(environmentDirectory, "logs");
-	}
-
 	private void createDirIfNotExists(File dir) {
 		if (!dir.exists()) {
 			dir.mkdirs();
@@ -62,7 +59,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	}
 
 	private void updateBinPermissions(File environmentDirectory) {
-		File binDir = new File(environmentDirectory, "current/bin");
+		File binDir = DirectoryRegistry.getBinDirectory(environmentDirectory);
 		if (binDir.exists()) {
 			for (File binFile : binDir.listFiles()) {
 				try {
@@ -106,20 +103,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		}
 	}
 
-	private File getDataDirectory(File environmentDirectory) {
-		return new File(environmentDirectory, "data");
-	}
 
 	private File getEnvironmentPropertiesDirectory(String environment, File environmentDirectory) {
-		return new File(getConfigurationDirectory(environmentDirectory), environment);
-	}
-
-	private File getConfigurationDirectory(File environmentDirectory) {
-		return new File(getLatestVersionInstallationDirectory(environmentDirectory), "config");
-	}
-
-	private File getLatestVersionInstallationDirectory(File environmentDirectory) {
-		return new File(environmentDirectory, "current");
+		return new File(DirectoryRegistry.getConfigurationDirectory(environmentDirectory), environment);
 	}
 
 	private void installConfigurationFromDirectory(File environmentDirectory, File configDir) {
