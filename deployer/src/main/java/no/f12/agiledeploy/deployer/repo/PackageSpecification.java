@@ -1,6 +1,5 @@
 package no.f12.agiledeploy.deployer.repo;
 
-import java.io.File;
 
 public class PackageSpecification {
 
@@ -40,10 +39,6 @@ public class PackageSpecification {
 		return this.getArtifactFileName().replaceAll("-SNAPSHOT", "-" + snapshotReplacement);
 	}
 
-	public File getInstallationPath(File parent, String environment) {
-		return new File(parent, this.artifactId + "/" + environment + "/current");
-	}
-
 	@Override
 	public String toString() {
 		return this.groupId + ":" + this.artifactId + ":" + this.version;
@@ -51,10 +46,6 @@ public class PackageSpecification {
 
 	public RepositoryInformation getRepositoryInformation() {
 		return new RepositoryInformation(this);
-	}
-
-	public FileSystemInformation getFileSystemInformation() {
-		return new FileSystemInformation(this);
 	}
 
 	public class RepositoryInformation {
@@ -88,40 +79,4 @@ public class PackageSpecification {
 		}
 	}
 
-	public class FileSystemInformation {
-		private PackageSpecification spec;
-
-		private FileSystemInformation(PackageSpecification spec) {
-			this.spec = spec;
-		}
-
-		public File getArtifactPath(File workingPath) {
-			return new File(workingPath, spec.getArtifactId());
-		}
-
-		public File getArtifactDataDirectory(File workingPath, String environment) {
-			return new File(getArtifactEnvironmentDirectory(workingPath, environment), "data");
-		}
-
-		public File getArtifactEnvironmentDirectory(File workingPath, String environment) {
-			return new File(getArtifactPath(workingPath), environment);
-		}
-
-		public File getArtifactPropertiesDirectory(File workingPath, String environment) {
-			return new File(getArtifactInstallationDirectory(workingPath, environment), "config");
-		}
-
-		public File getArtifactInstallationDirectory(File workingPath, String environment) {
-			File environmentFile = getArtifactEnvironmentDirectory(workingPath, environment);
-			return getUnpackDirectory(environmentFile);
-		}
-		
-		public File getUnpackDirectory(File environmentDirectory) {
-			return new File(environmentDirectory, "current");
-		}
-
-		public File getLogDirectory(File environmentDirectory) {
-			return new File(environmentDirectory, "logs");
-		}
-	}
 }

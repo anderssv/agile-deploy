@@ -42,41 +42,34 @@ public class PackageSpecificationTest {
 	}
 
 	@Test
-	public void shouldGiveCorrectCurrentPathForInstallation() {
-		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
-		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/current"), spec.getInstallationPath(workingPath, "test"));
-	}
-
-	@Test
 	public void shouldGiveCorrectArtifactPath() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core"), spec.getFileSystemInformation().getArtifactPath(workingPath));
+		assertEquals(new File(workingPath, "spring-core"), DirectoryRegistry.getArtifactPath(spec, workingPath));
 	}
 
 	@Test
 	public void shouldGiveCorrectArtifactDataDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/data"), spec.getFileSystemInformation()
-				.getArtifactDataDirectory(workingPath, "test"));
+		assertEquals(new File(workingPath, "spring-core/test/data"), DirectoryRegistry
+				.getDataDirectory(DirectoryRegistry.getEnvironmentDirectory(spec, workingPath, "test")));
 	}
 
 	@Test
 	public void shouldGiveCorrectPropertiesDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/current/config"), spec.getFileSystemInformation()
-				.getArtifactPropertiesDirectory(workingPath, "test"));
+		assertEquals(new File(workingPath, "spring-core/test/current/config"), DirectoryRegistry
+				.getConfigurationDirectory(DirectoryRegistry.getEnvironmentDirectory(spec, workingPath, "test")));
 	}
 
 	@Test
 	public void shouldGiveCorrectInstallationDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/current"), spec.getFileSystemInformation()
-				.getArtifactInstallationDirectory(workingPath, "test"));
+		assertEquals(new File(workingPath, "spring-core/test/current"), DirectoryRegistry
+				.getLastInstalledVersionDirectory(DirectoryRegistry.getEnvironmentDirectory(spec, workingPath, "test")));
 	}
 
 }

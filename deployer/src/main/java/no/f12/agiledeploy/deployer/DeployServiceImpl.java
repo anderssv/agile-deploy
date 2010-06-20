@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class DeployServiceImpl implements DeployService {
 
 	private static final Logger LOG = Logger.getLogger(DeployServiceImpl.class);
-	
+
 	private static final FileFilter PROTECTED_FILES_FILTER = new FileFilter() {
 		@Override
 		public boolean accept(File pathname) {
@@ -27,7 +27,7 @@ public class DeployServiceImpl implements DeployService {
 			return true;
 		}
 	};
-	
+
 	@Autowired(required = true)
 	private RepositoryService repositoryService;
 	@Autowired(required = true)
@@ -51,10 +51,8 @@ public class DeployServiceImpl implements DeployService {
 
 	@Override
 	public void deploy(PackageSpecification spec, String environment, File workingDirectory) {
-		File installationDirectory = spec.getFileSystemInformation().getArtifactInstallationDirectory(workingDirectory,
-				environment);
-		File environmentDirectory = spec.getFileSystemInformation().getArtifactEnvironmentDirectory(workingDirectory,
-				environment);
+		File environmentDirectory = DirectoryRegistry.getEnvironmentDirectory(spec, workingDirectory, environment);
+		File installationDirectory = DirectoryRegistry.getLastInstalledVersionDirectory(environmentDirectory);
 		workingDirectory.mkdirs();
 
 		File downloadedFile = repositoryService.fetchPackage(spec, workingDirectory);
@@ -62,12 +60,13 @@ public class DeployServiceImpl implements DeployService {
 		prepareInstallationDirectory(installationDirectory, spec, environment);
 
 		unpackerService.unpack(downloadedFile, installationDirectory);
-		// TODO Because tests download a file without a directroy. Bad fix. We just support both.
+		// TODO Because tests download a file without a directroy. Bad fix. We
+		// just support both.
 		File artifactNamedDir = new File(installationDirectory, spec.getArtifactFileName());
 		if (artifactNamedDir.exists()) {
 			fileSystemAdapter.moveOneUp(artifactNamedDir);
 		}
-		
+
 		resourceConverterService.convert(installationDirectory);
 
 		configurationService.configure(environmentDirectory, environment, spec);
@@ -76,9 +75,10 @@ public class DeployServiceImpl implements DeployService {
 			databaseService.upgradeDatabase(installationDirectory);
 		} catch (DatabaseInspectionException e) {
 			// Not too happy about this one. Any suggestions?
-			LOG.info("Could not inspect database for upgrade details, skipping. Increase logging for no.f12.agiledeploy.deployer.DataBaseServiceImpl to see details.");
+			LOG
+					.info("Could not inspect database for upgrade details, skipping. Increase logging for no.f12.agiledeploy.deployer.DataBaseServiceImpl to see details.");
 		}
-		
+
 		downloadedFile.deleteOnExit();
 	}
 
