@@ -120,5 +120,10 @@
 			<groupId>com.dbdeploy</groupId>
 			<version>3.0M2</version>
 		</dependency>
+		<dependency>
+			<artifactId>guava</artifactId>
+			<groupId>com.google.guava</groupId>
+			<version>r05</version>
+		</dependency>
 	</dependencies>
 </project>
