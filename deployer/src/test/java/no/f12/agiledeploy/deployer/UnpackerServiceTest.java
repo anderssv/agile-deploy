@@ -19,7 +19,7 @@ public class UnpackerServiceTest extends AbstractFileSystemTest {
 		assertTrue(new File(unpackDir, "repo").exists());
 		assertTrue(new File(unpackDir, "bin/myapp").exists());
 		assertTrue(new File(unpackDir, "bin/myapp.bat").exists());
-		assertTrue(new File(unpackDir, "properties/system.properties").exists());
+		assertTrue(new File(unpackDir, "config/system.properties").exists());
 	}
 
 }

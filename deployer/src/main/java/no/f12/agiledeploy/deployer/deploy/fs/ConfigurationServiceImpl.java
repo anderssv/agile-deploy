@@ -17,12 +17,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	@Override
 	public void configure(File environmentDirectory, String environment) {
-		File propDir = getPropertiesDirectory(environmentDirectory);
-		File environmentPropDir = getEnvironmentPropertiesDirectory(environment, environmentDirectory);
+		File configDir = getConfigurationDirectory(environmentDirectory);
+		File environmentConfigDir = getEnvironmentPropertiesDirectory(environment, environmentDirectory);
 
 		LOG.info("Updating configuration");
-		installProperties(environmentDirectory, environmentPropDir);
-		installProperties(environmentDirectory, propDir);
+		installConfigurationFromDirectory(environmentDirectory, environmentConfigDir);
+		installConfigurationFromDirectory(environmentDirectory, configDir);
 
 		LOG.info("Creating links");
 		createDirIfNotExists(getDataDirectory(environmentDirectory));
@@ -109,20 +109,20 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	}
 
 	private File getEnvironmentPropertiesDirectory(String environment, File environmentDirectory) {
-		return new File(getPropertiesDirectory(environmentDirectory), environment);
+		return new File(getConfigurationDirectory(environmentDirectory), environment);
 	}
 
-	private File getPropertiesDirectory(File environmentDirectory) {
-		return new File(getLatestVersionInstallationDirectory(environmentDirectory), "properties");
+	private File getConfigurationDirectory(File environmentDirectory) {
+		return new File(getLatestVersionInstallationDirectory(environmentDirectory), "config");
 	}
 
 	private File getLatestVersionInstallationDirectory(File environmentDirectory) {
 		return new File(environmentDirectory, "current");
 	}
 
-	private void installProperties(File environmentDirectory, File propDir) {
-		if (propDir.exists()) {
-			File[] files = propDir.listFiles();
+	private void installConfigurationFromDirectory(File environmentDirectory, File configDir) {
+		if (configDir.exists()) {
+			File[] files = configDir.listFiles();
 			for (File source : files) {
 				File target = new File(environmentDirectory, source.getName());
 				if (!target.exists() && source.isFile()) {
@@ -132,7 +132,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 					LOG.debug("File already exists, skipping " + source);
 				}
 			}
-
 		}
 	}
 

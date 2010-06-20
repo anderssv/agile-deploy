@@ -11,7 +11,7 @@
             <lineEnding>unix</lineEnding>
             <fileMode>550</fileMode>
             <directory>${basedir}/src/main/config</directory>
-            <outputDirectory>properties</outputDirectory>
+            <outputDirectory>config</outputDirectory>
             <includes>
                 <include>**/*.properties</include>
             </includes>
