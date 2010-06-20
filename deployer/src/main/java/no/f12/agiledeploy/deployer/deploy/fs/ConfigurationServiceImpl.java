@@ -3,6 +3,8 @@ package no.f12.agiledeploy.deployer.deploy.fs;
 import java.io.File;
 import java.io.FileFilter;
 
+import no.f12.agiledeploy.deployer.repo.PackageSpecification;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	private FileSystemAdapter fileSystemAdapter;
 
 	@Override
-	public void configure(File environmentDirectory, String environment) {
+	public void configure(File environmentDirectory, String environment, PackageSpecification spec) {
 		File configDir = getConfigurationDirectory(environmentDirectory);
 		File environmentConfigDir = getEnvironmentPropertiesDirectory(environment, environmentDirectory);
 
@@ -27,12 +29,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		LOG.info("Creating links");
 		createDirIfNotExists(getDataDirectory(environmentDirectory));
 		createDirIfNotExists(getLogDirectory(environmentDirectory));
-		createLinksToCurrent(environmentDirectory);
+		createLinksToCurrent(environmentDirectory, spec);
 
 		updateBinPermissions(environmentDirectory);
 	}
 
-	private void createLinksToCurrent(File environmentDirectory) {
+	private void createLinksToCurrent(File environmentDirectory, PackageSpecification spec) {
 		final File installDirectory = getLatestVersionInstallationDirectory(environmentDirectory);
 		File[] entries = environmentDirectory.listFiles(new FileFilter() {
 			@Override
@@ -45,7 +47,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		});
 
 		for (File file : entries) {
-			linkInto(file, new File(environmentDirectory, "current"));
+			linkInto(file, spec.getFileSystemInformation().getUnpackDirectory(environmentDirectory));
 		}
 	}
 

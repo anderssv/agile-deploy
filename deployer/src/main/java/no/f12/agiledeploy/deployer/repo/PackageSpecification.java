@@ -108,11 +108,16 @@ public class PackageSpecification {
 		}
 
 		public File getArtifactPropertiesDirectory(File workingPath, String environment) {
-			return new File(getArtifactInstallationDirectory(workingPath, environment), "properties");
+			return new File(getArtifactInstallationDirectory(workingPath, environment), "config");
 		}
 
 		public File getArtifactInstallationDirectory(File workingPath, String environment) {
-			return new File(getArtifactEnvironmentDirectory(workingPath, environment), "current");
+			File environmentFile = getArtifactEnvironmentDirectory(workingPath, environment);
+			return getUnpackDirectory(environmentFile);
+		}
+		
+		public File getUnpackDirectory(File environmentDirectory) {
+			return new File(environmentDirectory, "current");
 		}
 	}
 }

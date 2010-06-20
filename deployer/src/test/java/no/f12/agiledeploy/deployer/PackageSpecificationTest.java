@@ -67,7 +67,7 @@ public class PackageSpecificationTest {
 	public void shouldGiveCorrectPropertiesDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/current/properties"), spec.getFileSystemInformation()
+		assertEquals(new File(workingPath, "spring-core/test/current/config"), spec.getFileSystemInformation()
 				.getArtifactPropertiesDirectory(workingPath, "test"));
 	}
 

@@ -38,7 +38,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 	@Test
 	public void shouldCopyFilesForCurrentEnvironmentIfTheyDontExist() throws IOException {
 		ConfigurationServiceImpl configService = createService();
-		configService.configure(environmentDirectory, "test");
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
 
 		assertTrue(new File(workingDirectory, "test-artifact/test/datasource.properties").exists());
 	}
@@ -49,7 +49,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		TestDataProvider.writeContentToFile(target, "testing");
 
 		ConfigurationServiceImpl configService = createService();
-		configService.configure(environmentDirectory, "test");
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
 
 		TestDataProvider.assertFileContains(target, "testing");
 	}
@@ -58,7 +58,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 	public void shouldCopyFilesForAllEnvironments() throws IOException {
 		ConfigurationServiceImpl configService = createService();
 
-		configService.configure(environmentDirectory, "test");
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
 
 		assertTrue(new File(workingDirectory, "test-artifact/test/allenvs.properties").exists());
 	}
@@ -67,7 +67,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 	public void shouldNotOverWriteCustomFileForEnvironmentWithFileForAllEnvironments() throws IOException {
 		ConfigurationServiceImpl configService = createService();
 
-		configService.configure(environmentDirectory, "test");
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
 
 		Resource propertyFile = new DefaultResourceLoader().getResource("file:" + environmentDirectory.getPath()
 				+ "/system.properties");
@@ -81,7 +81,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		FileSystemAdapter fsAdapter = mock(FileSystemAdapter.class);
 		configService.setFileSystemAdapter(fsAdapter);
 
-		configService.configure(environmentDirectory, "test");
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
 
 		String[] dirNames = new String[] {"data", "logs"};
 		for (String dirName : dirNames) {
@@ -96,7 +96,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		FileSystemAdapter fsAdapter = spy(new FileSystemAdapterImpl());
 		configService.setFileSystemAdapter(fsAdapter);
 
-		configService.configure(environmentDirectory, "test");
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
 
 		verify(fsAdapter).createSymbolicLink(new File(workingDirectory, "test-artifact/test/allenvs.properties"),
 				new File(workingDirectory, "test-artifact/test/current/allenvs.properties"));
@@ -114,7 +114,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		doThrow(new IllegalStateException("No symlinks here")).when(fsAdapter).createSymbolicLink((File) anyObject(),
 				(File) anyObject());
 
-		configService.configure(environmentDirectory, "test");
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
 
 		verify(fsAdapter).copyFile(new File(workingDirectory, "test-artifact/test/datasource.properties"),
 				new File(workingDirectory, "test-artifact/test/current/datasource.properties"));
@@ -126,7 +126,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		FileSystemAdapter fsAdapter = spy(new FileSystemAdapterImpl());
 		configService.setFileSystemAdapter(fsAdapter);
 
-		configService.configure(environmentDirectory, "test");
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
 
 		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/myapp"), "u+x");
 		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/myapp.bat"), "u+x");

@@ -48,7 +48,7 @@ public class DatabaseServiceTest extends AbstractFileSystemTest {
 		File targetDirectory = TestDataProvider.getDefaultTargetDirectory(getWorkingDirectory());
 
 		TestDataProvider.unpackDefaultTestZip(targetDirectory);
-		configService.configure(targetDirectory.getParentFile(), "test");
+		configService.configure(targetDirectory.getParentFile(), "test", TestDataProvider.createDefaultSpec(false));
 		return targetDirectory;
 	}
 

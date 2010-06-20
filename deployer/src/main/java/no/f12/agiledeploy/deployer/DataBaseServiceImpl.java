@@ -17,6 +17,7 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.stereotype.Service;
 
 import com.dbdeploy.DbDeploy;
+import com.google.common.io.Closeables;
 
 @Service
 public class DataBaseServiceImpl implements DataBaseService {
@@ -47,13 +48,7 @@ public class DataBaseServiceImpl implements DataBaseService {
 		} catch (IOException e) {
 			throw new IllegalStateException("Could not load properties from file", e);
 		} finally {
-			if (propertyReader != null) {
-				try {
-					propertyReader.close();
-				} catch (IOException e) {
-					// Ignore
-				}
-			}
+			Closeables.closeQuietly(propertyReader);
 		}
 		this.databaseUrl = (String) props.get("db.url");
 		this.password = (String) props.get("db.password");

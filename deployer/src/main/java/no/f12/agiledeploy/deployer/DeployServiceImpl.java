@@ -62,7 +62,7 @@ public class DeployServiceImpl implements DeployService {
 		prepareInstallationDirectory(installationDirectory, spec, environment);
 
 		unpackerService.unpack(downloadedFile, installationDirectory);
-		// TODO Because tests download a file without a directroy. Bad fix.
+		// TODO Because tests download a file without a directroy. Bad fix. We just support both.
 		File artifactNamedDir = new File(installationDirectory, spec.getArtifactFileName());
 		if (artifactNamedDir.exists()) {
 			fileSystemAdapter.moveOneUp(artifactNamedDir);
@@ -70,7 +70,7 @@ public class DeployServiceImpl implements DeployService {
 		
 		resourceConverterService.convert(installationDirectory);
 
-		configurationService.configure(environmentDirectory, environment);
+		configurationService.configure(environmentDirectory, environment, spec);
 
 		try {
 			databaseService.upgradeDatabase(installationDirectory);

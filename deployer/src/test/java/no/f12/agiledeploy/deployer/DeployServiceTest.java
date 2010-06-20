@@ -71,7 +71,7 @@ public class DeployServiceTest extends AbstractFileSystemTest {
 
 		verify(repoServ).fetchPackage(spec, tempDir);
 		verify(unpackServ).unpack(downloadedFile, unpackDir);
-		verify(configServ).configure(new File(artifactDir, "test"), "test");
+		verify(configServ).configure(new File(artifactDir, "test"), "test", spec);
 	}
 
 	@Test
