@@ -119,5 +119,9 @@ public class PackageSpecification {
 		public File getUnpackDirectory(File environmentDirectory) {
 			return new File(environmentDirectory, "current");
 		}
+
+		public File getLogDirectory(File environmentDirectory) {
+			return new File(environmentDirectory, "logs");
+		}
 	}
 }
