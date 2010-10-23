@@ -125,11 +125,5 @@
 			<groupId>com.google.guava</groupId>
 			<version>r05</version>
 		</dependency>
-		<dependency>
-			<groupId>org.mygroup</groupId>
-			<artifactId>myapp-server</artifactId>
-			<version>${project.version}</version>
-			<type>zip</type>
-		</dependency>
 	</dependencies>
 </project>
