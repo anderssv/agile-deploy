@@ -21,14 +21,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>
@@ -41,6 +33,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.4</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -67,6 +60,18 @@
 
 	<dependencies>
 		<dependency>
+			<artifactId>mockito-all</artifactId>
+			<groupId>org.mockito</groupId>
+		</dependency>
+		<dependency>
+			<artifactId>spring-test</artifactId>
+			<groupId>org.springframework</groupId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
 			<artifactId>spring-jdbc</artifactId>
 			<groupId>org.springframework</groupId>
 		</dependency>
@@ -86,6 +91,91 @@
 			<artifactId>dbdeploy-core</artifactId>
 			<groupId>com.dbdeploy</groupId>
 		</dependency>
+		<dependency>
+			<artifactId>log4j</artifactId>
+			<groupId>log4j</groupId>
+		</dependency>
+		<dependency>
+			<artifactId>guava</artifactId>
+			<groupId>com.google.guava</groupId>
+		</dependency>
 	</dependencies>
-	
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<artifactId>myapp-war</artifactId>
+				<groupId>${project.groupId}</groupId>
+				<version>${project.version}</version>
+				<type>war</type>
+				<scope>runtime</scope>
+			</dependency>
+
+			<dependency>
+				<artifactId>mockito-all</artifactId>
+				<groupId>org.mockito</groupId>
+				<version>1.8.5</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<artifactId>spring-test</artifactId>
+				<groupId>org.springframework</groupId>
+				<version>${spring.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.2</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<artifactId>guava</artifactId>
+				<groupId>com.google.guava</groupId>
+				<version>r07</version>
+			</dependency>
+			<dependency>
+				<artifactId>log4j</artifactId>
+				<groupId>log4j</groupId>
+				<version>1.2.16</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>1.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<artifactId>spring-context</artifactId>
+				<groupId>org.springframework</groupId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<artifactId>spring-jdbc</artifactId>
+				<groupId>org.springframework</groupId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<artifactId>hsqldb</artifactId>
+				<groupId>hsqldb</groupId>
+				<version>1.8.0.10</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<artifactId>dbdeploy-core</artifactId>
+				<groupId>com.dbdeploy</groupId>
+				<version>3.0M2</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+
 </project>

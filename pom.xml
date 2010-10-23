@@ -10,6 +10,8 @@
 
 	<properties>
 		<spring.version>3.0.5.RELEASE</spring.version>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<scm>
@@ -17,6 +19,30 @@
 		<url>scm:git:git://github.com/anderssv/agile-deploy.git</url>
 	</scm>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+			</plugin>
+		</plugins>
+	</build>
+	
 	<distributionManagement>
 		<repository>
 			<id>no.f12.repo</id>
@@ -27,142 +53,7 @@
 			<url>scp://repo.f12.no/home/anderssv_mvn/public-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-
-	<dependencies>
-		<dependency>
-			<artifactId>mockito-all</artifactId>
-			<groupId>org.mockito</groupId>
-		</dependency>
-		<dependency>
-			<artifactId>spring-test</artifactId>
-			<groupId>org.springframework</groupId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<artifactId>log4j</artifactId>
-			<groupId>log4j</groupId>
-		</dependency>
-		<dependency>
-			<artifactId>guava</artifactId>
-			<groupId>com.google.guava</groupId>
-		</dependency>
-	</dependencies>
 	
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<artifactId>myapp-war</artifactId>
-				<groupId>${project.groupId}</groupId>
-				<version>${project.version}</version>
-				<type>war</type>
-				<scope>runtime</scope>
-			</dependency>
-
-			<dependency>
-				<artifactId>mockito-all</artifactId>
-				<groupId>org.mockito</groupId>
-				<version>1.8.5</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<artifactId>spring-test</artifactId>
-				<groupId>org.springframework</groupId>
-				<version>${spring.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.8.2</version>
-				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<artifactId>guava</artifactId>
-				<groupId>com.google.guava</groupId>
-				<version>r07</version>
-			</dependency>
-			<dependency>
-				<artifactId>log4j</artifactId>
-				<groupId>log4j</groupId>
-				<version>1.2.16</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>1.4</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<artifactId>spring-context</artifactId>
-				<groupId>org.springframework</groupId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
-			<dependency>
-				<artifactId>spring-jdbc</artifactId>
-				<groupId>org.springframework</groupId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<artifactId>hsqldb</artifactId>
-				<groupId>hsqldb</groupId>
-				<version>1.8.0.10</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<artifactId>dbdeploy-core</artifactId>
-				<groupId>com.dbdeploy</groupId>
-				<version>3.0M2</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty</artifactId>
-				<version>6.1.19</version>
-			</dependency>
-			<dependency>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-util</artifactId>
-				<version>6.1.19</version>
-			</dependency>
-			<dependency>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jsp-2.1</artifactId>
-				<version>6.1.14</version>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jsp-api-2.1</artifactId>
-				<version>6.1.14</version>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.ant</groupId>
-				<artifactId>ant</artifactId>
-				<version>1.8.1</version>
-				<scope>runtime</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 	
 	<modules>
 		<module>application-template</module>
