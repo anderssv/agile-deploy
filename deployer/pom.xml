@@ -67,63 +67,25 @@
 
 	<dependencies>
 		<dependency>
-			<artifactId>junit</artifactId>
-			<groupId>junit</groupId>
-			<version>4.4</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<artifactId>mockito-all</artifactId>
-			<groupId>org.mockito</groupId>
-			<version>1.7</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<artifactId>spring-test</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>2.5.6</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<artifactId>spring-jdbc</artifactId>
 			<groupId>org.springframework</groupId>
-			<version>2.5.6</version>
 		</dependency>
 		<dependency>
 			<artifactId>hsqldb</artifactId>
 			<groupId>hsqldb</groupId>
-			<version>1.8.0.7</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<artifactId>spring-core</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>2.5.6</version>
 		</dependency>
 		<dependency>
 			<artifactId>spring-context</artifactId>
 			<groupId>org.springframework</groupId>
-			<version>2.5.6</version>
-		</dependency>
-		<dependency>
-			<artifactId>log4j</artifactId>
-			<groupId>log4j</groupId>
-			<version>1.2.14</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>1.4</version>
 		</dependency>
 		<dependency>
 			<artifactId>dbdeploy-core</artifactId>
 			<groupId>com.dbdeploy</groupId>
-			<version>3.0M2</version>
-		</dependency>
-		<dependency>
-			<artifactId>guava</artifactId>
-			<groupId>com.google.guava</groupId>
-			<version>r05</version>
 		</dependency>
 	</dependencies>
+	
 </project>
