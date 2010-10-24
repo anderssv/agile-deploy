@@ -8,55 +8,12 @@
 	<name>agile-deploy</name>
 	<description>Just a common parent to enable setting common properties.</description>
 
-	<properties>
-		<spring.version>3.0.5.RELEASE</spring.version>
-
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<scm>
-		<connection>scm:git:git://github.com/anderssv/agile-deploy.git</connection>
-		<url>scm:git:git://github.com/anderssv/agile-deploy.git</url>
-	</scm>
-
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.5</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.1</version>
-			</plugin>
 		</plugins>
 	</build>
 	
-	<distributionManagement>
-		<repository>
-			<id>no.f12.repo</id>
-			<url>scp://repo.f12.no/home/anderssv_mvn/public</url>
-		</repository>
-		<snapshotRepository>
-			<id>no.f12.repo</id>
-			<url>scp://repo.f12.no/home/anderssv_mvn/public-snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-	
-	
 	<modules>
-		<module>application-template</module>
 		<module>deployer</module>
 	</modules>
 

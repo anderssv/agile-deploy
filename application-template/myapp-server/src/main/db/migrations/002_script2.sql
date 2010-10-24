@@ -1,6 +1,0 @@
--- Script 2
-CREATE TABLE test2 (
-  id INTEGER NOT NULL
-);
-
-ALTER TABLE test2 ADD CONSTRAINT test2Pk PRIMARY KEY (id);
