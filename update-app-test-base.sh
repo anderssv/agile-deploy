@@ -7,10 +7,11 @@
 #
 #
 
-cd application-template
+pushd .
+cd ../jettyserver-archetype
 mvn clean install
-cd ..
-cp application-template/myapp-server/target/myapp-server-0.1-SNAPSHOT.zip deployer/src/test/resources/application.zip
+popd
+cp ../jettyserver-archetype/myapp-server/target/myapp-server-0.1-SNAPSHOT.zip src/test/resources/application.zip
 
 echo
 echo 'Application is updated! Please make sure that the tests in the deployer still runs!'
