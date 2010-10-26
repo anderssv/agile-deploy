@@ -33,7 +33,7 @@ public class ResourceConverterTest extends AbstractFileSystemTest {
 		ResourceConverterService service = serviceImpl;
 		service.convert(target);
 
-		File testFile = new File(target, "bin/myapp.bat");
+		File testFile = new File(target, "bin/application.bat");
 		String wrong = FileUtils.readFileToString(testFile, "UTF-8");
 		String right = FileUtils.readFileToString(testFile, "Cp1047");
 
@@ -55,7 +55,7 @@ public class ResourceConverterTest extends AbstractFileSystemTest {
 		ResourceConverterService service = serviceImpl;
 		service.convert(target);
 
-		File testFile = new File(target, "bin/myapp.bat");
+		File testFile = new File(target, "bin/application.bat");
 		String right = FileUtils.readFileToString(testFile, "UTF-8");
 		String wrong = FileUtils.readFileToString(testFile, "Cp1047");
 

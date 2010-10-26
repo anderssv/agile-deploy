@@ -128,8 +128,8 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 
 		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
 
-		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/myapp"), "u+x");
-		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/myapp.bat"), "u+x");
+		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/application"), "u+x");
+		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/application.bat"), "u+x");
 	}
 
 	private ConfigurationServiceImpl createService() {
