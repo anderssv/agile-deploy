@@ -42,16 +42,13 @@ public class CommandLineDeployer {
 		Namespace ns = null;
 		try {			
 			ns = argparse.parseArgs(args);
-			System.out.println(ns.getAttrs());
-			ps = new PackageSpecification(ns.getString("group_id"), ns.getString("artifact_id"), ns.getString("version"), ns.getString("packaging"));
-			environment = ns.getString("environment");
 		} catch (ArgumentParserException e) {
 			argparse.handleError(e);
 			System.exit(1);
-		} catch (IllegalArgumentException e) {
-			LOG.error(e.getMessage());
-			System.exit(1);
 		}
+
+		ps = new PackageSpecification(ns.getString("group_id"), ns.getString("artifact_id"), ns.getString("version"), ns.getString("packaging"));
+		environment = ns.getString("environment");
 
 		LOG.info("Starting deploy: " + ps);
 		deployService.deploy(ps, environment, workingDirectory);
