@@ -126,6 +126,10 @@
 			<artifactId>guava</artifactId>
 			<groupId>com.google.guava</groupId>
 		</dependency>
+		<dependency>
+		  <groupId>net.sourceforge.argparse4j</groupId>
+		  <artifactId>argparse4j</artifactId>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -195,7 +199,11 @@
 				<version>1.8.0.10</version>
 				<scope>test</scope>
 			</dependency>
-
+			<dependency>
+			  <groupId>net.sourceforge.argparse4j</groupId>
+			  <artifactId>argparse4j</artifactId>
+			  <version>0.2.2</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

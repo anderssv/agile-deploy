@@ -24,7 +24,7 @@ public class TestDataProvider {
 		if (snapshot) {
 			version += "-SNAPSHOT";
 		}
-		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", version);
+		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", version, "zip");
 		return spec;
 	}
 

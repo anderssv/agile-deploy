@@ -8,10 +8,6 @@ public class PackageSpecification {
 	private String version;
 	private String packageType;
 
-	public PackageSpecification(String groupId, String artifactId, String version) {
-		this(groupId, artifactId, version, "zip");
-	}
-
 	public PackageSpecification(String groupId, String artifactId, String version, String packageType) {
 		this.groupId = groupId;
 		this.artifactId = artifactId;

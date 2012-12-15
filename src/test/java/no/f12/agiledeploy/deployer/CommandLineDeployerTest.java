@@ -4,6 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+
 import org.junit.Test;
 
 public class CommandLineDeployerTest extends AbstractFileSystemTest {
@@ -12,13 +15,16 @@ public class CommandLineDeployerTest extends AbstractFileSystemTest {
 
 	CommandLineDeployer deployer;
 
+	String[] springArgs = new String[] { "-e", environment, "-g", "org.springframework", "-a", "spring-core", "-v", "2.5.6", "-p", "jar" };
+
 	File workingDirectory;
 	File unpackDir;
 	File downloadedFile;
 
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldGiveErrorIfNotEnoughParameters() {
-		CommandLineDeployer.checkCommandLine(new String[] {});
+	@Test(expected = ArgumentParserException.class)
+	public void shouldGiveErrorIfNotEnoughParameters() throws ArgumentParserException {
+		ArgumentParser parser = CommandLineDeployer.createArgumentParser();
+		parser.parseArgs(new String[] {});
 	}
 
 	private void createDeployerAndSetupDir() {
@@ -28,7 +34,7 @@ public class CommandLineDeployerTest extends AbstractFileSystemTest {
 		unpackDir = new File(workingDirectory, "spring-core/" + environment + "/current");
 		downloadedFile = new File(workingDirectory, "spring-core-2.5.6.jar");
 	}
-
+	
 	@Test
 	public void shouldStartUpGivenCorrectParameters() {
 		createDeployerAndSetupDir();
@@ -50,8 +56,7 @@ public class CommandLineDeployerTest extends AbstractFileSystemTest {
 	}
 
 	private void executeWithSpringStandard() {
-		String[] args = new String[] { environment, "org.springframework", "spring-core", "2.5.6", "jar" };
-		deployer.execute(args);
+		deployer.execute(springArgs);
 	}
 
 }

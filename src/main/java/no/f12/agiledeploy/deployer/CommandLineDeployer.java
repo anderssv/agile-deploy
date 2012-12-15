@@ -3,6 +3,10 @@ package no.f12.agiledeploy.deployer;
 import java.io.File;
 import java.util.Date;
 
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 
 import org.apache.log4j.Logger;
@@ -32,10 +36,18 @@ public class CommandLineDeployer {
 	public void execute(String[] args) {
 		PackageSpecification ps = null;
 		String environment = null;
-		try {
-			checkCommandLine(args);
-			ps = parsePackageSpecification(args);
-			environment = parseEnvironment(args);
+
+		ArgumentParser argparse = createArgumentParser();
+
+		Namespace ns = null;
+		try {			
+			ns = argparse.parseArgs(args);
+			System.out.println(ns.getAttrs());
+			ps = new PackageSpecification(ns.getString("group_id"), ns.getString("artifact_id"), ns.getString("version"), ns.getString("packaging"));
+			environment = ns.getString("environment");
+		} catch (ArgumentParserException e) {
+			argparse.handleError(e);
+			System.exit(1);
 		} catch (IllegalArgumentException e) {
 			LOG.error(e.getMessage());
 			System.exit(1);
@@ -45,23 +57,14 @@ public class CommandLineDeployer {
 		deployService.deploy(ps, environment, workingDirectory);
 	}
 
-	private static String parseEnvironment(String[] args) {
-		return args[0];
-	}
-
-	public static void checkCommandLine(String[] args) {
-		if (args == null || args.length < 4) {
-			throw new IllegalArgumentException(
-					"Not enough parameters. Usage: CommandLineDeployer environment groupId artifactId version");
-		}
-	}
-
-	private static PackageSpecification parsePackageSpecification(String[] args) {
-		if (args.length == 4) {
-			return new PackageSpecification(args[1], args[2], args[3]);
-		} else {
-			return new PackageSpecification(args[1], args[2], args[3], args[4]);
-		}
+	protected static ArgumentParser createArgumentParser() {
+		ArgumentParser argparse = ArgumentParsers.newArgumentParser("Agile Deployer").defaultHelp(true).description("Deploys lightweight Java applications");
+		argparse.addArgument("-e", "--environment").required(true).help("The environment this deploy is for");
+		argparse.addArgument("-g", "--group-id").required(true).help("The groupId of the artifact to deploy");
+		argparse.addArgument("-a", "--artifact-id").required(true).help("The artifactID to deploy");
+		argparse.addArgument("-v", "--version").required(true).help("The version to deploy");
+		argparse.addArgument("-p", "--packaging").setDefault("zip").help("The package format");
+		return argparse;
 	}
 
 	public File getWorkingDirectory() {
