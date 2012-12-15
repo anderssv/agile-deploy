@@ -37,8 +37,6 @@ public class DeployServiceImpl implements DeployService {
 	@Autowired(required = true)
 	private FileSystemAdapter fileSystemAdapter;
 	@Autowired(required = true)
-	private DataBaseService databaseService;
-	@Autowired(required = true)
 	private ResourceConverterService resourceConverterService;
 
 	public void setRepositoryService(RepositoryService repoServ) {
@@ -71,14 +69,6 @@ public class DeployServiceImpl implements DeployService {
 
 		configurationService.configure(environmentDirectory, environment, spec);
 
-		try {
-			databaseService.upgradeDatabase(installationDirectory);
-		} catch (DatabaseInspectionException e) {
-			// Not too happy about this one. Any suggestions?
-			LOG
-					.info("Could not inspect database for upgrade details, skipping. Increase logging for no.f12.agiledeploy.deployer.DataBaseServiceImpl to see details.");
-		}
-
 		downloadedFile.deleteOnExit();
 	}
 
@@ -96,10 +86,6 @@ public class DeployServiceImpl implements DeployService {
 
 	public void setFileSystemAdapter(FileSystemAdapter adapter) {
 		this.fileSystemAdapter = adapter;
-	}
-
-	public void setDatabaseService(DataBaseService dbService) {
-		this.databaseService = dbService;
 	}
 
 	public void setResourceConverterService(ResourceConverterService resourceConverterService) {

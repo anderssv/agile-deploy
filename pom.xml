@@ -119,10 +119,6 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
-			<artifactId>dbdeploy-core</artifactId>
-			<groupId>com.dbdeploy</groupId>
-		</dependency>
-		<dependency>
 			<artifactId>log4j</artifactId>
 			<groupId>log4j</groupId>
 		</dependency>
@@ -198,11 +194,6 @@
 				<groupId>hsqldb</groupId>
 				<version>1.8.0.10</version>
 				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<artifactId>dbdeploy-core</artifactId>
-				<groupId>com.dbdeploy</groupId>
-				<version>3.0M2</version>
 			</dependency>
 
 		</dependencies>
