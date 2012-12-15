@@ -9,14 +9,11 @@ import no.f12.agiledeploy.deployer.deploy.fs.ResourceConverterService;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 import no.f12.agiledeploy.deployer.repo.RepositoryService;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeployServiceImpl implements DeployService {
-
-	private static final Logger LOG = Logger.getLogger(DeployServiceImpl.class);
 
 	private static final FileFilter PROTECTED_FILES_FILTER = new FileFilter() {
 		@Override

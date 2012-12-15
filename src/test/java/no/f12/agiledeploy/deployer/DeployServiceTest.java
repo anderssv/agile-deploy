@@ -2,7 +2,6 @@ package no.f12.agiledeploy.deployer;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
