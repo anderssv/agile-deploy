@@ -32,7 +32,7 @@ public class CommandLineDeployerTest extends AbstractFileSystemTest {
 		deployer.prepare();
 
 		workingDirectory = deployer.getWorkingDirectory();
-		unpackDir = new File(workingDirectory, "spring-core/" + environment + "/current");
+		unpackDir = TestDataProvider.getDefaultTargetDirectory(workingDirectory);
 		downloadedFile = new File(workingDirectory, "spring-core-2.5.6.jar");
 	}
 	

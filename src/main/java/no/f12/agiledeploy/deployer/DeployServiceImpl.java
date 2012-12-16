@@ -55,10 +55,9 @@ public class DeployServiceImpl implements DeployService {
 	@Override
 	public void deploy(PackageSpecification spec, String environment, File workingDirectory, File packageFile) {
 		File environmentDirectory = DirectoryRegistry.getEnvironmentDirectory(spec, workingDirectory, environment);
-		File installationDirectory = DirectoryRegistry.getLastInstalledVersionDirectory(environmentDirectory);
+		File installationDirectory = DirectoryRegistry.getInstallDirectory(environmentDirectory, spec);
 		workingDirectory.mkdirs();
 
-	
 		prepareInstallationDirectory(installationDirectory, spec, environment);
 
 		unpackerService.unpack(packageFile, installationDirectory);

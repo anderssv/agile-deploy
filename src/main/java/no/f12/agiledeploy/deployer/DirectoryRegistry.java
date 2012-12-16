@@ -34,4 +34,8 @@ public class DirectoryRegistry {
 		return new File(workingPath, spec.getArtifactId());
 	}
 
+	public static File getInstallDirectory(File environmentDirectory, PackageSpecification spec) {
+		return new File(new File(environmentDirectory, "versions"), spec.getArtifactFileName());
+	}
+
 }

@@ -45,7 +45,7 @@ public class TestDataProvider {
 	}
 
 	public static File getDefaultTargetDirectory(File base) {
-		return new File(base, "spring-core/test/current");
+		return new File(base, "spring-core/test/versions/spring-core-2.5.6");
 	}
 
 	public static void writeContentToFile(File target, String content) throws IOException {
