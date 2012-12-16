@@ -34,9 +34,6 @@ public class CommandLineDeployer {
 	}
 
 	public void execute(String[] args) {
-		PackageSpecification ps = null;
-		String environment = null;
-
 		ArgumentParser argparse = createArgumentParser();
 
 		Namespace ns = null;
@@ -47,11 +44,11 @@ public class CommandLineDeployer {
 			System.exit(1);
 		}
 
-		ps = new PackageSpecification(ns.getString("group_id"), ns.getString("artifact_id"), ns.getString("version"), ns.getString("packaging"));
-		environment = ns.getString("environment");
+		PackageSpecification ps = new PackageSpecification(ns.getString("group_id"), ns.getString("artifact_id"), ns.getString("version"), ns.getString("packaging"));
+		String environment = ns.getString("environment");
 
 		LOG.info("Starting deploy: " + ps);
-		deployService.deploy(ps, environment, workingDirectory);
+		deployService.downloadAndDeploy(ps, environment, workingDirectory);
 	}
 
 	protected static ArgumentParser createArgumentParser() {

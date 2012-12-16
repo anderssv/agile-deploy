@@ -45,16 +45,23 @@ public class DeployServiceImpl implements DeployService {
 	}
 
 	@Override
-	public void deploy(PackageSpecification spec, String environment, File workingDirectory) {
+	public void downloadAndDeploy(PackageSpecification spec, String environment, File workingDirectory) {
+		File downloadedFile = repositoryService.fetchPackage(spec, workingDirectory);
+		downloadedFile.deleteOnExit();
+		
+		deploy(spec, environment, workingDirectory, downloadedFile);
+	}
+	
+	@Override
+	public void deploy(PackageSpecification spec, String environment, File workingDirectory, File packageFile) {
 		File environmentDirectory = DirectoryRegistry.getEnvironmentDirectory(spec, workingDirectory, environment);
 		File installationDirectory = DirectoryRegistry.getLastInstalledVersionDirectory(environmentDirectory);
 		workingDirectory.mkdirs();
 
-		File downloadedFile = repositoryService.fetchPackage(spec, workingDirectory);
-
+	
 		prepareInstallationDirectory(installationDirectory, spec, environment);
 
-		unpackerService.unpack(downloadedFile, installationDirectory);
+		unpackerService.unpack(packageFile, installationDirectory);
 		// TODO Because tests download a file without a directroy. Bad fix. We
 		// just support both.
 		File artifactNamedDir = new File(installationDirectory, spec.getArtifactFileName());
@@ -65,8 +72,6 @@ public class DeployServiceImpl implements DeployService {
 		resourceConverterService.convert(installationDirectory);
 
 		configurationService.configure(environmentDirectory, environment, spec);
-
-		downloadedFile.deleteOnExit();
 	}
 
 	private void prepareInstallationDirectory(File installationDirectory, PackageSpecification spec, String environment) {

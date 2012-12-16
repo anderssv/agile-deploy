@@ -55,6 +55,15 @@ public class DeployServiceTest extends AbstractFileSystemTest {
 		dServ.setFileSystemAdapter(fsAdapter);
 		dServ.setResourceConverterService(resConvService);
 	}
+	
+	@Test
+	public void shouldAvoidDownloadingFileIfFileIsGiven() throws IOException {
+		createMocks();
+		createService();
+		PackageSpecification spec = new PackageSpecification("no.f12", "testapp", "1.0-SNAPHOT", "zip");
+		
+		dServ.deploy(spec, "test", tempDir, TestDataProvider.getZipFile(tempDir));
+	}
 
 	@Test
 	public void shouldDownloadAndThenUnpackAndConfigure() {
@@ -63,7 +72,7 @@ public class DeployServiceTest extends AbstractFileSystemTest {
 		createService();
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 
-		dServ.deploy(spec, "test", tempDir);
+		dServ.downloadAndDeploy(spec, "test", tempDir);
 
 		verify(repoServ).fetchPackage(spec, tempDir);
 		verify(unpackServ).unpack(downloadedFile, unpackDir);
@@ -80,7 +89,7 @@ public class DeployServiceTest extends AbstractFileSystemTest {
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 
-		dServ.deploy(spec, "test", tempDir);
+		dServ.downloadAndDeploy(spec, "test", tempDir);
 
 		assertTrue(unpackDir.exists());
 	}
