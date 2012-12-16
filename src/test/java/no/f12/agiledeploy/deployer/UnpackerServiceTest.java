@@ -13,13 +13,17 @@ public class UnpackerServiceTest extends AbstractFileSystemTest {
 
 	@Test
 	public void shouldUnpackCorrectly() throws IOException {
-		TestDataProvider.unpackDefaultTestZip(unpackDir);
+		unpackDir.mkdir();
+		File zipFile = TestDataProvider.getZipFile(unpackDir);
+		UnpackerService unpacker = new UnpackerServiceImpl();
+		unpacker.unpack(zipFile, unpackDir);
 
-		assertTrue(new File(unpackDir, "bin").exists());
-		assertTrue(new File(unpackDir, "repo").exists());
-		assertTrue(new File(unpackDir, "bin/application").exists());
-		assertTrue(new File(unpackDir, "bin/application.bat").exists());
-		assertTrue(new File(unpackDir, "config/system.properties").exists());
+		File baseDir = new File(unpackDir, "myapp-server-0.1-SNAPSHOT");
+		assertTrue(new File(baseDir, "bin").exists());
+		assertTrue(new File(baseDir, "repo").exists());
+		assertTrue(new File(baseDir, "bin/application").exists());
+		assertTrue(new File(baseDir, "bin/application.bat").exists());
+		assertTrue(new File(baseDir, "config/system.properties").exists());
 	}
 
 }

@@ -21,11 +21,6 @@ public class UnpackerServiceImpl implements UnpackerService {
 	private static final Log LOG = LogFactory.getLog(UnpackerServiceImpl.class);
 
 	@Override
-	public void unpack(File downloadedFile) {
-		unpack(downloadedFile, new File("."));
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
 	public void unpack(File zipFile, File workingDirectory) {
 		LOG.info("Unpacking " + zipFile + " into " + workingDirectory);
