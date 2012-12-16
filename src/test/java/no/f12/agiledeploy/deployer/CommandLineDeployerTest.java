@@ -29,6 +29,7 @@ public class CommandLineDeployerTest extends AbstractFileSystemTest {
 
 	private void createDeployerAndSetupDir() {
 		deployer = new CommandLineDeployer("classpath:spring/deployer-test-applicationContext.xml");
+		deployer.prepare();
 
 		workingDirectory = deployer.getWorkingDirectory();
 		unpackDir = new File(workingDirectory, "spring-core/" + environment + "/current");

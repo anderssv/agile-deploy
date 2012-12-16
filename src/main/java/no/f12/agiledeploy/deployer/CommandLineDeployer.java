@@ -19,11 +19,10 @@ public class CommandLineDeployer {
 
 	private DeployService deployService;
 	private File workingDirectory = new File(".");
+	private String springContext;
 
 	public CommandLineDeployer(String context) {
-		BeanFactory factory = new ClassPathXmlApplicationContext(context);
-		this.deployService = (DeployService) factory.getBean("deployServiceImpl");
-		this.workingDirectory = (File) factory.getBean("workingDirectory");
+		this.springContext = context;
 	}
 
 	public static void main(String[] args) {
@@ -31,6 +30,12 @@ public class CommandLineDeployer {
 		CommandLineDeployer deployer = new CommandLineDeployer("classpath:spring/deployer-applicationContext.xml");
 		deployer.execute(args);
 		LOG.info("Deploy ended at " + new Date());
+	}
+
+	public void prepare() {
+		BeanFactory factory = new ClassPathXmlApplicationContext(this.springContext);
+		this.deployService = (DeployService) factory.getBean("deployServiceImpl");
+		this.workingDirectory = (File) factory.getBean("workingDirectory");
 	}
 
 	public void execute(String[] args) {
@@ -42,9 +47,13 @@ public class CommandLineDeployer {
 			ns = argparse.parseArgs(args);
 			packageFile = getFile(argparse, ns, "file");
 		} catch (ArgumentParserException e) {
-			argparse.handleError(e);
+			LOG.error("Invalid command line arguments: " + e.getMessage());
+			System.out.println("\n\n");
+			argparse.printHelp();
 			System.exit(1);
 		}
+
+		this.prepare();
 
 		PackageSpecification ps = new PackageSpecification(ns.getString("group_id"), ns.getString("artifact_id"),
 				ns.getString("version"), ns.getString("packaging"));
@@ -71,7 +80,7 @@ public class CommandLineDeployer {
 	}
 
 	protected static ArgumentParser createArgumentParser() {
-		ArgumentParser argparse = ArgumentParsers.newArgumentParser("Agile Deployer").defaultHelp(true)
+		ArgumentParser argparse = ArgumentParsers.newArgumentParser("deployer").defaultHelp(true)
 				.description("Deploys lightweight Java applications");
 		argparse.addArgument("-e", "--environment").required(true).help("The environment this deploy is for");
 		argparse.addArgument("-g", "--group-id").required(true).help("The groupId of the artifact to deploy");
