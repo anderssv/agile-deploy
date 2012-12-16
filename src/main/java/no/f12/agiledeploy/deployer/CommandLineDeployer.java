@@ -59,11 +59,13 @@ public class CommandLineDeployer {
 				ns.getString("version"), ns.getString("packaging"));
 		String environment = ns.getString("environment");
 
+		DeploymentSpecification ds = new DeploymentSpecification(ps, ns.getString("environment"), workingDirectory, packageFile);
+		
 		LOG.info("Starting deploy: " + ps);
 		if (packageFile != null) {
-			deployService.deploy(ps, environment, workingDirectory, packageFile);
+			deployService.deploy(ds);
 		} else {
-			deployService.downloadAndDeploy(ps, environment, workingDirectory);
+			deployService.downloadAndDeploy(ds);
 		}
 	}
 

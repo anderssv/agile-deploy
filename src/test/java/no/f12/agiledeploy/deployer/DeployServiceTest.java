@@ -62,7 +62,7 @@ public class DeployServiceTest extends AbstractFileSystemTest {
 		createService();
 		PackageSpecification spec = new PackageSpecification("no.f12", "testapp", "1.0-SNAPHOT", "zip");
 		
-		dServ.deploy(spec, "test", tempDir, TestDataProvider.getZipFile(tempDir));
+		dServ.deploy(new DeploymentSpecification(spec, "test", tempDir, TestDataProvider.getZipFile(tempDir)));
 	}
 
 	@Test
@@ -72,7 +72,7 @@ public class DeployServiceTest extends AbstractFileSystemTest {
 		createService();
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 
-		dServ.downloadAndDeploy(spec, "test", tempDir);
+		dServ.downloadAndDeploy(new DeploymentSpecification(spec, "test", tempDir, null));
 
 		verify(repoServ).fetchPackage(spec, tempDir);
 		verify(unpackServ).unpack(downloadedFile, unpackDir);
@@ -89,7 +89,7 @@ public class DeployServiceTest extends AbstractFileSystemTest {
 
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
 
-		dServ.downloadAndDeploy(spec, "test", tempDir);
+		dServ.downloadAndDeploy(new DeploymentSpecification(spec, "test", tempDir, null));
 
 		assertTrue(unpackDir.exists());
 	}

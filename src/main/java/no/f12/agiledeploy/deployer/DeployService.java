@@ -1,13 +1,10 @@
 package no.f12.agiledeploy.deployer;
 
-import java.io.File;
-
-import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 
 public interface DeployService {
 
-	public void downloadAndDeploy(PackageSpecification spec, String environment, File basePath);
+	public void downloadAndDeploy(DeploymentSpecification ds);
 	
-	public void deploy(PackageSpecification spec, String environment, File basePath, File packageFile);
+	public void deploy(DeploymentSpecification ds);
 
 }

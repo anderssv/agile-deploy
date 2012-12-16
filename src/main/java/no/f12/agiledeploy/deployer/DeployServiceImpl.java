@@ -45,15 +45,21 @@ public class DeployServiceImpl implements DeployService {
 	}
 
 	@Override
-	public void downloadAndDeploy(PackageSpecification spec, String environment, File workingDirectory) {
-		File downloadedFile = repositoryService.fetchPackage(spec, workingDirectory);
+	public void downloadAndDeploy(DeploymentSpecification ds) {
+		File downloadedFile = repositoryService.fetchPackage(ds.getPackageSpecification(), ds.getInstallBase());
 		downloadedFile.deleteOnExit();
+		ds.setPackageFile(downloadedFile);
 		
-		deploy(spec, environment, workingDirectory, downloadedFile);
+		deploy(ds);
 	}
 	
 	@Override
-	public void deploy(PackageSpecification spec, String environment, File workingDirectory, File packageFile) {
+	public void deploy(DeploymentSpecification ds) {
+		PackageSpecification spec = ds.getPackageSpecification();
+		File workingDirectory = ds.getInstallBase();
+		String environment = ds.getEnvironment();
+		File packageFile = ds.getPackageFile();
+		
 		File environmentDirectory = DirectoryRegistry.getEnvironmentDirectory(spec, workingDirectory, environment);
 		File installationDirectory = DirectoryRegistry.getInstallDirectory(environmentDirectory, spec);
 		workingDirectory.mkdirs();
