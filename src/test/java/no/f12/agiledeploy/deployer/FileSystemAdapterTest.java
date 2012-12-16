@@ -37,10 +37,10 @@ public class FileSystemAdapterTest extends AbstractFileSystemTest {
 				return false;
 			}
 		};
-		deleteDirectoryWithDbDeployFix(artifactDir, filter);
+		deleteDirectoryWithFilter(artifactDir, filter);
 		assertTrue(Arrays.asList(testDir.listFiles()).contains(testFile));
 		
-		deleteDirectoryWithDbDeployFix(artifactDir, null);
+		deleteDirectoryWithFilter(artifactDir, null);
 	}
 	
 }

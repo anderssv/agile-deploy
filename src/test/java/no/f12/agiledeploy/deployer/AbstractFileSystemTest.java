@@ -28,7 +28,7 @@ public class AbstractFileSystemTest {
 
 	@After
 	public void deleteWorkingFiles() throws InterruptedException, IOException {
-		deleteDirectoryWithDbDeployFix(getWorkingDirectory(), null);
+		deleteDirectoryWithFilter(getWorkingDirectory(), null);
 	}
 
 	/**
@@ -37,18 +37,12 @@ public class AbstractFileSystemTest {
 	 * @param directory
 	 * @param filter
 	 */
-	public void deleteDirectoryWithDbDeployFix(File directory, FileFilter filter) {
+	public void deleteDirectoryWithFilter(File directory, FileFilter filter) {
 		FileSystemAdapter fsAdapter = new FileSystemAdapterImpl();
-		try {
-			if (filter == null) {
-				fsAdapter.deleteDir(directory);
-			} else {
-				fsAdapter.deleteDir(directory, filter);
-			}
-		} catch (IllegalStateException e) {
-			if (!e.getCause().getMessage().contains("db-upgrade.sql")) {
-				throw e;
-			}
+		if (filter == null) {
+			fsAdapter.deleteDir(directory);
+		} else {
+			fsAdapter.deleteDir(directory, filter);
 		}
 	}
 
