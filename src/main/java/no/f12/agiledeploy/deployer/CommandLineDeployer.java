@@ -37,26 +37,48 @@ public class CommandLineDeployer {
 		ArgumentParser argparse = createArgumentParser();
 
 		Namespace ns = null;
-		try {			
+		File packageFile = null;
+		try {
 			ns = argparse.parseArgs(args);
+			packageFile = getFile(argparse, ns, "file");
 		} catch (ArgumentParserException e) {
 			argparse.handleError(e);
 			System.exit(1);
 		}
 
-		PackageSpecification ps = new PackageSpecification(ns.getString("group_id"), ns.getString("artifact_id"), ns.getString("version"), ns.getString("packaging"));
+		PackageSpecification ps = new PackageSpecification(ns.getString("group_id"), ns.getString("artifact_id"),
+				ns.getString("version"), ns.getString("packaging"));
 		String environment = ns.getString("environment");
 
 		LOG.info("Starting deploy: " + ps);
-		deployService.downloadAndDeploy(ps, environment, workingDirectory);
+		if (packageFile != null) {
+			deployService.deploy(ps, environment, workingDirectory, packageFile);
+		} else {
+			deployService.downloadAndDeploy(ps, environment, workingDirectory);
+		}
+	}
+
+	protected File getFile(ArgumentParser argparse, Namespace ns, String fileField) throws ArgumentParserException {
+		File packageFile = null;
+		if (ns.getString(fileField) != null) {
+			packageFile = new File(ns.getString(fileField));
+			if (!packageFile.exists()) {
+				throw new ArgumentParserException("The file you specified for parameter " + fileField
+						+ "does not exist.", argparse);
+			}
+		}
+		return packageFile;
 	}
 
 	protected static ArgumentParser createArgumentParser() {
-		ArgumentParser argparse = ArgumentParsers.newArgumentParser("Agile Deployer").defaultHelp(true).description("Deploys lightweight Java applications");
+		ArgumentParser argparse = ArgumentParsers.newArgumentParser("Agile Deployer").defaultHelp(true)
+				.description("Deploys lightweight Java applications");
 		argparse.addArgument("-e", "--environment").required(true).help("The environment this deploy is for");
 		argparse.addArgument("-g", "--group-id").required(true).help("The groupId of the artifact to deploy");
 		argparse.addArgument("-a", "--artifact-id").required(true).help("The artifactID to deploy");
 		argparse.addArgument("-v", "--version").required(true).help("The version to deploy");
+		argparse.addArgument("-f", "--file").required(false)
+				.help("The package to deploy. Will download from Maven repo if not specified");
 		argparse.addArgument("-p", "--packaging").setDefault("zip").help("The package format");
 		return argparse;
 	}
