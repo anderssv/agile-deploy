@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileFilter;
 
 import no.f12.agiledeploy.deployer.DeploymentSpecification;
-import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

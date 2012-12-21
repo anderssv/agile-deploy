@@ -60,8 +60,8 @@ public class DeployServiceImpl implements DeployService {
 		String environment = ds.getEnvironment();
 		File packageFile = ds.getPackageFile();
 		
-		File environmentDirectory = DeploymentSpecification.getEnvironmentDirectory(spec, workingDirectory, environment);
-		File installationDirectory = DeploymentSpecification.getInstallDirectory(environmentDirectory, spec);
+		File environmentDirectory = ds.getEnvironmentDirectory();
+		File installationDirectory = ds.getInstallDirectory();
 		workingDirectory.mkdirs();
 
 		prepareInstallationDirectory(installationDirectory, spec, environment);

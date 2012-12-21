@@ -38,12 +38,12 @@ public class DeploymentSpecification {
 		this.packageFile = downloadedFile;
 	}
 
-	public static File getEnvironmentDirectory(PackageSpecification spec, File workingDirectory, String environment) {
-		return new File(getArtifactPath(spec, workingDirectory), environment);
+	public File getEnvironmentDirectory() {
+		return new File(getArtifactPath(this.packageSpecification, this.installBase), this.environment);
 	}
 
 	public File getLastInstalledVersionDirectory() {
-		return new File(getEnvironmentDirectory(this.packageSpecification, this.installBase, this.environment), "current");
+		return new File(getEnvironmentDirectory(), "current");
 	}
 
 	public File getConfigurationDirectory() {
@@ -51,18 +51,18 @@ public class DeploymentSpecification {
 	}
 
 	public File getLogDirectory() {
-		return new File(getEnvironmentDirectory(this.packageSpecification, this.installBase, this.environment), "logs");
+		return new File(getEnvironmentDirectory(), "logs");
 	}
 
 	public File getDataDirectory() {
-		return new File(getEnvironmentDirectory(this.packageSpecification, this.installBase, this.environment), "data");
+		return new File(getEnvironmentDirectory(), "data");
 	}
 
 	public File getBinDirectory() {
 		return new File(getLastInstalledVersionDirectory(), "bin");
 	}
 
-	public static File getArtifactPath(PackageSpecification spec, File workingPath) {
+	public File getArtifactPath(PackageSpecification spec, File workingPath) {
 		return new File(workingPath, spec.getArtifactId());
 	}
 
@@ -70,13 +70,13 @@ public class DeploymentSpecification {
 		return new File(installBase, this.packageSpecification.getArtifactId());
 	}
 
-	public static File getInstallDirectory(File environmentDirectory, PackageSpecification spec) {
-		return new File(new File(environmentDirectory, "versions"), spec.getArtifactFileName());
+	public File getInstallDirectory() {
+		return new File(new File(getEnvironmentDirectory(), "versions"),
+				this.packageSpecification.getArtifactFileName());
 	}
-	
+
 	public File getEnvironmentPropertiesDirectory() {
 		return new File(getConfigurationDirectory(), environment);
 	}
-
 
 }
