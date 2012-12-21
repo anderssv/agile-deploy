@@ -42,12 +42,12 @@ public class DeploymentSpecification {
 		return new File(getArtifactPath(spec, workingDirectory), environment);
 	}
 
-	public static File getLastInstalledVersionDirectory(File environmentDirectory) {
-		return new File(environmentDirectory, "current");
+	public File getLastInstalledVersionDirectory() {
+		return new File(getEnvironmentDirectory(this.packageSpecification, this.installBase, this.environment), "current");
 	}
 
-	public static File getConfigurationDirectory(File environmentDirectory) {
-		return new File(getLastInstalledVersionDirectory(environmentDirectory), "config");
+	public File getConfigurationDirectory() {
+		return new File(getLastInstalledVersionDirectory(), "config");
 	}
 
 	public File getLogDirectory() {
@@ -58,8 +58,8 @@ public class DeploymentSpecification {
 		return new File(getEnvironmentDirectory(this.packageSpecification, this.installBase, this.environment), "data");
 	}
 
-	public static File getBinDirectory(File environmentDirectory) {
-		return new File(getLastInstalledVersionDirectory(environmentDirectory), "bin");
+	public File getBinDirectory() {
+		return new File(getLastInstalledVersionDirectory(), "bin");
 	}
 
 	public static File getArtifactPath(PackageSpecification spec, File workingPath) {
@@ -73,5 +73,10 @@ public class DeploymentSpecification {
 	public static File getInstallDirectory(File environmentDirectory, PackageSpecification spec) {
 		return new File(new File(environmentDirectory, "versions"), spec.getArtifactFileName());
 	}
+	
+	public File getEnvironmentPropertiesDirectory() {
+		return new File(getConfigurationDirectory(), environment);
+	}
+
 
 }

@@ -20,8 +20,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	@Override
 	public void configure(File environmentDirectory, String environment, DeploymentSpecification spec) {
-		File configDir = DeploymentSpecification.getConfigurationDirectory(environmentDirectory);
-		File environmentConfigDir = getEnvironmentPropertiesDirectory(environment, environmentDirectory);
+		File configDir = spec.getConfigurationDirectory();
+		File environmentConfigDir = spec.getEnvironmentPropertiesDirectory();
 
 		LOG.info("Updating configuration");
 		installConfigurationFromDirectory(environmentDirectory, environmentConfigDir);
@@ -30,13 +30,13 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		LOG.info("Creating links");
 		createDirIfNotExists(spec.getDataDirectory());
 		createDirIfNotExists(spec.getLogDirectory());
-		createLinksToCurrent(environmentDirectory, spec.getPackageSpecification());
+		createLinksToCurrent(environmentDirectory, spec);
 
-		updateBinPermissions(environmentDirectory);
+		updateBinPermissions(spec.getBinDirectory());
 	}
 
-	private void createLinksToCurrent(File environmentDirectory, PackageSpecification spec) {
-		final File installDirectory = DeploymentSpecification.getLastInstalledVersionDirectory(environmentDirectory);
+	private void createLinksToCurrent(File environmentDirectory, DeploymentSpecification spec) {
+		final File installDirectory = spec.getLastInstalledVersionDirectory();
 		File[] entries = environmentDirectory.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File path) {
@@ -48,7 +48,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		});
 
 		for (File file : entries) {
-			linkInto(file, DeploymentSpecification.getLastInstalledVersionDirectory(environmentDirectory));
+			linkInto(file, spec.getLastInstalledVersionDirectory());
 		}
 	}
 
@@ -58,10 +58,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		}
 	}
 
-	private void updateBinPermissions(File environmentDirectory) {
-		File binDir = DeploymentSpecification.getBinDirectory(environmentDirectory);
-		if (binDir.exists()) {
-			for (File binFile : binDir.listFiles()) {
+	private void updateBinPermissions(File binDirectory) {
+		if (binDirectory.exists()) {
+			for (File binFile : binDirectory.listFiles()) {
 				try {
 					fileSystemAdapter.changePermissionsOnFile(binFile, "u+x");
 				} catch (IllegalStateException e) {
@@ -101,11 +100,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 						+ ". Please make sure your application does not write to any directories under your root.", e);
 			}
 		}
-	}
-
-
-	private File getEnvironmentPropertiesDirectory(String environment, File environmentDirectory) {
-		return new File(DeploymentSpecification.getConfigurationDirectory(environmentDirectory), environment);
 	}
 
 	private void installConfigurationFromDirectory(File environmentDirectory, File configDir) {

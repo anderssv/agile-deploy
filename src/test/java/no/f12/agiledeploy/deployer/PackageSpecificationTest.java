@@ -58,20 +58,18 @@ public class PackageSpecificationTest {
 
 	@Test
 	public void shouldGiveCorrectPropertiesDirectory() {
-		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
+		DeploymentSpecification ds = TestDataProvider.createDefaultDeploymentSpec(true, workingPath, null);
 		assertEquals(new File(workingPath, "spring-core/test/current/config"),
-				DeploymentSpecification.getConfigurationDirectory(DeploymentSpecification.getEnvironmentDirectory(spec,
-						workingPath, "test")));
+				ds.getConfigurationDirectory());
 	}
 
 	@Test
 	public void shouldGiveCorrectInstallationDirectory() {
-		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
+		DeploymentSpecification ds = TestDataProvider.createDefaultDeploymentSpec(true, workingPath, null);
 		assertEquals(new File(workingPath, "spring-core/test/current"),
-				DeploymentSpecification.getLastInstalledVersionDirectory(DeploymentSpecification
-						.getEnvironmentDirectory(spec, workingPath, "test")));
+				ds.getLastInstalledVersionDirectory());
 	}
 
 }
