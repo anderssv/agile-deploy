@@ -3,7 +3,7 @@ package no.f12.agiledeploy.deployer.deploy.fs;
 import java.io.File;
 import java.io.FileFilter;
 
-import no.f12.agiledeploy.deployer.DirectoryRegistry;
+import no.f12.agiledeploy.deployer.DeploymentSpecification;
 import no.f12.agiledeploy.deployer.repo.PackageSpecification;
 
 import org.apache.log4j.Logger;
@@ -20,7 +20,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 	@Override
 	public void configure(File environmentDirectory, String environment, PackageSpecification spec) {
-		File configDir = DirectoryRegistry.getConfigurationDirectory(environmentDirectory);
+		File configDir = DeploymentSpecification.getConfigurationDirectory(environmentDirectory);
 		File environmentConfigDir = getEnvironmentPropertiesDirectory(environment, environmentDirectory);
 
 		LOG.info("Updating configuration");
@@ -28,15 +28,15 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		installConfigurationFromDirectory(environmentDirectory, configDir);
 
 		LOG.info("Creating links");
-		createDirIfNotExists(DirectoryRegistry.getDataDirectory(environmentDirectory));
-		createDirIfNotExists(DirectoryRegistry.getLogDirectory(environmentDirectory));
+		createDirIfNotExists(DeploymentSpecification.getDataDirectory(environmentDirectory));
+		createDirIfNotExists(DeploymentSpecification.getLogDirectory(environmentDirectory));
 		createLinksToCurrent(environmentDirectory, spec);
 
 		updateBinPermissions(environmentDirectory);
 	}
 
 	private void createLinksToCurrent(File environmentDirectory, PackageSpecification spec) {
-		final File installDirectory = DirectoryRegistry.getLastInstalledVersionDirectory(environmentDirectory);
+		final File installDirectory = DeploymentSpecification.getLastInstalledVersionDirectory(environmentDirectory);
 		File[] entries = environmentDirectory.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File path) {
@@ -48,7 +48,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		});
 
 		for (File file : entries) {
-			linkInto(file, DirectoryRegistry.getLastInstalledVersionDirectory(environmentDirectory));
+			linkInto(file, DeploymentSpecification.getLastInstalledVersionDirectory(environmentDirectory));
 		}
 	}
 
@@ -59,7 +59,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	}
 
 	private void updateBinPermissions(File environmentDirectory) {
-		File binDir = DirectoryRegistry.getBinDirectory(environmentDirectory);
+		File binDir = DeploymentSpecification.getBinDirectory(environmentDirectory);
 		if (binDir.exists()) {
 			for (File binFile : binDir.listFiles()) {
 				try {
@@ -105,7 +105,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 
 	private File getEnvironmentPropertiesDirectory(String environment, File environmentDirectory) {
-		return new File(DirectoryRegistry.getConfigurationDirectory(environmentDirectory), environment);
+		return new File(DeploymentSpecification.getConfigurationDirectory(environmentDirectory), environment);
 	}
 
 	private void installConfigurationFromDirectory(File environmentDirectory, File configDir) {

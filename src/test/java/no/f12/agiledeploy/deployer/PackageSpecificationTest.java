@@ -45,31 +45,31 @@ public class PackageSpecificationTest {
 	public void shouldGiveCorrectArtifactPath() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core"), DirectoryRegistry.getArtifactPath(spec, workingPath));
+		assertEquals(new File(workingPath, "spring-core"), DeploymentSpecification.getArtifactPath(spec, workingPath));
 	}
 
 	@Test
 	public void shouldGiveCorrectArtifactDataDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/data"), DirectoryRegistry
-				.getDataDirectory(DirectoryRegistry.getEnvironmentDirectory(spec, workingPath, "test")));
+		assertEquals(new File(workingPath, "spring-core/test/data"), DeploymentSpecification
+				.getDataDirectory(DeploymentSpecification.getEnvironmentDirectory(spec, workingPath, "test")));
 	}
 
 	@Test
 	public void shouldGiveCorrectPropertiesDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/current/config"), DirectoryRegistry
-				.getConfigurationDirectory(DirectoryRegistry.getEnvironmentDirectory(spec, workingPath, "test")));
+		assertEquals(new File(workingPath, "spring-core/test/current/config"), DeploymentSpecification
+				.getConfigurationDirectory(DeploymentSpecification.getEnvironmentDirectory(spec, workingPath, "test")));
 	}
 
 	@Test
 	public void shouldGiveCorrectInstallationDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/current"), DirectoryRegistry
-				.getLastInstalledVersionDirectory(DirectoryRegistry.getEnvironmentDirectory(spec, workingPath, "test")));
+		assertEquals(new File(workingPath, "spring-core/test/current"), DeploymentSpecification
+				.getLastInstalledVersionDirectory(DeploymentSpecification.getEnvironmentDirectory(spec, workingPath, "test")));
 	}
 
 }

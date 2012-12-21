@@ -57,7 +57,6 @@ public class CommandLineDeployer {
 
 		PackageSpecification ps = new PackageSpecification(ns.getString("group_id"), ns.getString("artifact_id"),
 				ns.getString("version"), ns.getString("packaging"));
-		String environment = ns.getString("environment");
 
 		DeploymentSpecification ds = new DeploymentSpecification(ps, ns.getString("environment"), workingDirectory, packageFile);
 		
