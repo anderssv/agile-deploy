@@ -38,16 +38,12 @@ public class DeploymentSpecification {
 		this.packageFile = downloadedFile;
 	}
 
+	public File getArtifactPath() {
+		return new File(installBase, this.packageSpecification.getArtifactId());
+	}
+
 	public File getEnvironmentDirectory() {
 		return new File(getArtifactPath(), this.environment);
-	}
-
-	public File getLastInstalledVersionDirectory() {
-		return new File(getEnvironmentDirectory(), "current");
-	}
-
-	public File getConfigurationDirectory() {
-		return new File(getLastInstalledVersionDirectory(), "config");
 	}
 
 	public File getLogDirectory() {
@@ -58,21 +54,24 @@ public class DeploymentSpecification {
 		return new File(getEnvironmentDirectory(), "data");
 	}
 
+	public File getLastInstalledVersionDirectory() {
+		return new File(getEnvironmentDirectory(), "current");
+	}
+
+	public File getConfigurationDirectory() {
+		return new File(getLastInstalledVersionDirectory(), "config");
+	}
+
 	public File getBinDirectory() {
 		return new File(getLastInstalledVersionDirectory(), "bin");
-	}
-
-	public File getArtifactPath() {
-		return new File(installBase, this.packageSpecification.getArtifactId());
-	}
-
-	public File getInstallDirectory() {
-		return new File(new File(getEnvironmentDirectory(), "versions"),
-				this.packageSpecification.getArtifactFileName());
 	}
 
 	public File getEnvironmentPropertiesDirectory() {
 		return new File(getConfigurationDirectory(), environment);
 	}
 
+	public File getInstallDirectory() {
+		return new File(new File(getEnvironmentDirectory(), "versions"),
+				this.packageSpecification.getArtifactFileName());
+	}
 }
