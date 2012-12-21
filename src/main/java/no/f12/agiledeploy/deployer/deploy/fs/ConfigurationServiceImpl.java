@@ -19,7 +19,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	private FileSystemAdapter fileSystemAdapter;
 
 	@Override
-	public void configure(File environmentDirectory, String environment, PackageSpecification spec) {
+	public void configure(File environmentDirectory, String environment, DeploymentSpecification spec) {
 		File configDir = DeploymentSpecification.getConfigurationDirectory(environmentDirectory);
 		File environmentConfigDir = getEnvironmentPropertiesDirectory(environment, environmentDirectory);
 
@@ -28,9 +28,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		installConfigurationFromDirectory(environmentDirectory, configDir);
 
 		LOG.info("Creating links");
-		createDirIfNotExists(DeploymentSpecification.getDataDirectory(environmentDirectory));
+		createDirIfNotExists(spec.getDataDirectory(environmentDirectory));
 		createDirIfNotExists(DeploymentSpecification.getLogDirectory(environmentDirectory));
-		createLinksToCurrent(environmentDirectory, spec);
+		createLinksToCurrent(environmentDirectory, spec.getPackageSpecification());
 
 		updateBinPermissions(environmentDirectory);
 	}

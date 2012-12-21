@@ -43,33 +43,36 @@ public class PackageSpecificationTest {
 
 	@Test
 	public void shouldGiveCorrectArtifactPath() {
-		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core"), DeploymentSpecification.getArtifactPath(spec, workingPath));
+		DeploymentSpecification ds = TestDataProvider.createDefaultDeploymentSpec(true, workingPath, null);
+		assertEquals(new File(workingPath, "spring-core"), ds.getArtifactPath());
 	}
 
 	@Test
 	public void shouldGiveCorrectArtifactDataDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/data"), DeploymentSpecification
-				.getDataDirectory(DeploymentSpecification.getEnvironmentDirectory(spec, workingPath, "test")));
+		DeploymentSpecification ds = TestDataProvider.createDefaultDeploymentSpec(true, workingPath, null);
+		assertEquals(new File(workingPath, "spring-core/test/data"),
+				ds.getDataDirectory(DeploymentSpecification.getEnvironmentDirectory(spec, workingPath, "test")));
 	}
 
 	@Test
 	public void shouldGiveCorrectPropertiesDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/current/config"), DeploymentSpecification
-				.getConfigurationDirectory(DeploymentSpecification.getEnvironmentDirectory(spec, workingPath, "test")));
+		assertEquals(new File(workingPath, "spring-core/test/current/config"),
+				DeploymentSpecification.getConfigurationDirectory(DeploymentSpecification.getEnvironmentDirectory(spec,
+						workingPath, "test")));
 	}
 
 	@Test
 	public void shouldGiveCorrectInstallationDirectory() {
 		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
-		assertEquals(new File(workingPath, "spring-core/test/current"), DeploymentSpecification
-				.getLastInstalledVersionDirectory(DeploymentSpecification.getEnvironmentDirectory(spec, workingPath, "test")));
+		assertEquals(new File(workingPath, "spring-core/test/current"),
+				DeploymentSpecification.getLastInstalledVersionDirectory(DeploymentSpecification
+						.getEnvironmentDirectory(spec, workingPath, "test")));
 	}
 
 }

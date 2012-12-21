@@ -70,13 +70,13 @@ public class DeployServiceTest extends AbstractFileSystemTest {
 		createMocks();
 		mockDownload(new File("."));
 		createService();
-		PackageSpecification spec = TestDataProvider.createDefaultSpec(false);
+		DeploymentSpecification ds = TestDataProvider.createDefaultDeploymentSpec(false, tempDir, null);
+		
+		dServ.downloadAndDeploy(ds);
 
-		dServ.downloadAndDeploy(new DeploymentSpecification(spec, "test", tempDir, null));
-
-		verify(repoServ).fetchPackage(spec, tempDir);
+		verify(repoServ).fetchPackage(ds.getPackageSpecification(), tempDir);
 		verify(unpackServ).unpack(downloadedFile, unpackDir);
-		verify(configServ).configure(new File(artifactDir, "test"), "test", spec);
+		verify(configServ).configure(new File(artifactDir, "test"), "test", ds);
 	}
 
 	@Test

@@ -38,7 +38,8 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 	@Test
 	public void shouldCopyFilesForCurrentEnvironmentIfTheyDontExist() throws IOException {
 		ConfigurationServiceImpl configService = createService();
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
+		configService.configure(environmentDirectory, "test",
+				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
 		assertTrue(new File(workingDirectory, "test-artifact/test/datasource.properties").exists());
 	}
@@ -49,7 +50,8 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		TestDataProvider.writeContentToFile(target, "testing");
 
 		ConfigurationServiceImpl configService = createService();
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
+		configService.configure(environmentDirectory, "test",
+				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
 		TestDataProvider.assertFileContains(target, "testing");
 	}
@@ -58,7 +60,8 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 	public void shouldCopyFilesForAllEnvironments() throws IOException {
 		ConfigurationServiceImpl configService = createService();
 
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
+		configService.configure(environmentDirectory, "test",
+				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
 		assertTrue(new File(workingDirectory, "test-artifact/test/allenvs.properties").exists());
 	}
@@ -67,7 +70,8 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 	public void shouldNotOverWriteCustomFileForEnvironmentWithFileForAllEnvironments() throws IOException {
 		ConfigurationServiceImpl configService = createService();
 
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
+		configService.configure(environmentDirectory, "test",
+				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
 		Resource propertyFile = new DefaultResourceLoader().getResource("file:" + environmentDirectory.getPath()
 				+ "/system.properties");
@@ -81,22 +85,24 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		FileSystemAdapter fsAdapter = mock(FileSystemAdapter.class);
 		configService.setFileSystemAdapter(fsAdapter);
 
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
+		configService.configure(environmentDirectory, "test",
+				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
-		String[] dirNames = new String[] {"data", "logs"};
+		String[] dirNames = new String[] { "data", "logs" };
 		for (String dirName : dirNames) {
 			verify(fsAdapter).createSymbolicLink(new File(workingDirectory, "test-artifact/test/" + dirName),
 					new File(workingDirectory, "test-artifact/test/current/" + dirName));
 		}
 	}
-	
+
 	@Test
 	public void shouldSymLinkToPropertiesFiles() {
 		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
 		FileSystemAdapter fsAdapter = spy(new FileSystemAdapterImpl());
 		configService.setFileSystemAdapter(fsAdapter);
 
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
+		configService.configure(environmentDirectory, "test",
+				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
 		verify(fsAdapter).createSymbolicLink(new File(workingDirectory, "test-artifact/test/allenvs.properties"),
 				new File(workingDirectory, "test-artifact/test/current/allenvs.properties"));
@@ -106,7 +112,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 	public void shouldCopyIfSymLinkFails() throws IOException {
 		File target = new File(workingDirectory, "test-artifact/test/datasource.properties");
 		TestDataProvider.writeContentToFile(target, "testing");
-		
+
 		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
 		FileSystemAdapter fsAdapter = mock(FileSystemAdapter.class);
 		configService.setFileSystemAdapter(fsAdapter);
@@ -114,7 +120,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		doThrow(new IllegalStateException("No symlinks here")).when(fsAdapter).createSymbolicLink((File) anyObject(),
 				(File) anyObject());
 
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
 		verify(fsAdapter).copyFile(new File(workingDirectory, "test-artifact/test/datasource.properties"),
 				new File(workingDirectory, "test-artifact/test/current/datasource.properties"));
@@ -126,10 +132,12 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		FileSystemAdapter fsAdapter = spy(new FileSystemAdapterImpl());
 		configService.setFileSystemAdapter(fsAdapter);
 
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultSpec(false));
+		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
-		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/application"), "u+x");
-		verify(fsAdapter).changePermissionsOnFile(new File(workingDirectory, "test-artifact/test/current/bin/application.bat"), "u+x");
+		verify(fsAdapter).changePermissionsOnFile(
+				new File(workingDirectory, "test-artifact/test/current/bin/application"), "u+x");
+		verify(fsAdapter).changePermissionsOnFile(
+				new File(workingDirectory, "test-artifact/test/current/bin/application.bat"), "u+x");
 	}
 
 	private ConfigurationServiceImpl createService() {
@@ -137,6 +145,5 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		configService.setFileSystemAdapter(new FileSystemAdapterImpl());
 		return configService;
 	}
-
 
 }

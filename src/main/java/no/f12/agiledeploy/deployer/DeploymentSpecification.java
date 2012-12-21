@@ -37,7 +37,7 @@ public class DeploymentSpecification {
 	public void setPackageFile(File downloadedFile) {
 		this.packageFile = downloadedFile;
 	}
-	
+
 	public static File getEnvironmentDirectory(PackageSpecification spec, File workingDirectory, String environment) {
 		return new File(getArtifactPath(spec, workingDirectory), environment);
 	}
@@ -54,7 +54,7 @@ public class DeploymentSpecification {
 		return new File(environmentDirectory, "logs");
 	}
 
-	public static File getDataDirectory(File environmentDirectory) {
+	public File getDataDirectory(File environmentDirectory) {
 		return new File(environmentDirectory, "data");
 	}
 
@@ -66,9 +66,12 @@ public class DeploymentSpecification {
 		return new File(workingPath, spec.getArtifactId());
 	}
 
+	public File getArtifactPath() {
+		return new File(installBase, this.packageSpecification.getArtifactId());
+	}
+
 	public static File getInstallDirectory(File environmentDirectory, PackageSpecification spec) {
 		return new File(new File(environmentDirectory, "versions"), spec.getArtifactFileName());
 	}
-
 
 }

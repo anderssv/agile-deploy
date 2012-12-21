@@ -76,7 +76,7 @@ public class DeployServiceImpl implements DeployService {
 
 		resourceConverterService.convert(installationDirectory);
 
-		configurationService.configure(environmentDirectory, environment, spec);
+		configurationService.configure(environmentDirectory, environment, ds);
 	}
 
 	private void prepareInstallationDirectory(File installationDirectory, PackageSpecification spec, String environment) {

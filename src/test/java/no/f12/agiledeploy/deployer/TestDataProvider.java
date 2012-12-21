@@ -27,6 +27,10 @@ public class TestDataProvider {
 		PackageSpecification spec = new PackageSpecification("org.springframework", "spring-core", version, "zip");
 		return spec;
 	}
+	
+	public static DeploymentSpecification createDefaultDeploymentSpec(boolean snapshot, File workingDirectory, File packageFile) {
+		return new DeploymentSpecification(createDefaultSpec(false), "test", workingDirectory, packageFile);
+	}
 
 	public static File getZipFile(File workingdirectory) throws IOException {
 		DefaultResourceLoader loader = new DefaultResourceLoader();
