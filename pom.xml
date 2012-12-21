@@ -10,11 +10,11 @@
 	<distributionManagement>
 		<repository>
 			<id>no.f12.repo</id>
-			<url>scp://repo.f12.no/home/anderssv_mvn/public</url>
+			<url>scpexe://repo.f12.no/home/anderssv_mvn/public</url>
 		</repository>
 		<snapshotRepository>
 			<id>no.f12.repo</id>
-			<url>scp://repo.f12.no/home/anderssv_mvn/public-snapshots</url>
+			<url>scpexe://repo.f12.no/home/anderssv_mvn/public-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -31,7 +31,15 @@
 	</properties>
 
 	<build>
-		<plugins>
+    <extensions>
+      <!-- Enabling the use of FTP -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ssh-external</artifactId>
+         <version>1.0-beta-6</version>
+      </extension>
+    </extensions>
+ 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
