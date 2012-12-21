@@ -27,11 +27,13 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 	private File environmentDirectory;
 	private File installationDirectory;
 
+	private static final String ARTIFACT_NAME = "spring-core";
+
 	@Before
 	public void setupDirectories() throws IOException {
 		this.workingDirectory = getWorkingDirectory();
-		this.environmentDirectory = new File(workingDirectory, "test-artifact/test");
-		this.installationDirectory = new File(workingDirectory, "test-artifact/test/current");
+		this.environmentDirectory = new File(workingDirectory, ARTIFACT_NAME + "/test");
+		this.installationDirectory = new File(workingDirectory, ARTIFACT_NAME + "/test/current");
 		TestDataProvider.unpackDefaultTestZip(this.installationDirectory);
 	}
 
@@ -41,12 +43,12 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		configService.configure(environmentDirectory, "test",
 				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
-		assertTrue(new File(workingDirectory, "test-artifact/test/datasource.properties").exists());
+		assertTrue(new File(workingDirectory, ARTIFACT_NAME + "/test/datasource.properties").exists());
 	}
 
 	@Test
 	public void shouldNotCopyFilesIfTheyAlreadyExist() throws IOException {
-		File target = new File(workingDirectory, "test-artifact/test/datasource.properties");
+		File target = new File(workingDirectory, ARTIFACT_NAME + "/test/datasource.properties");
 		TestDataProvider.writeContentToFile(target, "testing");
 
 		ConfigurationServiceImpl configService = createService();
@@ -63,7 +65,7 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		configService.configure(environmentDirectory, "test",
 				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
-		assertTrue(new File(workingDirectory, "test-artifact/test/allenvs.properties").exists());
+		assertTrue(new File(workingDirectory, ARTIFACT_NAME + "/test/allenvs.properties").exists());
 	}
 
 	@Test
@@ -90,8 +92,8 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 
 		String[] dirNames = new String[] { "data", "logs" };
 		for (String dirName : dirNames) {
-			verify(fsAdapter).createSymbolicLink(new File(workingDirectory, "test-artifact/test/" + dirName),
-					new File(workingDirectory, "test-artifact/test/current/" + dirName));
+			verify(fsAdapter).createSymbolicLink(new File(workingDirectory, ARTIFACT_NAME + "/test/" + dirName),
+					new File(workingDirectory, ARTIFACT_NAME + "/test/current/" + dirName));
 		}
 	}
 
@@ -104,13 +106,13 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		configService.configure(environmentDirectory, "test",
 				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
-		verify(fsAdapter).createSymbolicLink(new File(workingDirectory, "test-artifact/test/allenvs.properties"),
-				new File(workingDirectory, "test-artifact/test/current/allenvs.properties"));
+		verify(fsAdapter).createSymbolicLink(new File(workingDirectory, ARTIFACT_NAME + "/test/allenvs.properties"),
+				new File(workingDirectory, ARTIFACT_NAME + "/test/current/allenvs.properties"));
 	}
 
 	@Test
 	public void shouldCopyIfSymLinkFails() throws IOException {
-		File target = new File(workingDirectory, "test-artifact/test/datasource.properties");
+		File target = new File(workingDirectory, ARTIFACT_NAME + "/test/datasource.properties");
 		TestDataProvider.writeContentToFile(target, "testing");
 
 		ConfigurationServiceImpl configService = new ConfigurationServiceImpl();
@@ -120,10 +122,11 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		doThrow(new IllegalStateException("No symlinks here")).when(fsAdapter).createSymbolicLink((File) anyObject(),
 				(File) anyObject());
 
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
+		configService.configure(environmentDirectory, "test",
+				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
-		verify(fsAdapter).copyFile(new File(workingDirectory, "test-artifact/test/datasource.properties"),
-				new File(workingDirectory, "test-artifact/test/current/datasource.properties"));
+		verify(fsAdapter).copyFile(new File(workingDirectory, ARTIFACT_NAME + "/test/datasource.properties"),
+				new File(workingDirectory, ARTIFACT_NAME + "/test/current/datasource.properties"));
 	}
 
 	@Test
@@ -132,12 +135,13 @@ public class ConfigurationServiceTest extends AbstractFileSystemTest {
 		FileSystemAdapter fsAdapter = spy(new FileSystemAdapterImpl());
 		configService.setFileSystemAdapter(fsAdapter);
 
-		configService.configure(environmentDirectory, "test", TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
+		configService.configure(environmentDirectory, "test",
+				TestDataProvider.createDefaultDeploymentSpec(false, workingDirectory, null));
 
 		verify(fsAdapter).changePermissionsOnFile(
-				new File(workingDirectory, "test-artifact/test/current/bin/application"), "u+x");
+				new File(workingDirectory, ARTIFACT_NAME + "/test/current/bin/application"), "u+x");
 		verify(fsAdapter).changePermissionsOnFile(
-				new File(workingDirectory, "test-artifact/test/current/bin/application.bat"), "u+x");
+				new File(workingDirectory, ARTIFACT_NAME + "/test/current/bin/application.bat"), "u+x");
 	}
 
 	private ConfigurationServiceImpl createService() {

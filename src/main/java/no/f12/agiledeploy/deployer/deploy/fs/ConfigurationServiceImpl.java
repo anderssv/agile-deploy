@@ -29,7 +29,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
 		LOG.info("Creating links");
 		createDirIfNotExists(spec.getDataDirectory(environmentDirectory));
-		createDirIfNotExists(DeploymentSpecification.getLogDirectory(environmentDirectory));
+		createDirIfNotExists(spec.getLogDirectory());
 		createLinksToCurrent(environmentDirectory, spec.getPackageSpecification());
 
 		updateBinPermissions(environmentDirectory);

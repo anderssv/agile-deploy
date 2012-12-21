@@ -50,8 +50,8 @@ public class DeploymentSpecification {
 		return new File(getLastInstalledVersionDirectory(environmentDirectory), "config");
 	}
 
-	public static File getLogDirectory(File environmentDirectory) {
-		return new File(environmentDirectory, "logs");
+	public File getLogDirectory() {
+		return new File(getEnvironmentDirectory(this.packageSpecification, this.installBase, this.environment), "logs");
 	}
 
 	public File getDataDirectory(File environmentDirectory) {
