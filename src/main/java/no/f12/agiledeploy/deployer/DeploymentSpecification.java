@@ -39,7 +39,7 @@ public class DeploymentSpecification {
 	}
 
 	public File getEnvironmentDirectory() {
-		return new File(getArtifactPath(this.packageSpecification, this.installBase), this.environment);
+		return new File(getArtifactPath(), this.environment);
 	}
 
 	public File getLastInstalledVersionDirectory() {
@@ -60,10 +60,6 @@ public class DeploymentSpecification {
 
 	public File getBinDirectory() {
 		return new File(getLastInstalledVersionDirectory(), "bin");
-	}
-
-	public File getArtifactPath(PackageSpecification spec, File workingPath) {
-		return new File(workingPath, spec.getArtifactId());
 	}
 
 	public File getArtifactPath() {
