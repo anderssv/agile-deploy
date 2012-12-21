@@ -28,7 +28,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		installConfigurationFromDirectory(environmentDirectory, configDir);
 
 		LOG.info("Creating links");
-		createDirIfNotExists(spec.getDataDirectory(environmentDirectory));
+		createDirIfNotExists(spec.getDataDirectory());
 		createDirIfNotExists(spec.getLogDirectory());
 		createLinksToCurrent(environmentDirectory, spec.getPackageSpecification());
 

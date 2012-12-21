@@ -54,8 +54,8 @@ public class DeploymentSpecification {
 		return new File(getEnvironmentDirectory(this.packageSpecification, this.installBase, this.environment), "logs");
 	}
 
-	public File getDataDirectory(File environmentDirectory) {
-		return new File(environmentDirectory, "data");
+	public File getDataDirectory() {
+		return new File(getEnvironmentDirectory(this.packageSpecification, this.installBase, this.environment), "data");
 	}
 
 	public static File getBinDirectory(File environmentDirectory) {

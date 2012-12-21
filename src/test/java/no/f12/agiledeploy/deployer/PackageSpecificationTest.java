@@ -50,11 +50,10 @@ public class PackageSpecificationTest {
 
 	@Test
 	public void shouldGiveCorrectArtifactDataDirectory() {
-		PackageSpecification spec = TestDataProvider.createDefaultSpec(true);
 		File workingPath = new File(".");
 		DeploymentSpecification ds = TestDataProvider.createDefaultDeploymentSpec(true, workingPath, null);
 		assertEquals(new File(workingPath, "spring-core/test/data"),
-				ds.getDataDirectory(DeploymentSpecification.getEnvironmentDirectory(spec, workingPath, "test")));
+				ds.getDataDirectory());
 	}
 
 	@Test
